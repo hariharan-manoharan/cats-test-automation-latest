@@ -30,6 +30,7 @@ import com.google.common.base.Function;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
@@ -140,14 +141,17 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	 * 
 	 */
 
+	@SuppressWarnings("unchecked")
 	public void enterText(String field, String data) throws TimeoutException, NoSuchElementException {
 
 		By by = By.xpath(String.format(XPATH_TXT, field));
+		
+		MobileElement  element = (MobileElement) driver.findElement(By.xpath(".//android.widget.EditText"));
 
 		waitCommand(by);
-		WebElement element = driver.findElement(by);
+		
 		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
-		element.sendKeys(data);
+		element.setValue(data);
 		takeScreenshot(field, data);
 
 	}
@@ -217,11 +221,19 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	}
 
 
-	public void clickRoutineBackButton() throws TimeoutException, NoSuchElementException{
-	
+	public void clickRoutineBackButton(){	
+		
+		try {
+		
 		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
 		element.click();
 		takeScreenshot("Click Routine back Button");
+		
+		}catch(Exception e) {
+			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
+			element.click();
+			takeScreenshot("Click Routine back Button");
+		}
 
 	}
 
@@ -422,12 +434,14 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 		data = (data.contains("#")) ?  getRuntimeTestdata(data) : generateTestData(columnName, data);
 
-		By by = By.xpath(String.format(XPATH_TXT, field));
+		By by = By.xpath(String.format(XPATH_TXT, field));	
 
 		waitCommand(by);
-		WebElement element = driver.findElement(by);
+		
+		MobileElement element = (MobileElement) driver.findElement(By.xpath(".//android.widget.EditText"));
+		
 		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
-		element.sendKeys(data);
+		element.setValue(data);
 		takeScreenshot(field, data);
 
 	}

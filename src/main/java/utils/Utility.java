@@ -2289,20 +2289,30 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 	
 	
 	public void clickRoutineBackButton() throws TimeoutException, NoSuchElementException {
-
+		try {
+		
 		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
 		element.click();
 		takeScreenshot("Click Routine back Button");
-
-	}
+		
+		}catch(Exception e) {
+			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
+			element.click();
+			takeScreenshot("Click Routine back Button");
+		}}
 	
 	public void clickRoutineBackButton(AndroidDriver driver , ExtentTest test) throws TimeoutException, NoSuchElementException {
-
+		try {
+		
 		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
 		element.click();
 		takeScreenshot("Click Routine back Button");
-
-	}
+		
+		}catch(Exception e) {
+			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
+			element.click();
+			takeScreenshot("Click Routine back Button");
+		}}
 	
 	@SuppressWarnings("unused")
 	protected String findDir(File root, String name)
