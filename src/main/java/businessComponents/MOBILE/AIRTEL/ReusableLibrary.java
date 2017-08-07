@@ -154,7 +154,11 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		waitCommand(by);
 		
 		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
+		if(data.contains("&")) { // setValue function not working if data contains '&', so included this check. Need to research if there is any alternative approach to handle this issue.
+		element.sendKeys(data);	
+		}else{
 		element.setValue(data);
+		}
 		takeScreenshot(field, data);
 
 	}
