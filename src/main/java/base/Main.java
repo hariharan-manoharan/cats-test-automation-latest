@@ -30,11 +30,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.exec.ExecuteException;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.FluentWait;
 
+import com.google.common.base.Function;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -641,14 +646,50 @@ public class Main{
 	private static void setupAppForTesting(int driverIndex) {
 		
 		androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();	
+		waitCommand(By.id("action_bar_title"), androidDriverList.get(driverIndex));
+		
 		List<WebElement> elements = androidDriverList.get(driverIndex).findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
 		
-		for(WebElement element: elements) {			
+		for(WebElement element: elements) {				
 			if(element.getText().equalsIgnoreCase(properties.getProperty("userProfile"))) {
 				element.click();
 				break;
 			}
 		}
+		
+	}
+	
+	
+	/**
+	 * FulentWait Function - Waits until the object is available with timeout of 100 seconds polling every 5 seconds
+	 * 
+	 * @param1 By by	
+	 * @return void
+	 * @author Hari
+	 * @since 12/27/2016
+	 * 
+	 */
+	
+	
+	public static void waitCommand(final By by, AndroidDriver driver) throws TimeoutException, NoSuchElementException {
+
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver);
+		wait.pollingEvery(5, TimeUnit.SECONDS);
+		wait.withTimeout(20, TimeUnit.SECONDS);
+		wait.ignoring(NoSuchElementException.class);
+
+		Function<WebDriver, Boolean> function = new Function<WebDriver, Boolean>() {
+
+			@Override
+			public Boolean apply(WebDriver arg0) {
+				boolean displayed = arg0.findElement(by).isEnabled();
+				if (displayed) {
+					return true;
+				}
+				return false;
+			}
+		};
+		wait.until(function);
 		
 	}
 	
