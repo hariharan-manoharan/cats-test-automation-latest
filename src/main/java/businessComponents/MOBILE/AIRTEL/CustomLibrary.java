@@ -83,4 +83,26 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			verifyAutopopulatefieldvalues("Shipment #", data);
 		}
 	}
+	
+	/************************************************************************************************
+	 * Function :enterSiteID 
+	 * Decsription:Function to used enter SiteID in MRRSITEReceive Routine
+	 * Date :07-08-2017 
+	 * Author :Saran
+	 *************************************************************************************************/
+	public void enterSiteID(String locationName){
+		
+		String TRANSLATION= String.format(TRANSLATION_COUNT, locationName);
+		String Translationcount = selectQuerySingleValue(TRANSLATION, "TRANSLATIONCOUNT");
+
+		int count = 	Integer.parseInt(Translationcount);
+		
+		if(count>1){
+			
+			clickNextMultiple(Integer.toString(2));
+		}
+		else{
+		    clickNext();
+		}
+	}
 }
