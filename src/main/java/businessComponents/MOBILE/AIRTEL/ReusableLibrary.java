@@ -89,7 +89,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	@SuppressWarnings("unchecked")
 	public void selectUserProfile(String profile) throws TimeoutException, NoSuchElementException {
 
-		List<WebElement> elements = driver.findElements(By.id("routine_name"));
+		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
 
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(profile)) {
@@ -104,7 +104,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	@SuppressWarnings("unchecked")
 	public void clickRoutineFolder(String folderName) throws TimeoutException, NoSuchElementException  {
 		
-		List<WebElement> elements = driver.findElements(By.id("routine_name"));
+		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
 
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(folderName)) {
@@ -117,7 +117,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	@SuppressWarnings("unchecked")
 	public void clickRoutine(String routineName) throws TimeoutException, NoSuchElementException  {
-		List<WebElement> elements = driver.findElements(By.id("routine_name"));
+		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
 
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(routineName)) {

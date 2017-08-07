@@ -641,7 +641,7 @@ public class Main{
 	private static void setupAppForTesting(int driverIndex) {
 		
 		androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();	
-		List<WebElement> elements = androidDriverList.get(driverIndex).findElements(By.id("routine_name"));
+		List<WebElement> elements = androidDriverList.get(driverIndex).findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
 		
 		for(WebElement element: elements) {			
 			if(element.getText().equalsIgnoreCase(properties.getProperty("userProfile"))) {
