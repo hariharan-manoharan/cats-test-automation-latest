@@ -306,7 +306,7 @@ public class Utility implements RoutineObjectRepository{
 
 		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver);
 		wait.pollingEvery(5, TimeUnit.SECONDS);
-		wait.withTimeout(30, TimeUnit.SECONDS);
+		wait.withTimeout(20, TimeUnit.SECONDS);
 		wait.ignoring(NoSuchElementException.class);
 
 		Function<WebDriver, Boolean> function = new Function<WebDriver, Boolean>() {
@@ -340,7 +340,7 @@ public class Utility implements RoutineObjectRepository{
 
 		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver);
 		wait.pollingEvery(5, TimeUnit.SECONDS);
-		wait.withTimeout(30, TimeUnit.SECONDS);
+		wait.withTimeout(20, TimeUnit.SECONDS);
 		wait.ignoring(NoSuchElementException.class);
 
 		Function<WebDriver, Boolean> function = new Function<WebDriver, Boolean>() {

@@ -401,7 +401,7 @@ public class Main{
 		
 		driver = new AndroidDriver(new URL(	"http://" + properties.getProperty("RemoteAddress") + ":" + desiredCapabilitiesProperties.getProperty("device"+selectDevice+".appium.port") + "/wd/hub"),capabilities);
 		
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		
 		androidDriverList.add(driver);
 		
@@ -640,9 +640,7 @@ public class Main{
 	@SuppressWarnings("unchecked")
 	private static void setupAppForTesting(int driverIndex) {
 		
-		androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();
-		//androidDriverList.get(driverIndex).findElement(By.name(properties.getProperty("userProfile"))).click();
-		
+		androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();	
 		List<WebElement> elements = androidDriverList.get(driverIndex).findElements(By.id("routine_name"));
 		
 		for(WebElement element: elements) {			

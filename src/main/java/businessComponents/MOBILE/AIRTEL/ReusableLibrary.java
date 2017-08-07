@@ -146,7 +146,8 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 		By by = By.xpath(String.format(XPATH_TXT, field));
 		
-		MobileElement  element = (MobileElement) driver.findElement(By.xpath(".//android.widget.EditText"));
+		MobileElement  element = (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.EditText\")");		
+		
 
 		waitCommand(by);
 		
@@ -438,7 +439,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 		waitCommand(by);
 		
-		MobileElement element = (MobileElement) driver.findElement(By.xpath(".//android.widget.EditText"));
+		MobileElement  element = (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.EditText\")");	
 		
 		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
 		element.setValue(data);
