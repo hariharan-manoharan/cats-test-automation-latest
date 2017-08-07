@@ -262,6 +262,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "swipingHorizontal":
 					case "clickButtonWithText":
 					case "enterSiteID":	
+					case "clickDatePicker":
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
 							isMethodFound = true;

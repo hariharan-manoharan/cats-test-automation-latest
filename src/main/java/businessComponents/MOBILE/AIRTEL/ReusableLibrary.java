@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.google.common.base.Function;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import io.appium.java_client.MobileDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
@@ -257,32 +259,78 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		List<WebElement> element = driver.findElementsByAndroidUIAutomator(
 				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");
 		
+		TouchAction action = new TouchAction((MobileDriver)driver);
+		
 		
 		int size = element.size();
 		if (size > 1) {
-			//((JavascriptExecutor) driver).executeScript("arguments[0].click();", element.get(size - 1));
-			//element.get(size - 1).click();
-			
+						
 			int x = element.get(size - 1).getLocation().getX();
 			int y = element.get(size - 1).getLocation().getY();
 			
-			driver.tap(1, x, y, 2);
+			//driver.tap(1, x, y, 2);		
 			
+			action.press(element.get(size - 1), x, y).release().perform();
 			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
 		} else {
-		    //((JavascriptExecutor) driver).executeScript("arguments[0].click();", element.get(0));
-			//element.get(0).click();
-			
+		    			
 			int x = element.get(0).getLocation().getX();
 			int y = element.get(0).getLocation().getY();
 			
-			driver.tap(1, x, y, 2);
+			//driver.tap(1, x, y, 2);
+			
+			action.press(element.get(0), x, y).release().perform();
 			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
-		}
-		HardDelay(1000L);	
+		}			
+
+	}
+	
+	
+	/**
+	 * Function to click spyglass  - Need to Fix this one - Avoid getting the fieldIndex from user
+	 * 
+	 * @param1 String reportName	 
+	 * @return void
+	 * @author Hari 
+	 * @since 06/27/2017
+	 * 
+	 */
+
+	@SuppressWarnings("unchecked")
+	public void clickDatePicker(String pickListName) throws TimeoutException, NoSuchElementException {
 		
+		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));		
+		
+		List<WebElement> element = driver.findElementsByAndroidUIAutomator(
+				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");
+		
+		TouchAction action = new TouchAction((MobileDriver)driver);
+		
+		
+		int size = element.size();
+		if (size > 1) {
+						
+			int x = element.get(size - 1).getLocation().getX();
+			int y = element.get(size - 1).getLocation().getY();
+			
+			//driver.tap(1, x, y, 2);		
+			
+			action.press(element.get(size - 1), x, y).release().perform();
+			
+			takeScreenshot("Clicked - " + pickListName + " date picker icon");
+		} else {
+		    			
+			int x = element.get(0).getLocation().getX();
+			int y = element.get(0).getLocation().getY();
+			
+			//driver.tap(1, x, y, 2);
+			
+			action.press(element.get(0), x, y).release().perform();
+			
+			takeScreenshot("Clicked - " + pickListName + " date picker icon");
+		}			
 
 	}
 
@@ -794,23 +842,40 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 	
 	
 	@SuppressWarnings("unchecked")
-	public void clickButtonWithText(String buttonText) {
+	public void clickButtonWithText(String button) {
 		
 		List<WebElement> elements = driver.findElementsByXPath(".//android.widget.Button");
 		boolean isClicked = false;
+
+		String[] buttonTexts = null;
+		String buttonTextClicked = null;
+		
+		
+		if(button.contains("/")) {
+			buttonTexts  = button.split("/");
+		}
+		
+		for(String buttonText : buttonTexts) {
 		
 		for(WebElement element:elements) {
 			
+			if(isClicked) {
+				break;
+			}
+			
 			if(element.getText().equalsIgnoreCase(buttonText)) {
 				isClicked = true;
+				buttonTextClicked = buttonText; 
 				element.click();
 				takeScreenshot(buttonText+" button is Clicked");
+				break;
 			}
+		}
 		}
 		
 		
 		if(!isClicked) {
-			takeScreenshot(buttonText+" button is not Clicked");
+			takeScreenshot(buttonTextClicked+" button is not Clicked");
 		}
 	}
 
