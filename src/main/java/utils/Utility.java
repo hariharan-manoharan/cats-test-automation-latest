@@ -2285,7 +2285,7 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 	
 	
 	
-	public void clickRoutineBackButton() throws TimeoutException, NoSuchElementException {
+	public void clickRoutineBackButton() {
 		try {
 		
 		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
@@ -2298,7 +2298,7 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 			takeScreenshot("Click Routine back Button");
 		}}
 	
-	public void clickRoutineBackButton(AndroidDriver driver , ExtentTest test) throws TimeoutException, NoSuchElementException {
+	public void clickRoutineBackButton(AndroidDriver driver , ExtentTest test) {
 		try {
 		
 		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
