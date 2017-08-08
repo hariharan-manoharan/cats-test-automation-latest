@@ -76,7 +76,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		Click(ID_TOGGLE_BTN_SSL, "Click - Enable SSL");
 		}
 		Click(ID_ICON_SAVE, "Click - Save Connection");
-		Click(ID_IMG_BACK_BTN, "Click - Back button");
+		Click(ID_ACTION_BAR_BTN, "Click - Back button");
 
 	}
 
@@ -92,10 +92,13 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void selectUserProfile(String profile) throws TimeoutException, NoSuchElementException {
 
 		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
-
+		waitCommand(ID_ACTION_BAR_BTN);
+		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(profile)) {
-				element.click();
+				int x = element.getLocation().getX();
+				int y = element.getLocation().getY();				
+				action.press(element, x, y).release().perform();	
 				takeScreenshot("Profile - <b>"+profile+"</b> is clicked");
 				break;				
 			}
@@ -106,24 +109,30 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	@SuppressWarnings("unchecked")
 	public void clickRoutineFolder(String folderName) throws TimeoutException, NoSuchElementException  {
 		
-		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
-
+		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");		
+		waitUntilTextDisplayed(ID_ACTION_BAR_BTN, "Routines");
+		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(folderName)) {
-				element.click();
+				int x = element.getLocation().getX();
+				int y = element.getLocation().getY();				
+				action.press(element, x, y).release().perform();
 				takeScreenshot("Routine Folder - <b>"+folderName+"</b> is clicked");
 				break;				
 			}
-		}	
+		}		
 	}
 
 	@SuppressWarnings("unchecked")
-	public void clickRoutine(String routineName) throws TimeoutException, NoSuchElementException  {
+	public void clickRoutine(String folderName, String routineName) throws TimeoutException, NoSuchElementException  {
 		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
-
+		waitUntilTextDisplayed(ID_ACTION_BAR_SUBTITLE,folderName);
+		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(routineName)) {
-				element.click();
+				int x = element.getLocation().getX();
+				int y = element.getLocation().getY();				
+				action.press(element, x, y).release().perform();
 				takeScreenshot("Routine - <b>"+routineName+"</b> is clicked");
 				break;				
 			}
@@ -350,6 +359,8 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	@SuppressWarnings("unchecked")
 	public void selectPickListValue(String pickListValue) throws TimeoutException, NoSuchElementException{
+		
+		TouchAction action = new TouchAction((MobileDriver)driver);
 
 		waitCommand(ID_PICKLIST_SEARCHFIELD);
 
@@ -362,7 +373,9 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		for(WebElement element: elements){			
 			size--;
 			if(element.getText().equalsIgnoreCase(pickListValue)){
-				element.click();	
+				int x = element.getLocation().getX();
+				int y = element.getLocation().getY();				
+				action.press(element, x, y).release().perform();				
 				takeScreenshot("Pick List Value - <b>"+pickListValue+"</b> is selected");
 				break;
 			}else if(size==0){

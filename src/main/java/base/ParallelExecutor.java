@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -129,7 +130,17 @@ public class ParallelExecutor extends Utility implements Runnable {
 			report.flush();	
 			testRailReport();
 			return;
-		} catch (Exception e) {
+		} catch (SQLException  e) {
+			test.log(LogStatus.FAIL, "DB Connection not established");
+			test.log(LogStatus.FAIL, e);
+			if(driver!=null){
+				report(driver, test, "Exception occured", LogStatus.FAIL);
+				exceptionHandler();
+				}
+			report.flush();	
+			testRailReport();
+			return;
+		}catch (Exception e) {
 			test.log(LogStatus.FAIL, e);
 			if(driver!=null){
 				report(driver, test, "Exception occured", LogStatus.FAIL);
@@ -222,6 +233,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "multipleClickNext":
 					case "validatePicklistValue":
 					case "verifyPrompt":
+					case "clickRoutine":
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
 							isMethodFound = true;
@@ -246,8 +258,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 							method.invoke(classInstance, fieldMap.get(currentKey), dataMap.get(currentKey), currentKey);							
 						}
 						break;
-					case "clickRoutineFolder":
-					case "clickRoutine":
+					case "clickRoutineFolder":					
 					case "selectPickListValue":
 					case "validateLoopField":
 					case "clickYesConfirmPromptContains":

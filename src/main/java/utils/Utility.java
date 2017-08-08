@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -1361,12 +1362,12 @@ public boolean checkRecordAvailable(String query) {
 	/************************************************************************************************
 	 * Function :Getconnections() Decsription:Function to connect Database Date
 	 * :14-12-2016 Author :Saran
+	 * @throws ClassNotFoundException 
 	 *************************************************************************************************/
-	public Connection Getconnections() throws Exception {
+	public Connection Getconnections() throws SQLException, SQLTimeoutException, ClassNotFoundException {
 		
 		 Connection connection = null;
 
-		try {
 			String driver = "oracle.jdbc.driver.OracleDriver";
 
 			String url = "jdbc:oracle:thin:@" + environmentVariables.get("DataBaseURL");
@@ -1376,11 +1377,7 @@ public boolean checkRecordAvailable(String query) {
 			Class.forName(driver);
 			connection = DriverManager.getConnection(url, username, password);
 
-		} catch (Exception e) {
-			test.log(LogStatus.FAIL, "DB Connection not established");
-
-		}
-		
+	
 		return connection;
 
 	}
@@ -2306,12 +2303,12 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 		
 		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
 		element.click();
-		takeScreenshot("Click Routine back Button");
+		takeScreenshot(driver,test,"Click Routine back Button");
 		
 		}catch(Exception e) {
 			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
 			element.click();
-			takeScreenshot("Click Routine back Button");
+			takeScreenshot(driver,test,"Click Routine back Button");
 		}}
 	
 	@SuppressWarnings("unused")
