@@ -96,9 +96,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(profile)) {
-				int x = element.getLocation().getX();
-				int y = element.getLocation().getY();				
-				action.press(element, x, y).release().perform();	
+				//int x = element.getLocation().getX();
+				//int y = element.getLocation().getY();				
+				//action.press(element).release().perform();	
+				element.click();
 				takeScreenshot("Profile - <b>"+profile+"</b> is clicked");
 				break;				
 			}
@@ -114,9 +115,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(folderName)) {
-				int x = element.getLocation().getX();
-				int y = element.getLocation().getY();				
-				action.press(element, x, y).release().perform();
+				//int x = element.getLocation().getX();
+				//int y = element.getLocation().getY();				
+				//action.press(element).release().perform();
+				element.click();
 				takeScreenshot("Routine Folder - <b>"+folderName+"</b> is clicked");
 				break;				
 			}
@@ -130,9 +132,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(routineName)) {
-				int x = element.getLocation().getX();
-				int y = element.getLocation().getY();				
-				action.press(element, x, y).release().perform();
+				//int x = element.getLocation().getX();
+				//int y = element.getLocation().getY();				
+				//action.press(element).release().perform();
+				element.click();
 				takeScreenshot("Routine - <b>"+routineName+"</b> is clicked");
 				break;				
 			}
@@ -281,9 +284,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			int x = element.get(size - 1).getLocation().getX();
 			int y = element.get(size - 1).getLocation().getY();
 			
-			//driver.tap(1, x, y, 2);		
+			driver.tap(1, x, y, 2);		
 			
-			action.press(element.get(size - 1), x, y).release().perform();
+			//action.press(element.get(size - 1)).release().perform();
+			//element.get(size - 1).click();
 			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
 		} else {
@@ -291,9 +295,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			int x = element.get(0).getLocation().getX();
 			int y = element.get(0).getLocation().getY();
 			
-			//driver.tap(1, x, y, 2);
+			driver.tap(1, x, y, 2);
 			
-			action.press(element.get(0), x, y).release().perform();
+			//action.press(element.get(0)).release().perform();
+			//element.get(0).click();
 			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
 		}			
@@ -328,9 +333,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			int x = element.get(size - 1).getLocation().getX();
 			int y = element.get(size - 1).getLocation().getY();
 			
-			//driver.tap(1, x, y, 2);		
+			driver.tap(1, x, y, 2);		
 			
-			action.press(element.get(size - 1), x, y).release().perform();
+			//action.press(element.get(size - 1)).release().perform();
+			//element.get(size - 1).click();
 			
 			takeScreenshot("Clicked - " + pickListName + " date picker icon");
 		} else {
@@ -338,9 +344,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			int x = element.get(0).getLocation().getX();
 			int y = element.get(0).getLocation().getY();
 			
-			//driver.tap(1, x, y, 2);
+			driver.tap(1, x, y, 2);
 			
-			action.press(element.get(0), x, y).release().perform();
+			//action.press(element.get(0)).release().perform();
+			//element.get(0).click();
 			
 			takeScreenshot("Clicked - " + pickListName + " date picker icon");
 		}			
@@ -373,9 +380,10 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		for(WebElement element: elements){			
 			size--;
 			if(element.getText().equalsIgnoreCase(pickListValue)){
-				int x = element.getLocation().getX();
-				int y = element.getLocation().getY();				
-				action.press(element, x, y).release().perform();				
+				//int x = element.getLocation().getX();
+				//int y = element.getLocation().getY();				
+				//action.press(element).release().perform();	
+				element.click();
 				takeScreenshot("Pick List Value - <b>"+pickListValue+"</b> is selected");
 				break;
 			}else if(size==0){
