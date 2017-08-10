@@ -676,12 +676,16 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 
 			if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {			
 				distributedRuntimeDataProperties.put(testParameters.getCurrentTestCase() + "#" + columnName, columnValue);
+				test.log(LogStatus.PASS, testParameters.getCurrentTestCase() + "#" + columnName + " : "+columnValue , "");
+				
 			}else {
 				parallelRuntimeDataProperties.put(testParameters.getCurrentTestCase() + "#" + columnName, columnValue);
+				test.log(LogStatus.PASS, testParameters.getCurrentTestCase() + "#" + columnName + " : "+columnValue , "");
 			}
 
 		} catch (Exception e) {
 			test.log(LogStatus.FAIL, e);
+			test.log(LogStatus.FAIL, testParameters.getCurrentTestCase() + "#" + columnName + " : "+columnValue , "");
 		}
 		}finally {
 			lock.unlock();
@@ -741,13 +745,12 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 
 	}
 
-	public void getPutTestdata(String field , String name){
+	public void getPutTestdata(String field , String name) throws TimeoutException, NoSuchElementException{
 
 
 		waitCommand(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View"));
 
 		String Fieldvalue = driver.findElement(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View")).getAttribute("name");	
-
 
 		addRuntimeTestData(name, Fieldvalue);
 
