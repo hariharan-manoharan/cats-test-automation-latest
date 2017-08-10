@@ -255,8 +255,10 @@ public class Utility implements RoutineObjectRepository{
 
 		switchContext(contextHandles, "NATIVE");
 
+		if(properties.getProperty("take.screenshot.on.pass").equalsIgnoreCase("True") ){
 		test.log(LogStatus.PASS, reportName,
 				"<b>Screenshot: <b>" + test.addScreenCapture("./" + screenShot() + ".png"));
+		}
 
 	}
 
@@ -826,6 +828,32 @@ public class Utility implements RoutineObjectRepository{
 
 	}
 	
+	
+	/**
+	 * Function to enter text in WebElement - WEBVIEW
+	 * 
+	 * @param1 By by	
+	 * @param2 String reportName
+	 * @param3 String text
+	 * @return void
+	 * @author Hari 
+	 * @since 12/27/2016
+	 * 
+	 */
+
+	@SuppressWarnings("unchecked")
+	public void clickWebView(By by, String reportName)
+			throws TimeoutException, NoSuchElementException {
+
+		Set<String> contextHandles = driver.getContextHandles();
+		switchContext(contextHandles, "fulcrum");
+		waitCommand(by);
+		String s = driver.getPageSource();
+		WebElement element = driver.findElement(by);
+		element.click();
+		takeScreenshotWebView(contextHandles, reportName);
+
+	}
 	
 	/**
 	 * Function to enter text in WebElement - WEBVIEW

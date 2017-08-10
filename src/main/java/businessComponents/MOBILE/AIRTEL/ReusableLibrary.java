@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
@@ -266,44 +267,95 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	 * @since 06/27/2017
 	 * 
 	 */
-
 	@SuppressWarnings("unchecked")
 	public void clickSpyGlass(String pickListName) throws TimeoutException, NoSuchElementException {
 		
-		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));		
+		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));	
+		driver.pressKeyCode(112); 
 		
 		List<WebElement> element = driver.findElementsByAndroidUIAutomator(
-				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");
-		
-		TouchAction action = new TouchAction((MobileDriver)driver);
-		
+				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");			
+	
 		
 		int size = element.size();
-		if (size > 1) {
-						
-			int x = element.get(size - 1).getLocation().getX();
-			int y = element.get(size - 1).getLocation().getY();
+		if (size > 1) {						
+	
+			element.get(size - 1).click();
+			Set<String> contextHandles = driver.getContextHandles();
+			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
+				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
+					Click(ID_MESSAGE_OK,
+							"Clicked 'Ok' for prompt - " + GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")));
+
+					if (contextHandles.contains("fulcrum")) {
+						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
+						clickWebView(
+								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
+								pickListName);
+					} else {
+						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
+						int x = element.get(size - 1).getLocation().getX();
+						int y = element.get(size - 1).getLocation().getY();				
+						driver.tap(1, x, y, 3);
+					}
+				} else {
+					if (contextHandles.contains("fulcrum")) {
+						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
+						clickWebView(
+								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
+								pickListName);
+					} else {
+						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
+						int x = element.get(0).getLocation().getX();
+						int y = element.get(0).getLocation().getY();				
+						driver.tap(1, x, y, 3);
+					}
+				}
+			}
 			
-			driver.tap(1, x, y, 2);		
-			
-			//action.press(element.get(size - 1)).release().perform();
-			//element.get(size - 1).click();
 			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
 		} else {
-		    			
-			int x = element.get(0).getLocation().getX();
-			int y = element.get(0).getLocation().getY();
-			
-			driver.tap(1, x, y, 2);
-			
-			//action.press(element.get(0)).release().perform();
-			//element.get(0).click();
+
+			element.get(0).click();
+			Set<String> contextHandles = driver.getContextHandles();
+			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
+				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
+					Click(ID_MESSAGE_OK,
+							"Clicked 'Ok' for prompt - " + GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")));
+
+					if (contextHandles.contains("fulcrum")) {
+						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
+						clickWebView(
+								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
+								pickListName);
+					} else {
+						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
+						int x = element.get(0).getLocation().getX();
+						int y = element.get(0).getLocation().getY();	
+						driver.tap(1, x, y, 3);
+					}
+				} else {
+					if (contextHandles.contains("fulcrum")) {
+						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
+						clickWebView(
+								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
+								pickListName);
+					} else {
+						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
+						int x = element.get(0).getLocation().getX();
+						int y = element.get(0).getLocation().getY();	
+						driver.tap(1, x, y, 3);
+					}
+				}
+			}
 			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
 		}			
 
 	}
+	
+
 	
 	
 	/**
@@ -321,38 +373,18 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		
 		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));		
 		
-		List<WebElement> element = driver.findElementsByAndroidUIAutomator(
-				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");
 		
-		TouchAction action = new TouchAction((MobileDriver)driver);
+		WebElement element = driver.findElement(By.xpath(String.format(XPATH_TXT, "Tap to Choose Date")));	
+		element.click();
+
+			if(!isElementPresent(By.id("numberpicker_input"), "Number Picker")) {			
+				test.log(LogStatus.INFO, "Re-Clicking in Web view - "+pickListName);			
+				 clickWebView(By.xpath("//*[contains(text(),'"+pickListName+"')]/following-sibling::div"), pickListName);
+			}
 		
-		
-		int size = element.size();
-		if (size > 1) {
-						
-			int x = element.get(size - 1).getLocation().getX();
-			int y = element.get(size - 1).getLocation().getY();
-			
-			driver.tap(1, x, y, 2);		
-			
-			//action.press(element.get(size - 1)).release().perform();
-			//element.get(size - 1).click();
-			
-			takeScreenshot("Clicked - " + pickListName + " date picker icon");
-		} else {
-		    			
-			int x = element.get(0).getLocation().getX();
-			int y = element.get(0).getLocation().getY();
-			
-			driver.tap(1, x, y, 2);
-			
-			//action.press(element.get(0)).release().perform();
-			//element.get(0).click();
-			
 			takeScreenshot("Clicked - " + pickListName + " date picker icon");
 		}			
 
-	}
 
 
 	/**
@@ -872,8 +904,7 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 		List<WebElement> elements = driver.findElementsByXPath(".//android.widget.Button");
 		boolean isClicked = false;
 
-		String[] buttonTexts = null;
-		String buttonTextClicked = null;
+		String[] buttonTexts = null;		
 		
 		
 		if(button.contains("/")) {
@@ -889,8 +920,7 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 			}
 			
 			if(element.getText().equalsIgnoreCase(buttonText)) {
-				isClicked = true;
-				buttonTextClicked = buttonText; 
+				isClicked = true;			
 				element.click();
 				takeScreenshot(buttonText+" button is Clicked");
 				break;
@@ -900,7 +930,7 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 		
 		
 		if(!isClicked) {
-			takeScreenshot(buttonTextClicked+" button is not Clicked");
+			takeScreenshot(button+" button is not Clicked");
 		}
 	}
 
