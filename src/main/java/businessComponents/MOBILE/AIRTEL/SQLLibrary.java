@@ -520,16 +520,15 @@ public class SQLLibrary extends Utility {
 	}
 
 	public void deliveryinfocomplete( String Complete, String TCID){
-
-
-		if(Complete.equalsIgnoreCase("Yes")){
-			
+		
+		if(Complete.equalsIgnoreCase("Yes")){			
 		test.log(LogStatus.PASS, "Delivery info complete - <b>Yes</b>");
 			deliveryinfocomplete(TCID);
 		}
 		else{
 		test.log(LogStatus.PASS, "Delivery info complete -<b>No</b>");
 		}
+		
 	}
 
 	public void deliveryinfocomplete(String TCID){
