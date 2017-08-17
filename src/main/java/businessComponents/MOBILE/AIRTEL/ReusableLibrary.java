@@ -270,24 +270,27 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	@SuppressWarnings("unchecked")
 	public void clickSpyGlass(String pickListName) throws TimeoutException, NoSuchElementException {
 		
+		boolean isWebviewExist = false;
+		
 		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));	
 		driver.pressKeyCode(112); 
 		
 		List<WebElement> element = driver.findElementsByAndroidUIAutomator(
-				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");			
-	
+				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");	
+		
+		isWebviewExist = isWebviewExist();
 		
 		int size = element.size();
 		if (size > 1) {						
 	
 			element.get(size - 1).click();
-			Set<String> contextHandles = driver.getContextHandles();
+				
 			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
 				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
 					Click(ID_MESSAGE_OK,
 							"Clicked 'Ok' for prompt - " + GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")));
 
-					if (contextHandles.contains("fulcrum")) {
+					if (isWebviewExist) {
 						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
 						clickWebView(
 								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
@@ -299,15 +302,15 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 						driver.tap(1, x, y, 3);
 					}
 				} else {
-					if (contextHandles.contains("fulcrum")) {
+					if (isWebviewExist) {
 						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
 						clickWebView(
 								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
 								pickListName);
 					} else {
 						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
-						int x = element.get(0).getLocation().getX();
-						int y = element.get(0).getLocation().getY();				
+						int x = element.get(size - 1).getLocation().getX();
+						int y = element.get(size - 1).getLocation().getY();				
 						driver.tap(1, x, y, 3);
 					}
 				}
@@ -318,13 +321,14 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		} else {
 
 			element.get(0).click();
-			Set<String> contextHandles = driver.getContextHandles();
+			
+			
 			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
 				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
 					Click(ID_MESSAGE_OK,
 							"Clicked 'Ok' for prompt - " + GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")));
 
-					if (contextHandles.contains("fulcrum")) {
+					if (isWebviewExist) {
 						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
 						clickWebView(
 								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
@@ -336,7 +340,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 						driver.tap(1, x, y, 3);
 					}
 				} else {
-					if (contextHandles.contains("fulcrum")) {
+					if (isWebviewExist) {
 						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
 						clickWebView(
 								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
@@ -345,7 +349,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
 						int x = element.get(0).getLocation().getX();
 						int y = element.get(0).getLocation().getY();	
-						driver.tap(1, x, y, 3);
+						element.get(0).click();
 					}
 				}
 			}
@@ -355,6 +359,21 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	}
 	
+	
+	public boolean isWebviewExist() {
+		
+		boolean isWebviewExist = false;
+		Set<String> contextHandles = driver.getContextHandles();
+		
+		for (String s : contextHandles) {				
+			if (s.contains("fulcrum")) {
+				isWebviewExist = true;
+				break;
+			}
+		}
+		
+		return isWebviewExist;
+	}
 
 	
 	
