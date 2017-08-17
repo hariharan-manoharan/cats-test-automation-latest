@@ -259,7 +259,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 
 	/**
-	 * Function to click spyglass  - Need to Fix this one - Avoid getting the fieldIndex from user
+	 * Function to click spyglass
 	 * 
 	 * @param1 String reportName	 
 	 * @return void
@@ -349,7 +349,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
 						int x = element.get(0).getLocation().getX();
 						int y = element.get(0).getLocation().getY();	
-						element.get(0).click();
+						driver.tap(1, x, y, 3);
 					}
 				}
 			}
