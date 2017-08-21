@@ -97,7 +97,7 @@ public class Main{
 	
 	private static String reportFolderName;	
 	private static boolean issueWithSetup = false;
-	
+	private static boolean appsdatavsmobility = true;
 	private static final String globalPropertyFilePath = "./resources/PropertyFiles/GlobalProperties.properties";
 	private static final String globalRuntimeDataPropertyFilePath = "./resources/PropertyFiles/GlobalRuntimeDataProperties.properties";
 	private static final String testRailPropertyFilePath = "./resources/PropertyFiles/TestRail.properties";
@@ -230,63 +230,64 @@ public class Main{
 		lock = new ReentrantLock();
 		
 		if(adbDevices.size()>=nThreads) {
-		
-		for (int t = 0; t < nThreads; t++) {
 
-			appiumServerSetup(t + 1);
-			androidDriverSetUp(t + 1);
-			if(appSetup.equalsIgnoreCase("True")) {
-			setupAppForTesting(t);
-			}
+			for (int t = 0; t < nThreads; t++) {
 
-		}
-
-		for (int i = 0; i < setCategoryList.size(); i++) {
-
-			groupedTestInstances = new ArrayList<TestParameters>();
-			for (int j = 0; j < testInstancesToRun.size(); j++) {
-				if (Integer.parseInt(testInstancesToRun.get(j).getSetCategory()) == setCategoryList.get(i)) {
-					groupedTestInstances.add(testInstancesToRun.get(j));
+				appiumServerSetup(t + 1);
+				androidDriverSetUp(t + 1);
+				if(appSetup.equalsIgnoreCase("True")) {
+					setupAppForTesting(t);
 				}
 
 			}
-			groupedtestInstancesToRun.add(groupedTestInstances);
-		}
 
-		for (int k = 0; k < groupedtestInstancesToRun.size(); k++) {
+			for (int i = 0; i < setCategoryList.size(); i++) {
+				if(appsdatavsmobility) {
+					groupedTestInstances = new ArrayList<TestParameters>();
+					for (int j = 0; j < testInstancesToRun.size(); j++) {
+						if (Integer.parseInt(testInstancesToRun.get(j).getSetCategory()) == setCategoryList.get(i)) {
+							groupedTestInstances.add(testInstancesToRun.get(j));
+						}
 
-			ExecutorService distributedExecutor = Executors.newFixedThreadPool(nThreads);
-
-			int groupedTestInstanceSize = groupedtestInstancesToRun.get(k).size();			
-
-			for (int currentTestInstance = 0; currentTestInstance < groupedTestInstanceSize; currentTestInstance++) {
-				if (testRailProperties.getProperty("testRail.enabled").equalsIgnoreCase("True")) {
-					testRunner = new DistributedExecutor(groupedtestInstancesToRun.get(k).get(currentTestInstance), report,
-							executionType, dataTable, testRailListenter, lock,
-							androidDriverList);
-				} else {
-					testRunner = new DistributedExecutor(groupedtestInstancesToRun.get(k).get(currentTestInstance), report,
-							executionType, dataTable, lock,
-							androidDriverList);
-				}
-
-				distributedExecutor.execute(testRunner);
-
-			}
-
-			distributedExecutor.shutdown();
-			while (!distributedExecutor.isTerminated()) {
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					}
+					groupedtestInstancesToRun.add(groupedTestInstances);
 				}
 			}
 
-		}
-		
-		globalRuntimeDataProperties.writeGlobalRuntimeDataProperties(globalRuntimeDataPropertyFilePath, utility.getRuntimeDataProperties());	
-		report.flush();
+			for (int k = 0; k < groupedtestInstancesToRun.size(); k++) {
+				if(appsdatavsmobility) {
+					ExecutorService distributedExecutor = Executors.newFixedThreadPool(nThreads);
+
+					int groupedTestInstanceSize = groupedtestInstancesToRun.get(k).size();			
+
+					for (int currentTestInstance = 0; currentTestInstance < groupedTestInstanceSize; currentTestInstance++) {
+						if (testRailProperties.getProperty("testRail.enabled").equalsIgnoreCase("True")) {
+							testRunner = new DistributedExecutor(groupedtestInstancesToRun.get(k).get(currentTestInstance), report,
+									executionType, dataTable, testRailListenter, lock,
+									androidDriverList);
+						} else {
+							testRunner = new DistributedExecutor(groupedtestInstancesToRun.get(k).get(currentTestInstance), report,
+									executionType, dataTable, lock,
+									androidDriverList);
+						}
+
+						distributedExecutor.execute(testRunner);
+
+					}
+
+					distributedExecutor.shutdown();
+					while (!distributedExecutor.isTerminated()) {
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+
+				}}
+
+			globalRuntimeDataProperties.writeGlobalRuntimeDataProperties(globalRuntimeDataPropertyFilePath, utility.getRuntimeDataProperties());	
+			report.flush();
 
 		}else {
 			issueWithSetup = true;
@@ -301,64 +302,68 @@ public class Main{
 
 
 	public static void parallelExecution() {
-		
+
 		int numberOfNodes = Integer.parseInt(properties.getProperty("NumberOfNodes"));
 		ExecutorService[] parallelExecutor = new ExecutorService[numberOfNodes] ;	
 		String appSetup = properties.getProperty("appSetup");
-		
+
 		Runnable testRunner = null;
 		lock = new ReentrantLock();
-		
-		if(adbDevices.size()>=nThreads) {
-		
-		for (int t = 0; t < numberOfNodes; t++) {
 
-			appiumServerSetup(t + 1);
-			androidDriverSetUp(t + 1);
-			if(appSetup.equalsIgnoreCase("True")) {
-				setupAppForTesting(t);
+		if(adbDevices.size()>=nThreads) {
+
+			for (int t = 0; t < numberOfNodes; t++) {
+
+				appiumServerSetup(t + 1);
+				androidDriverSetUp(t + 1);
+				if(appSetup.equalsIgnoreCase("True")) {
+					setupAppForTesting(t);
 				}
 
-		}
-		
-		for(int run = 0; run < numberOfNodes; run ++ ) {
-			
-			parallelExecutor[run] = Executors.newFixedThreadPool(1);
-			
-			FrameworkProperties globalRuntimeDataProperties = FrameworkProperties.getInstance();
-			Properties runtimeDataProperties = globalRuntimeDataProperties.loadPropertyFile(globalRuntimeDataPropertyFilePath);
-			ExtentReports report = initializeTestReport("TestSummary_"+(run+1));
-			
-			for (int currentTestInstance = 0; currentTestInstance < testInstancesToRun.size(); currentTestInstance++) {
-				
-				if (testRailProperties.getProperty("testRail.enabled").equalsIgnoreCase("True")) {
-					testRunner = new ParallelExecutor(testInstancesToRun.get(currentTestInstance), report,
-							executionType, dataTable, testRailListenter, lock,
-							androidDriverList.get(run), runtimeDataProperties);
-				} else {
-					testRunner = new ParallelExecutor(testInstancesToRun.get(currentTestInstance), report,
-							executionType, dataTable, lock,
-							androidDriverList.get(run), runtimeDataProperties);					
-				}				
-				
-				parallelExecutor[run].execute(testRunner);	
-				
 			}
-			
-			
-			
-		}
-		
-		for(int run = 0; run < numberOfNodes; run ++ ) {		
-		parallelExecutor[run].shutdown();
-		while (!parallelExecutor[run].isTerminated()) {
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+
+			for(int run = 0; run < numberOfNodes; run ++ ) {
+
+				if(appsdatavsmobility) {
+					parallelExecutor[run] = Executors.newFixedThreadPool(1);
+
+					FrameworkProperties globalRuntimeDataProperties = FrameworkProperties.getInstance();
+					Properties runtimeDataProperties = globalRuntimeDataProperties.loadPropertyFile(globalRuntimeDataPropertyFilePath);
+					ExtentReports report = initializeTestReport("TestSummary_"+(run+1));
+
+					for (int currentTestInstance = 0; currentTestInstance < testInstancesToRun.size(); currentTestInstance++) {
+
+						if (testRailProperties.getProperty("testRail.enabled").equalsIgnoreCase("True")) {
+							testRunner = new ParallelExecutor(testInstancesToRun.get(currentTestInstance), report,
+									executionType, dataTable, testRailListenter, lock,
+									androidDriverList.get(run), runtimeDataProperties);
+						} else {
+							testRunner = new ParallelExecutor(testInstancesToRun.get(currentTestInstance), report,
+									executionType, dataTable, lock,
+									androidDriverList.get(run), runtimeDataProperties);					
+						}				
+
+						parallelExecutor[run].execute(testRunner);	
+
+					}
+
+
+
+				}
 			}
-		}
-		}
+
+			for(int run = 0; run < numberOfNodes; run ++ ) {
+				if(appsdatavsmobility) {	
+					parallelExecutor[run].shutdown();
+					while (!parallelExecutor[run].isTerminated()) {
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
 		}else {
 			issueWithSetup = true;
 			setUpReport = report.startTest("Execution setup status");
@@ -366,9 +371,7 @@ public class Main{
 			setUpReport.log(LogStatus.INFO, "<b>Number of adb devices connected should be greater than or equal to NumberOfNodes. Please check whether all the devices are connected properly.</b>");
 			report.flush();
 		}
-		
-		
-		
+
 	}
 	
 	
@@ -644,19 +647,33 @@ public class Main{
 	
 	@SuppressWarnings("unchecked")
 	private static void setupAppForTesting(int driverIndex) {
-		
-		androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();	
-		waitCommand(By.id("action_bar_title"), androidDriverList.get(driverIndex));
-		
-		List<WebElement> elements = androidDriverList.get(driverIndex).findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
-		
-		for(WebElement element: elements) {				
-			if(element.getText().equalsIgnoreCase(properties.getProperty("userProfile"))) {
-				element.click();
-				break;
+
+		String Envapp = androidDriverList.get(driverIndex).findElement(By.id("my_connections")).getText();
+		String Envdata = properties.getProperty("Environment");
+		issueWithSetup = true;
+		setUpReport = report.startTest("Login");
+
+		if(Envapp.equalsIgnoreCase(Envdata)) {
+
+
+			androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();	
+			waitCommand(By.id("action_bar_title"), androidDriverList.get(driverIndex));
+
+			List<WebElement> elements = androidDriverList.get(driverIndex).findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
+
+			for(WebElement element: elements) {				
+				if(element.getText().equalsIgnoreCase(properties.getProperty("userProfile"))) {
+					element.click();
+					break;
+				}
 			}
+
+		}else {
+			setUpReport.log(LogStatus.FATAL, "<b>"+Envdata +"</b> is not connected to <b>"+ Envapp + "</b> in CATS MOBILITY");
+			appsdatavsmobility = false;
+			report.flush();
+
 		}
-		
 	}
 	
 	
