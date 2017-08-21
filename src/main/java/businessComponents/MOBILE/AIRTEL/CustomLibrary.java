@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
 import main.java.executionSetup.TestParameters;
@@ -105,4 +109,34 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		    clickNext();
 		}
 	}
+	
+	
+	  /************************************************************************************************
+	   * Function :getappinfo 
+	   * Decsription:Function to used get application info
+	   * Date :21-08-2017 
+	   * Author :Saran
+	   *************************************************************************************************/
+	  public void getappinfo(){
+	    
+	    driver.findElement(By.id("home")).click();
+	    takeScreenshot("Environmet/User/Profile");
+
+	    WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").text(\"Info\").clickable(true)");
+	    element.click();
+	    takeScreenshot("App Info");
+	    
+	    waitCommand(By.id("info_client_version"));
+	    
+	    String clientversion = driver.findElement(By.id("info_client_version")).getText();
+	    String serverversion = driver.findElement(By.id("info_server_version")).getText();
+	    String catsversion = driver.findElement(By.id("info_cats_version")).getText();
+	    
+	    test.log(LogStatus.INFO, "Client Version : <b>" + clientversion +"</b>");
+	    test.log(LogStatus.INFO, "Server Version : <b>"+ serverversion+"</b>");
+	    test.log(LogStatus.INFO, "CATS Version : <b>"+catsversion+"</b>");
+	    
+	    driver.findElement(By.id("info_done_button")).click();
+
+	  }
 }
