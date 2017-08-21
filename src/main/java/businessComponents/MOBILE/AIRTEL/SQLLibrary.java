@@ -62,7 +62,7 @@ public class SQLLibrary extends Utility {
 	
 	public void createBillOfMaterial(){
 		LinkedHashMap<String, String> dataMap = dataTable.getRowData("Data_Staging", testParameters.getCurrentTestCase());
-		createBillOfMaterial(dataMap);
+		createBillOfMaterialQuery(dataMap);
 	}
 
 
@@ -140,6 +140,63 @@ public class SQLLibrary extends Utility {
 	}
 
 
+	public void createBillOfMaterialQuery(LinkedHashMap<String, String> inputValueMap){
+		String query = null;	
+		CallableStatement stproc_stmt; 
+		try {
+			
+			query = "INSERT "
+						+"INTO CATS.CATSCON_BOM_STG"
+						  +"("
+						    +"ORGANIZATION_CODE,"
+						    +"ORGANIZATION_ID,"
+						    +"BILL_ITEM_NAME,"
+						    +"ITEM_SEQUENCE_NUMBER,"
+						    +"COMPONENT_ITEM_NAME,"
+						    +"QUANTITY_PER_ASSEMBLY,"
+						    +"START_EFFECTIVE_DATE,"
+						    +"UNIQUE_ID,"
+						    +"RECORD_ID,"
+						    +"CREATION_DATE,"
+						    +"PROCESS_FLAG,"
+						    + "YIELD"
+						  +")"
+						  +"VALUES"
+						  +"("
+						  	+"'"+inputValueMap.get("VALUE1")+"',"
+						  	+ Integer.parseInt(inputValueMap.get("VALUE2"))+","
+						    +"'"+getRuntimeTestdata(inputValueMap.get("VALUE3"))+"',"
+						    + Integer.parseInt(inputValueMap.get("VALUE4"))+","
+						    +"'"+getRuntimeTestdata(inputValueMap.get("VALUE5"))+"',"
+						    + Integer.parseInt(inputValueMap.get("VALUE6"))+","
+						    +inputValueMap.get("VALUE7")+","
+						    +"'"+inputValueMap.get("VALUE8")+"',"
+						    +generateRandomNum(10000000)+","
+						    +inputValueMap.get("VALUE10")+","
+						    +"'"+inputValueMap.get("VALUE11")+"',"
+						    +"'"+inputValueMap.get("VALUE12")+"')";
+						 
+			//System.out.println(query);
+			executeUpdateQuery(query, "BOM is created for Item code - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE3"))+"</b> where, Item Sequence # - <b>"+inputValueMap.get("VALUE4")+
+																										"</b>, Component Item Code - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE5"))+
+																										"</b>, Qty Per Assembly - <b>"+ inputValueMap.get("VALUE6")+"</b>");
+			connection.commit();
+			stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_BOM}");	
+			stproc_stmt.executeUpdate();		
+			stproc_stmt = connection.prepareCall ("{call CATSCON_P_PARTINTERFACE.SP_INITPARTINTERFACE(?)}");
+			stproc_stmt.setString(1, "");
+			stproc_stmt.executeUpdate();
+			stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_BOM_ERPACK}");	
+			stproc_stmt.executeUpdate();
+			
+			stproc_stmt.close();
+			
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+	}
+	
+	
 	public int createPurchaseOrderQuery(LinkedHashMap<String, String> inputValueMap){
 		String query = null;		
 		int RECORD_ID = 0;
@@ -148,10 +205,11 @@ public class SQLLibrary extends Utility {
 
 			RECORD_ID = generateRandomNum(10000000);
 
-			String purchaseOrder = generateTestData("PONUMBER", inputValueMap.get("VALUE2"));
+			String purchaseOrder = (inputValueMap.get("VALUE2").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE2")) : generateTestData("PONUMBER", inputValueMap.get("VALUE2"));
 			String itemcode = getRuntimeTestdata(inputValueMap.get("VALUE18"));
 
-
+			addRuntimeTestData("PONUMBER", purchaseOrder);
+			
 			query="INSERT "
 					+"INTO CATS.CATSCON_PO_STG"
 					+"("
@@ -274,7 +332,9 @@ public class SQLLibrary extends Utility {
 
 			RECORD_ID = generateRandomNum(10000000);
 
-			String mrrNumber = generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
+			String mrrNumber = (inputValueMap.get("VALUE9").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE9")) : generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
+			
+			addRuntimeTestData("MRRNUMBER", mrrNumber);
 
 			query = "INSERT "
 					+"INTO CATSCON_MRR_STG"
