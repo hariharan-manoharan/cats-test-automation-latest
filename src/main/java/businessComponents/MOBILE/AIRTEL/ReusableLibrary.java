@@ -110,7 +110,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	@SuppressWarnings("unchecked")
 	public void clickRoutineFolder(String folderName) throws TimeoutException, NoSuchElementException  {
-		
+		boolean isClicked = false;
 		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");		
 		waitUntilTextDisplayed(ID_ACTION_BAR_BTN, "Routines");
 		TouchAction action = new TouchAction((MobileDriver)driver);
@@ -121,13 +121,19 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 				//action.press(element).release().perform();
 				element.click();
 				takeScreenshot("Routine Folder - <b>"+folderName+"</b> is clicked");
+				isClicked = true;
 				break;				
 			}
 		}		
+		
+		if(!isClicked) {
+			test.log(LogStatus.FAIL, "Routine Folder - <b>"+folderName+"</b> is not clicked");			
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void clickRoutine(String folderName, String routineName) throws TimeoutException, NoSuchElementException  {
+		boolean isClicked = false;
 		List<WebElement> elements = driver.findElementsByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\")");
 		waitUntilTextDisplayed(ID_ACTION_BAR_SUBTITLE,folderName);
 		TouchAction action = new TouchAction((MobileDriver)driver);
@@ -138,9 +144,14 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 				//action.press(element).release().perform();
 				element.click();
 				takeScreenshot("Routine - <b>"+routineName+"</b> is clicked");
+				isClicked = true;
 				break;				
 			}
 		}	
+		
+		if(!isClicked) {
+			test.log(LogStatus.FAIL, "Routine - <b>"+routineName+"</b> is not clicked");			
+		}
 	}
 
 
@@ -847,6 +858,18 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 		}else if(field!=null && fieldValue.equals("")) {
 			test.log(LogStatus.INFO, "<b>"+ field + "</b></br> - Value is not expected in this field</b></br>"	, "");
 		}
+	}
+	
+	public void getSystemGenerateValue(String fieldName) {
+		
+		waitCommand(By.xpath(String.format(XPATH_TXT, fieldName)+"/following-sibling::android.view.View"));
+		waitForSeconds("2");
+		
+		WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, fieldName)+"/following-sibling::android.view.View"));
+		String fieldValue = element.getAttribute("name");
+		
+		test.log(LogStatus.INFO, "<b>"+ fieldName + "</b></br>System Generated value - <b>" + fieldValue + "</b></br>" , "");
+		
 	}
 	
 	

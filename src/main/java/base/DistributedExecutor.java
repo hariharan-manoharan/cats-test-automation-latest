@@ -285,6 +285,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "clickButtonWithText":
 					case "enterSiteID":
 					case "clickDatePicker":
+					case "getSystemGenerateValue":
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
 							isMethodFound = true;
