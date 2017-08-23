@@ -641,7 +641,27 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	}
 
-	public void clickConfirmPrompt(String msg , String data) throws TimeoutException, NoSuchElementException{		
+	public void clickConfirmPrompt(String msg , String data) throws TimeoutException, NoSuchElementException{	
+		
+	    String value = null;
+		if (msg.contains("@")){
+			String[] key =msg.split("@");
+			String message1 =  key [0];
+			String message2 =  key[1];
+			String message3 =  key[2];
+
+			if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
+				value = distributedRuntimeDataProperties.getProperty(message2);
+			}else {
+				value = parallelRuntimeDataProperties.getProperty(message2);	
+			}
+
+			String message = message1 +value+message3;
+			msg=message;
+
+		}		
+		
+		
 		if (GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")).equalsIgnoreCase(msg)) {
 			report(driver,test, msg + " is displayed", LogStatus.PASS);	
 
@@ -867,6 +887,7 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 		
 		WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, fieldName)+"/following-sibling::android.view.View"));
 		String fieldValue = element.getAttribute("name");
+		addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), fieldValue);
 		
 		test.log(LogStatus.INFO, "<b>"+ fieldName + "</b></br>System Generated value - <b>" + fieldValue + "</b></br>" , "");
 		
