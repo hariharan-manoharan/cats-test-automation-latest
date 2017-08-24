@@ -149,10 +149,12 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 
 		  if(count<1){
 			  clickOkPrompt("There are no items to be received at this location.");
-			  test.log(LogStatus.INFO, "There are no items to be received at this location.");  
+			  test.log(LogStatus.INFO, "There are no items to be received at this location.");
+			  validateLoopField("Enter Location (*) :");
 		  }
 		  else {
-			  test.log(LogStatus.INFO, "Items to be received at this location");  
+			  test.log(LogStatus.INFO, "Items to be received at this location");
+			  validateLoopField("Enter Barcode (*) :");
 		  }
 		  
 		  
