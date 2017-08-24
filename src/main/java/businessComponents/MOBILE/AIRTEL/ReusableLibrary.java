@@ -850,7 +850,7 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 	public void verifyAutopopulatefieldvalues(String field, String data)  throws TimeoutException, NoSuchElementException {
 
 		waitCommand(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View"));
-		waitForSeconds("2");
+		waitForSeconds("3");
 		
 		WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View"));
 		String fieldValue = element.getAttribute("name");		
