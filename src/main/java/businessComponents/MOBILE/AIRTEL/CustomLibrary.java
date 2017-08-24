@@ -139,4 +139,22 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 	    driver.findElement(By.id("info_done_button")).click();
 
 	  }
+	  
+	  
+	  public void clickOkPromptmovefinish(String locationName) {
+		  String COUNT= String.format(MOVESTARTLOC_COUNT, locationName);
+		  String MovestartLoccount = selectQuerySingleValue(COUNT, "MOVESTARTLOCCOUNT");
+
+		  int count = 	Integer.parseInt(MovestartLoccount);
+
+		  if(count<1){
+			  clickOkPrompt("There are no items to be received at this location.");
+			  test.log(LogStatus.INFO, "There are no items to be received at this location.");  
+		  }
+		  else {
+			  test.log(LogStatus.INFO, "Items to be received at this location");  
+		  }
+		  
+		  
+	  }
 }
