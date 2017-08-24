@@ -425,7 +425,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 		
 		try {
 		
-		if(!testParameters.getCurrentTestCase().contains("STAGE_DATA")) {					
+		if(!testParameters.getCurrentTestCase().contains("STAGE_DATA") && !testParameters.getTestRailTestcaseID().equalsIgnoreCase("NA")) {					
 			if(test.getRunStatus() == LogStatus.PASS && testRailEnabled.equalsIgnoreCase("True")){
 			testRailListenter.addTestResult(Integer.parseInt(testParameters.getTestRailTestcaseID()), 1);
 			}else if (testRailEnabled.equalsIgnoreCase("True")) {
