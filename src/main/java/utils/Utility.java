@@ -292,7 +292,22 @@ public class Utility implements RoutineObjectRepository{
 		Calendar calendar = Calendar.getInstance();
 		return dateFormat.format(calendar.getTime());
 	}
+	
+	/**
+	 * Function to format the current time instance
+	 * 
+	 * @return String (formatted date)
+	 * @author Saran
+	 * @since 30/08/2017
+	 * 
+	 */
 
+	public static String getfutureFormattedDate(int days) {
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar calendar = Calendar.getInstance();
+	    calendar.add(Calendar.DATE, days);
+	    return  dateFormat.format(calendar.getTime());
+	}
 	
 	/**
 	 * FulentWait Function - Waits until the object is available with timeout of 100 seconds polling every 5 seconds
