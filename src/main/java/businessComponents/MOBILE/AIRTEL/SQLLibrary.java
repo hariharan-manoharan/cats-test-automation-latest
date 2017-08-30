@@ -717,7 +717,7 @@ public class SQLLibrary extends Utility {
 		String RECEIVERNAME = ((inputValueMap.get("RECEIVERNAME") == null) ? "NULL" : "'"+inputValueMap.get("RECEIVERNAME") +"'");
 		String RECEIVERPHONE = ((inputValueMap.get("RECEIVERPHONE") == null) ? "NULL" : "'"+inputValueMap.get("RECEIVERPHONE") +"'");
 		String BEHALFOF = ((inputValueMap.get("BEHALFOF") == null) ? "NULL" : "'"+inputValueMap.get("BEHALFOF") +"'");
-		String NEEDBYDATE = ((inputValueMap.get("NEEDBYDATE") == null) ? "NULL" : "'"+inputValueMap.get("NEEDBYDATE") +"'");
+		String NEEDBYDATE = getfutureFormattedDate(15); test.log(LogStatus.INFO, "NEED BY DATE: <b>" + NEEDBYDATE +"<b>");
 		String PARTCODE = ((inputValueMap.get("PARTCODE") == null) ? "NULL" : inputValueMap.get("PARTCODE") );
 		String MFGPARTNUMBER = ((inputValueMap.get("MFGPARTNUMBER") == null) ? "NULL" : "'"+inputValueMap.get("MFGPARTNUMBER") +"'");
 		String ASSETCODE = ((inputValueMap.get("ASSETCODE") == null) ? "NULL" : "'"+inputValueMap.get("ASSETCODE") +"'");
@@ -787,7 +787,8 @@ public class SQLLibrary extends Utility {
 						+RECEIVERNAME+","
 						+RECEIVERPHONE+","
 						+BEHALFOF+","
-						+NEEDBYDATE+","
+						+"'"+NEEDBYDATE+"',"
+						//+NEEDBYDATE+","
 						+PARTCODE+","
 						+MFGPARTNUMBER+","
 						+ASSETCODE+","
