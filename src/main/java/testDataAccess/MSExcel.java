@@ -260,22 +260,22 @@ public class MSExcel implements DataTable {
 	}
 
 	@Override
-	public ArrayList<TestParameters> getRunManagerInfo() {
+	public ArrayList<TestParameters> getRunManagerInfo(String Suite) {
 		ArrayList<TestParameters> runInfoArray = new ArrayList<TestParameters>();
-		Sheet workSheet = workBook.getSheet("RunInfo");
+		Sheet workSheet = workBook.getSheet(Suite);
 		int lastRunNum = workSheet.getLastRowNum();
 
 		for (int i = 1; i <= lastRunNum; i++) {
 			TestParameters testParameter = new TestParameters();
 			
-			if(getData("RunInfo", i, "Execute").equalsIgnoreCase("Yes")){
+			if(getData(Suite, i, "Execute").equalsIgnoreCase("Yes")){
 
-			testParameter.setCurrentTestCase(getData("RunInfo", i, "TC_ID"));
-			testParameter.setTestRailTestcaseID(getData("RunInfo", i, "TestRail_TC_ID"));
-			testParameter.setDescription(getData("RunInfo", i, "Description"));
-			testParameter.setSetCategory(getData("RunInfo", i, "SetCategory"));
-			testParameter.setExecuteCurrentTestCase(getData("RunInfo", i, "Execute"));
-			testParameter.setConnectDB(getData("RunInfo", i, "Connect_DB"));
+			testParameter.setCurrentTestCase(getData(Suite, i, "TC_ID"));
+			testParameter.setTestRailTestcaseID(getData(Suite, i, "TestRail_TC_ID"));
+			testParameter.setDescription(getData(Suite, i, "Description"));
+			testParameter.setSetCategory(getData(Suite, i, "SetCategory"));
+			testParameter.setExecuteCurrentTestCase(getData(Suite, i, "Execute"));
+			testParameter.setConnectDB(getData(Suite, i, "Connect_DB"));
 			
 			
 			runInfoArray.add(testParameter);

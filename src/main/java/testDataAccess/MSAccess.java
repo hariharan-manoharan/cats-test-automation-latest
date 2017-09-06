@@ -36,7 +36,7 @@ public class MSAccess implements DataTable{
 	}
 
 	@Override
-	public ArrayList<TestParameters> getRunManagerInfo() {
+	public ArrayList<TestParameters> getRunManagerInfo(String Suite) {
 		
 		return null;
 	}

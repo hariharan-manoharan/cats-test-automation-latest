@@ -153,10 +153,11 @@ public class Main{
 		
 		String runManagerType = properties.getProperty("RunManagerType");
 		String runManagerName = properties.getProperty("RunManagerName");
+		String testsuit = properties.getProperty("TestSuite");
 		
 		runManagerFactory = DataTableFactoryProducer.getDataTableFactory();
 		runManager = runManagerFactory.getTestDataTableAccess(runManagerType, "./"+runManagerName);		
-		testInstancesToRun = runManager.getRunManagerInfo();
+		testInstancesToRun = runManager.getRunManagerInfo(testsuit);
 		
 		if(testInstancesToRun.isEmpty()) {
 			issueWithSetup = true;

@@ -8,7 +8,7 @@ import main.java.executionSetup.TestParameters;
 
 public interface DataTable {	
 
-	ArrayList<TestParameters> getRunManagerInfo();
+	ArrayList<TestParameters> getRunManagerInfo(String Suite);
 	
 	String getData(String workSheetName, String columnName);
 	
@@ -19,5 +19,7 @@ public interface DataTable {
 	LinkedHashMap<String, String> getRowData(String workSheetName, String testcaseName);
 	
 	void setCurrentRow(String arg1);
+
+	
 
 }
