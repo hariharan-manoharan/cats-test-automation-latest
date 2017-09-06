@@ -458,7 +458,38 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	}
 	
-	
+
+	/**
+	 * Function to get Pick List value by index
+	 * 	 
+	 * @return void
+	 * @author Saran
+	 * @since 06/09/2017
+	 * 
+	 */
+
+	@SuppressWarnings("unchecked")
+	public void selectPickListValueByIndex(String Index , String pickListValue ) throws TimeoutException, NoSuchElementException{
+		waitCommand(ID_PICKLIST_SEARCHFIELD);
+
+		if(pickListValue.contains("#")){
+			pickListValue = getRuntimeTestdata(pickListValue);
+		}			
+
+		List<WebElement> elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout[@index='"+Index+"']/android.widget.TextView[@index='0']");
+		int size = elements.size();
+		for(WebElement element: elements){			
+			size--;
+			if(element.getText().equalsIgnoreCase(pickListValue)){	
+				element.click();
+				takeScreenshot("Pick List Value - <b>"+pickListValue+"</b> is selected");
+				break;
+			}else if(size==0){
+				takeScreenshot("Pick List Value - <b>"+pickListValue+"</b> is not selected");
+			}
+		}
+
+	}
 	public void validatePicklistValue(String columnName, String value) throws InterruptedException {
 		
 		int requiredValueIndex = 0;
