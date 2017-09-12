@@ -911,6 +911,73 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 		}
 	}
 	
+	/**
+	 * Function to verify mandatory field
+	 * 	 
+	 * @return void
+	 * @author Saran
+	 * @since 11/09/2017
+	 * 
+	 */
+	public void verifymandatoryfield(String field ,String prompt) {
+
+		waitCommand(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View"));
+		waitForSeconds("3");
+
+		clickNext();
+
+		if(isElementPresent(ID_MESSAGE, "Mandatory field :"+field)) {
+
+			if (GetText(ID_MESSAGE,"Alert").equalsIgnoreCase(prompt)) {	
+
+				test.log(LogStatus.PASS, "<b>"+field +"</b> is a mandatory field and displays alert message <b> "+prompt+"</b>  when user left it blank."  , "");
+
+			}
+			else {
+				test.log(LogStatus.FAIL, "<b>"+prompt+"</b> is not displayed for mandatory field <b> "+field+"</b>  when user left it blank." , "");
+			}
+		}
+
+	}
+	
+	/**
+	 * Function to verify non mandatory field
+	 * 	 
+	 * @return void
+	 * @author Saran
+	 * @since 12/09/2017
+	 * 
+	 */
+	public void verifynonmandatoryfield(String field ,String field1) {
+
+		if(isElementPresent(By.xpath(String.format(XPATH_TXT, field)),field)) {
+			clickNext();
+		}
+
+		if(isElementPresent(ID_MESSAGE, "Alert message")) {
+
+			test.log(LogStatus.FAIL, "<b>"+field +"</b> is a non mandatory  and user not allowed to proceed by leaving it blank."  , "");
+
+		}
+		else {
+			test.log(LogStatus.PASS, "<b>"+field +"</b> is a non mandatory  and user able to proceed by leaving it blank."  , "");
+		}
+
+		waitCommand(By.xpath(String.format(XPATH_TXT, field1)+"/following-sibling::android.view.View"));
+		waitForSeconds("3");
+
+		WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, field1)+"/following-sibling::android.view.View"));
+		String fieldValue = element.getAttribute("name");
+
+		if(fieldValue.equals("")) {
+			test.log(LogStatus.PASS, "<b>"+ field1 +"</b>  is displayed as blank and it is non mandatory field", "");
+		}
+		else {
+
+			test.log(LogStatus.FAIL, "<b>"+ field1 +"</b>  is not displayed as blank", "");
+		}
+
+	}
 	public void getSystemGenerateValue(String fieldName) {
 		
 		waitCommand(By.xpath(String.format(XPATH_TXT, fieldName)+"/following-sibling::android.view.View"));

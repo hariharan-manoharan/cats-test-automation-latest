@@ -424,10 +424,10 @@ public class Utility implements RoutineObjectRepository{
 		
 		try{
 		driver.findElement(by).isDisplayed();		
-		test.log(LogStatus.PASS, "Element - " + objectName + " is present", "");
+		test.log(LogStatus.PASS, objectName + " is present", "");
 		return true;		
 		}catch(NoSuchElementException  e){
-			test.log(LogStatus.INFO, "Element - " + objectName + " is not present", "");
+			test.log(LogStatus.INFO, objectName + " is not present", "");
 			return false;
 		}
 		
