@@ -47,18 +47,24 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		String NoofTransfer = selectQuerySingleValue(TRANSFERCOUNT, "TRANSFERCOUNT");
 
 		int count = 	Integer.parseInt(NoofTransfer);
-
-		String data = getRuntimeTestdata(columnName);
+		
+		String[] key =columnName.split("@");
+		
+		String data = key [0];
+		String generateshipmentno = key [1];
+		String transferorder = getRuntimeTestdata(data);
 
 		if (count>1){
-			enterText("Enter Transfer Order (*) :", data);
+			enterText("Enter Transfer Order (*) :", transferorder);
+		
 			clickNext();
-			clickConfirmPrompt("Generate new shipment?", "Yes");
+			
+			clickConfirmPrompt("Generate new shipment?", generateshipmentno);
 		}
 		else
 		{
-			clickConfirmPrompt("Generate new shipment?", "Yes");
-			verifyAutopopulatefieldvalues("Transfer Order", data);
+			clickConfirmPrompt("Generate new shipment?", generateshipmentno);
+			verifyAutopopulatefieldvalues("Transfer Order", transferorder);
 		}
 	}
 	
