@@ -458,7 +458,43 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	}
 	
+	/**
+	 * Function to get Pick List value
+	 * 	 
+	 * @return void
+	 * @author Saran 
+	 * @since 09/19/2017
+	 * 
+	 */
 
+	@SuppressWarnings("unchecked")
+	public void verifyPickListValue(String pickListValue) throws TimeoutException, NoSuchElementException{
+		
+		waitCommand(ID_PICKLIST_SEARCHFIELD);
+
+		if(pickListValue.contains("#")){
+			pickListValue = getRuntimeTestdata(pickListValue);
+		}			
+
+		List<WebElement> elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout/android.widget.TextView[@index='0']");
+		int size = elements.size();
+		for(WebElement element: elements){			
+			size--;
+			if(element.getText().equalsIgnoreCase(pickListValue)){
+				
+				test.log(LogStatus.PASS, "Pick list value <b>"+pickListValue+"</b> is displayed");	
+				takeScreenshot("Pick list value <b>"+pickListValue+"</b> is displayed");
+				break;
+			}else if(size==0){
+				test.log(LogStatus.FAIL, "Pick list value <b>"+pickListValue+"</b> is not displayed");	
+				takeScreenshot("Pick list value <b>"+pickListValue+"</b> is not displayed");
+			}
+		}
+
+
+
+
+	}
 	/**
 	 * Function to get Pick List value by index
 	 * 	 

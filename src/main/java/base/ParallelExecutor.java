@@ -279,6 +279,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "clickDatePicker":
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
+					case "verifyPickListValue":
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
 							isMethodFound = true;
