@@ -716,9 +716,11 @@ public class Utility implements RoutineObjectRepository{
 			waitCommand(by);
 			WebElement element = driver.findElement(by);
 			text = element.getText();
+			takeScreenshot(fieldName);
 			test.log(LogStatus.INFO, fieldName + ":  Returned - Text:<b>" + text+"</b>");
 			return text.trim();
 		} catch (Exception ex) {
+			takeScreenshot(fieldName);
 			test.log(LogStatus.FAIL, ex);
 			test.log(LogStatus.INFO, fieldName + ": Not Returned - Text:<b>" + text+"</b>");
 			return "NULL";
