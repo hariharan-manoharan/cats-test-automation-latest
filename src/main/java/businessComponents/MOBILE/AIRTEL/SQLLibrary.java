@@ -304,7 +304,8 @@ public class SQLLibrary extends Utility {
 					+RECORD_ID+","
 					+inputValueMap.get("VALUE43")+","
 					+"'"+inputValueMap.get("VALUE44")+"')";
-
+			
+			//test.log(LogStatus.INFO, "<textarea rows=10 cols=50 class=scrollabletextbox name=note><code>"+query+"<textarea></code>");
 			//System.out.println(query);
 			executeUpdateQuery(query, "PO - <b>"+purchaseOrder+"</b> for Item <b>"+itemcode+"</b> is inserted in to CATSCON_PO_STG table");
 			connection.commit();
@@ -590,7 +591,27 @@ public class SQLLibrary extends Utility {
 		}
 		
 	}
+	public void updateMfgPartnoActive(String Mfgpartno , String Status) {
 
+		String query = null;
+
+		Mfgpartno = getRuntimeTestdata(Mfgpartno) ;
+
+		try {
+
+			query = "UPDATE CATSCUST_PARTMANUFACTURER SET ACTIVE ='"+ Status+"' WHERE MFGPARTNUMBER  ='"+Mfgpartno+"'";
+			test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:150px;overflow:scroll;><code>"+query+"</code></div>");
+
+			executeUpdateQuery(query, "Manfacturing Part Number is updated with <b> Active ="+ Status +"</b>");
+			
+			connection.commit();			
+
+		} catch (SQLException e) {	
+			test.log(LogStatus.FAIL, "Manfacturing Part Number is not updated with <b> Active ="+ Status +"</b>");
+			e.printStackTrace();			
+		}
+
+}
 	public void deliveryinfocomplete(String TCID){
 
 		String SHIPMENTID;
