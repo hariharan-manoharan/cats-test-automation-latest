@@ -795,25 +795,29 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void verifyPrompt(String prompt, String action) throws TimeoutException, NoSuchElementException{
 		
 		if(isElementPresent(ID_MESSAGE, "Alert")) {
-		
-		if (GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")).equalsIgnoreCase(prompt)) {			
-			
-			switch(action) {
-			case "ClickYes":
-				Click(ID_MESSAGE_CONFIRM_YES, "Clicked 'Yes' for prompt - " + prompt);
-				break;
-			case "ClickNo":
-				Click(ID_MESSAGE_CONFIRM_NO, "Clicked 'No' for prompt - " + prompt);
-				break;
-			case "ClickOk":
-				Click(ID_MESSAGE_OK, "Clicked 'Ok' for prompt - " + prompt);
-				break;
-			default:
-				test.log(LogStatus.FAIL, "Action <b><"+action+"></b> cannot be performed for the prompt <b><"+prompt+"></b>. Provide valid action like <ClickYes>/<ClickNo>/<ClickOk>");
-				break;
+
+			if (GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")).equalsIgnoreCase(prompt)) {			
+
+				switch(action) {
+				case "ClickYes":
+					Click(ID_MESSAGE_CONFIRM_YES, "Clicked 'Yes' for prompt - " + prompt);
+					break;
+				case "ClickNo":
+					Click(ID_MESSAGE_CONFIRM_NO, "Clicked 'No' for prompt - " + prompt);
+					break;
+				case "ClickOk":
+					Click(ID_MESSAGE_OK, "Clicked 'Ok' for prompt - " + prompt);
+					break;
+				default:
+					test.log(LogStatus.FAIL, "Action <b><"+action+"></b> cannot be performed for the prompt <b><"+prompt+"></b>. Provide valid action like <ClickYes>/<ClickNo>/<ClickOk>");
+					break;
+				}
+
 			}
+		}else {
 			
-		}
+			test.log(LogStatus.FAIL,"Prompt <b>"+prompt+"</b> is not displayed");
+			
 		}
 		
 	}
