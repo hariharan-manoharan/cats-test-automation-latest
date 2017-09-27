@@ -218,6 +218,13 @@ public class Main{
 	}
 	
 	
+	/**
+	 * distributedExecution method is used to handle the execution of the test instances in distributed mode across available devices. 
+	 * 
+	 * @param nil
+	 * 
+	 */
+	
 	public static void distributedExecution() {
 		
 		groupedtestInstancesToRun = new ArrayList<ArrayList<TestParameters>>();
@@ -300,7 +307,12 @@ public class Main{
 	}
 	
 	
-
+	/**
+	 * parallelExecution method is used to handle the execution of the test instances in parallel mode across available devices. 
+	 * 
+	 * @param nil
+	 * 
+	 */
 
 	public static void parallelExecution() {
 
