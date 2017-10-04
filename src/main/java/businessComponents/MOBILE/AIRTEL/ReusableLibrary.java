@@ -922,16 +922,16 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 
 		waitCommand(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View"));
 		waitForSeconds("3");
-		
+
 		WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, field)+"/following-sibling::android.view.View"));
 		String fieldValue = element.getAttribute("name");		
-		
+
 		if(data!=null){
 			if(data.contains("#")){
 				if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
-				data = distributedRuntimeDataProperties.getProperty(data);
+					data = distributedRuntimeDataProperties.getProperty(data);
 				}else {
-				data = parallelRuntimeDataProperties.getProperty(data);	
+					data = parallelRuntimeDataProperties.getProperty(data);	
 				}
 
 			}
@@ -940,10 +940,10 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 		if (data!=null){
 			if (data.equalsIgnoreCase(fieldValue)) {
 				test.log(LogStatus.PASS, "<b>"+ field + "</b></br>Expected - <b>" + data + "</b></br>"
-													   + "Actual - <b>" + fieldValue +"</b>", "");
+						+ "Actual - <b>" + fieldValue +"</b>", "");
 			}else {
 				test.log(LogStatus.FAIL, "<b>"+ field + "</b></br>Expected - <b>" + data + "</b></br>"
-						   + "Actual - <font color=red><b>" + fieldValue +"</font></b>", "");				
+						+ "Actual - <font color=red><b>" + fieldValue +"</font></b>", "");				
 				takeScreenshot(field + " is not populated as expected");				
 			}
 		}else if(field!=null && fieldValue.equals("")) {
