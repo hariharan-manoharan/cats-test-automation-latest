@@ -603,11 +603,36 @@ public class SQLLibrary extends Utility {
 			test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:150px;overflow:scroll;><code>"+query+"</code></div>");
 
 			executeUpdateQuery(query, "Manfacturing Part Number is updated with <b> Active ="+ Status +"</b>");
-			
+
 			connection.commit();			
 
 		} catch (SQLException e) {	
 			test.log(LogStatus.FAIL, "Manfacturing Part Number is not updated with <b> Active ="+ Status +"</b>");
+			e.printStackTrace();			
+		}
+
+}
+	
+	public void updateSerializedPartStatus(String Assetcode , String Status) {
+
+		String query = null;
+
+		Assetcode = getRuntimeTestdata(Assetcode) ;
+
+		try {
+		
+			query = "UPDATE CATS_ASSET SET LOCATIONSTATUSID = "
+					+ "(SELECT LOCATIONSTATUSID FROM CATS_LOCATIONSTATUS WHERE DESCRIPTION ='"+ Status+"') "
+					+ "WHERE ASSETCODE ='"+Assetcode+"'";
+			
+			test.log(LogStatus.INFO, "<div ><code>"+query+"</code></div>");
+
+			executeUpdateQuery(query, "AssetCode  is updated with <b> Status ="+ Status +"</b>");
+
+			connection.commit();			
+
+		} catch (SQLException e) {	
+			test.log(LogStatus.FAIL, "AssetCode  is not updated with <b> Status"+ Status +"</b>");
 			e.printStackTrace();			
 		}
 

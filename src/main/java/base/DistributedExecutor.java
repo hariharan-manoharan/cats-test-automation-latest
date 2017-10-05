@@ -249,6 +249,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "verifynonmandatoryfield":
 					case "verifymandatoryfield":
 					case "updateMfgPartnoActive":
+					case "updateSerializedPartStatus":
+					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
 							isMethodFound = true;
