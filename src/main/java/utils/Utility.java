@@ -778,7 +778,9 @@ public class Utility implements RoutineObjectRepository{
 			waitCommand(by);
 			WebElement element = driver.findElement(by);
 			text = element.getAttribute(attribute);
+			takeScreenshot(fieldName);
 		} catch (Exception ex) {
+			takeScreenshot(fieldName);
 			test.log(LogStatus.FAIL, ex);
 			test.log(LogStatus.INFO,"Value of attribute '"+attribute+"' of field '"+ fieldName + "': Not Returned - Value:" + text);
 		}
