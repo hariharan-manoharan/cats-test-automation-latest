@@ -944,6 +944,7 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 			if (data.equalsIgnoreCase(fieldValue)) {
 				test.log(LogStatus.PASS, "<b>"+ field + "</b></br>Expected - <b>" + data + "</b></br>"
 						+ "Actual - <b>" + fieldValue +"</b>", "");
+				takeScreenshot(field + " is populated as expected");
 			}else {
 				test.log(LogStatus.FAIL, "<b>"+ field + "</b></br>Expected - <b>" + data + "</b></br>"
 						+ "Actual - <font color=red><b>" + fieldValue +"</font></b>", "");				
