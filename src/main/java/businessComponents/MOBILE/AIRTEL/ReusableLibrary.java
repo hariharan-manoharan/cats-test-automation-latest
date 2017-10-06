@@ -793,7 +793,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	
 	
 	public void verifyPrompt(String prompt, String action) throws TimeoutException, NoSuchElementException{
-		
+
 		if(isElementPresent(ID_MESSAGE, "Alert")) {
 
 			if (GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")).equalsIgnoreCase(prompt)) {			
@@ -813,13 +813,16 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 					break;
 				}
 
+			}else {
+
+				test.log(LogStatus.FAIL,"Prompt <b>"+prompt+"</b> is not displayed");
 			}
 		}else {
-			
-			test.log(LogStatus.FAIL,"Prompt <b>"+prompt+"</b> is not displayed");
-			
+
+			test.log(LogStatus.FAIL,"Alert is not displayed");
+
 		}
-		
+
 	}
 
 
