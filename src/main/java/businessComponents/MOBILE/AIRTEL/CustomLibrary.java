@@ -1,6 +1,9 @@
 package main.java.businessComponents.MOBILE.AIRTEL;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 
@@ -165,4 +168,47 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		  
 		  
 	  }
+	  
+	  
+
+		/**
+		 * Function to get single column data from Database
+		 * 
+		 * @param1 String query
+		 * @param2 String dataRequired
+		 * @return String data
+		 * @author Hari
+		 * @since 12/23/2016
+		 * 
+		 */
+
+		public void getSetAssetCodeForStockTrx(String lotNumber) {
+			String data = null;
+			Statement stmt;
+			ResultSet rs;
+			
+			String query = "SELECT ASSETCODE FROM CATS_ASSETTRANSACTION WHERE ORIGINATORTYPETRX='STOCK' AND LOTNUMBER='"+getRuntimeTestdata(lotNumber)+"' ORDER BY ASSETTRANSACTIONID DESC";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					data = rs.getString("ASSETCODE");
+					if (!data.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "ASSETCODE" + " - <b>" + data +"</b>");
+				test.log(LogStatus.FAIL, e);
+			}
+			test.log(LogStatus.INFO, "ASSETCODE" + " - <b>" + data +"</b>");
+			addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
+			
+			
+
+		}
+
 }
