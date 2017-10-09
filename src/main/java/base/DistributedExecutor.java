@@ -294,7 +294,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
 					case "verifyPickListValue":
-					case "getSetAssetCodeForStockTrx":
+					case "getAssetCodeFromAssetTrx":
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
 							isMethodFound = true;

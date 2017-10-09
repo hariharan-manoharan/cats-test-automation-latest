@@ -182,7 +182,7 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		 * 
 		 */
 
-		public void getSetAssetCodeForStockTrx(String lotNumber) {
+		public void getAssetCodeFromAssetTrx(String lotNumber) {
 			String data = null;
 			Statement stmt;
 			ResultSet rs;
