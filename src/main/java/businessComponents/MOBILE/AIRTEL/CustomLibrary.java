@@ -182,12 +182,12 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		 * 
 		 */
 
-		public void getAssetCodeFromAssetTrx(String lotNumber) {
+		public void getAssetCodeFromAssetTrx(String originatorTypeTrx, String lotNumber) {
 			String data = null;
 			Statement stmt;
 			ResultSet rs;
 			
-			String query = "SELECT ASSETCODE FROM CATS_ASSETTRANSACTION WHERE ORIGINATORTYPETRX='STOCK' AND LOTNUMBER='"+getRuntimeTestdata(lotNumber)+"' ORDER BY ASSETTRANSACTIONID DESC";
+			String query = "SELECT ASSETCODE FROM CATS_ASSETTRANSACTION WHERE ORIGINATORTYPETRX='"+originatorTypeTrx+"' AND LOTNUMBER='"+getRuntimeTestdata(lotNumber)+"' ORDER BY ASSETTRANSACTIONID DESC";
 
 			try {
 				stmt = connection.createStatement();
@@ -209,6 +209,46 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			
 			
 
+		}
+		
+		
+		public void validateAssetStatus(String expectedStatus, String assetcode) {
+			
+			String actualStatus = null;
+			Statement stmt;
+			ResultSet rs;
+			
+						
+			String query = "SELECT DESCRIPTION FROM CATS_LOCATIONSTATUS WHERE LOCATIONSTATUSID IN (SELECT LOCATIONSTATUSID FROM CATS_ASSET WHERE ASSETCODE='"+getRuntimeTestdata(assetcode)+"')";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					actualStatus = rs.getString("DESCRIPTION");
+					if (!actualStatus.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while validating Asset Status");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			if(expectedStatus.equalsIgnoreCase(actualStatus)) {
+			test.log(LogStatus.PASS, "<b>Asset Status </b></br>"
+										+ "<b>Expected </b> - "+expectedStatus+ "</br>"
+										+ "<b>Actual </b> - "+actualStatus+ "</br>"
+										);
+			}else {
+				test.log(LogStatus.FAIL, "<b>Asset Status </b></br>"
+						+ "<b>Expected </b> - "+expectedStatus+ "</br>"
+						+ "<b>Actual </b> - "+actualStatus+ "</br>"
+						);
+			}
+			
 		}
 
 }

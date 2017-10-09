@@ -250,6 +250,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "verifymandatoryfield":
 					case "updateMfgPartnoActive":
 					case "updateSerializedPartStatus":
+					case "getAssetCodeFromAssetTrx":
+					case "validateAssetStatus":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
@@ -294,7 +296,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
 					case "verifyPickListValue":
-					case "getAssetCodeFromAssetTrx":
+					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
 							isMethodFound = true;
