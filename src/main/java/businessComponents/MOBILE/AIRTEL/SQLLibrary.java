@@ -1031,4 +1031,45 @@ public class SQLLibrary extends Utility {
 		
 	}
 	
+	
+	/**
+	 * Function to get single column data from Database
+	 * 
+	 * @param1 String query
+	 * @param2 String dataRequired
+	 * @return NULL
+	 * @author Hari
+	 * @since 10/10/2017
+	 * 
+	 */
+
+	public void selectQueryReturnSingleValue(String query, String dataRequired) {
+		String data = null;
+		Statement stmt;
+		ResultSet rs;
+
+		try {
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				rs.getObject(1);
+				data = rs.getString(dataRequired);
+				if (!data.equals(null)) {
+					break;
+				}
+				
+
+			}
+		} catch (SQLException e) {
+			test.log(LogStatus.FAIL, dataRequired + " - <b>" + data +"</b>");
+			test.log(LogStatus.FAIL, e);
+		}
+		
+		
+		test.log(LogStatus.INFO, dataRequired + " - <b>" + data +"</b>");
+		addRuntimeTestData(dataRequired, data);
+		
+
+	}
+	
 }

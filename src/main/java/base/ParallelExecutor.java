@@ -241,6 +241,10 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "updateSerializedPartStatus":
 					case "getAssetCodeFromAssetTrx":
 					case "validateAssetStatus":
+					case "selectQueryReturnSingleValue":
+					case "verifyAssetActiveState":
+					case "verifyPartActiveState":
+						
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
 							isMethodFound = true;
@@ -284,6 +288,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
 					case "verifyPickListValue":
+
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

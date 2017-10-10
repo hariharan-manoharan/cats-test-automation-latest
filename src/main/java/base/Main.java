@@ -660,6 +660,8 @@ public class Main{
 	
 	@SuppressWarnings("unchecked")
 	private static void setupAppForTesting(int driverIndex) {
+		
+		try {
 
 		String Envapp = androidDriverList.get(driverIndex).findElement(By.id("my_connections")).getText();
 		String Envdata = properties.getProperty("Environment");
@@ -686,6 +688,10 @@ public class Main{
 			appsdatavsmobility = false;
 			report.flush();
 
+		}
+		}catch(Exception e){
+			setUpReport.log(LogStatus.FAIL, "Exception occured while logging into application.");
+			setUpReport.log(LogStatus.FAIL, e);
 		}
 	}
 	

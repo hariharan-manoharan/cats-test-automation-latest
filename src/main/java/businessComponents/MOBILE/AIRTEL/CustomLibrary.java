@@ -250,5 +250,88 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			}
 			
 		}
+		
+		public void verifyAssetActiveState(String assetCode, String expectedValue) {			
+		
+			String isActive = null;
+			Statement stmt;
+			ResultSet rs;
+			
+						
+			String query = "SELECT ACTIVE FROM CATS_ASSET WHERE ASSETCODE='"+getRuntimeTestdata(assetCode)+"'";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					isActive = rs.getString("ACTIVE");
+					if (!isActive.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while getting Asset's Active State");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			if(expectedValue.equalsIgnoreCase(isActive)) {
+				test.log(LogStatus.PASS, "<b>Asset ("+getRuntimeTestdata(assetCode)+") Active State </b></br>"
+											+ "<b>Expected </b> - "+expectedValue+ "</br>"
+											+ "<b>Actual </b> - "+isActive+ "</br>"
+											);
+				}else {
+					test.log(LogStatus.FAIL, "<b>Asset ("+getRuntimeTestdata(assetCode)+") Active State </b></br>"
+							+ "<b>Expected </b> - "+expectedValue+ "</br>"
+							+ "<b>Actual </b> - "+isActive+ "</br>"
+							);
+				}
+			
+			
+		}
+		
+		public void verifyPartActiveState(String lotNumber, String expectedValue) {
+			
+			String isActive = null;
+			Statement stmt;
+			ResultSet rs;
+			
+						
+			String query = "SELECT ACTIVE FROM CATS_PART WHERE PARTID IN (SELECT PARTID FROM CATS_PARTDETAIL WHERE LOTNUMBER='"+getRuntimeTestdata(lotNumber)+"')";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					isActive = rs.getString("ACTIVE");
+					if (!isActive.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while getting Part's Active State");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			if(!isActive.equals(null)) {
+				if(expectedValue.equalsIgnoreCase(isActive)) {
+					test.log(LogStatus.PASS, "<b>Part with Lot number "+getRuntimeTestdata(lotNumber)+" Active State </b></br>"
+												+ "<b>Expected </b> - "+expectedValue+ "</br>"
+												+ "<b>Actual </b> - "+isActive+ "</br>"
+												);
+					}else {
+						test.log(LogStatus.FAIL, "<b>Part Active State </b></br>"
+								+ "<b>Expected </b> - "+expectedValue+ "</br>"
+								+ "<b>Actual </b> - "+isActive+ "</br>"
+								);
+					}
+				
+			}else{				
+			test.log(LogStatus.FAIL, "Part Detail record not found");
+			}
+		}
 
 }
