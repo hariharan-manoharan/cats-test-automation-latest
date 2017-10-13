@@ -86,14 +86,22 @@ public class SQLLibrary extends Utility {
 	}	
 	
 	
-	public void deliveryConfirmation() {
+	public void deliveryConfirmation(String iteration) {
+		
+		LinkedHashMap<String, String> dataMap = null;
 
 		try {
 
 			lock.lock();
 			String validateDC = "SELECT * FROM CATSCON_POREC_STG WHERE ITEM_CODE='%s' AND RECORD_ID=%d";
-			LinkedHashMap<String, String> dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_DC");
+			
+			if(iteration!=null) {
+				dataMap = dataTable.getRowData("Data_Staging",
+					testParameters.getCurrentTestCase() + "_DC"+iteration);
+			}else {
+				dataMap = dataTable.getRowData("Data_Staging",
+						testParameters.getCurrentTestCase() + "_DC");
+			}
 			int recordId = deliveryConfirmationQuery(dataMap);
 			validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
 					getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
@@ -102,15 +110,23 @@ public class SQLLibrary extends Utility {
 		}
 	}
 
+	
+	
 
-	public void createPurchaseOrder() {
-
+	public void createPurchaseOrder(String iteration) {
+		LinkedHashMap<String, String> dataMap = null;
 		try {
 
 			lock.lock();
 			String validatePO = "SELECT * FROM CATSCON_PO_STG WHERE PHA_PO_NUMBER='%s' AND RECORD_ID=%d";
-			LinkedHashMap<String, String> dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_PO");
+			
+			if(iteration!=null) {
+			 dataMap = dataTable.getRowData("Data_Staging",
+					testParameters.getCurrentTestCase() + "_PO"+iteration);
+			}else {
+				dataMap = dataTable.getRowData("Data_Staging",
+						testParameters.getCurrentTestCase() + "_PO");
+			}
 			int recordId = createPurchaseOrderQuery(dataMap);
 			validateInboundTransaction("PO", "PROCESS_FLAG", "ERROR_MESSAGE", validatePO,
 					getRuntimeTestdata(testParameters.getCurrentTestCase() + "#PONUMBER"), recordId);
@@ -119,16 +135,24 @@ public class SQLLibrary extends Utility {
 			lock.unlock();
 		}
 	}
+	
+	
 
 
-	public void createMaterialReceiveReceipt() {
-
+	public void createMaterialReceiveReceipt(String iteration) {
+		LinkedHashMap<String, String> dataMap = null;
 		try {
 
 			lock.lock();
 			String validateMRR = "SELECT * FROM CATSCON_MRR_STG WHERE RECEIPT_NUM='%s' AND RECORD_ID=%d";
-			LinkedHashMap<String, String> dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_MRR");
+			
+			if(iteration!=null) {
+			 dataMap = dataTable.getRowData("Data_Staging",
+					testParameters.getCurrentTestCase() + "_MRR"+iteration);
+			}else {
+				dataMap = dataTable.getRowData("Data_Staging",
+						testParameters.getCurrentTestCase() + "_MRR");	
+			}
 			int recordId = createMaterialReceiveReceiptQuery(dataMap);
 			validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
 					getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);

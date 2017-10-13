@@ -299,6 +299,9 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
 					case "verifyPickListValue":
+					case "deliveryConfirmation":
+					case "createMaterialReceiveReceipt":
+					case "createPurchaseOrder":
 					
 					
 						try {

@@ -288,7 +288,9 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
 					case "verifyPickListValue":
-
+					case "deliveryConfirmation":
+					case "createMaterialReceiveReceipt":
+					case "createPurchaseOrder":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
