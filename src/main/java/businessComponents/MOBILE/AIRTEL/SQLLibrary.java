@@ -594,7 +594,7 @@ public class SQLLibrary extends Utility {
 		try {			
 			query = "UPDATE CATSCUST_MRR "
 					+"SET TAX_UPDATE = 'Y'"
-					+"WHERE MRRID IN (SELECT MRRID FROM CATSCUST_MRR WHERE POCODE='"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+"')";
+					+"WHERE MRRID IN (SELECT MRRID FROM CATSCUST_MRR WHERE POCODE='"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+".OU."+inputValueMap.get("VALUE1")+"')";
 			executeUpdateQuery(query, "Tax Update for PO - <b>"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+"</b>");
 			connection.commit();			
 
