@@ -333,5 +333,47 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			test.log(LogStatus.FAIL, "Part Detail record not found");
 			}
 		}
+		
+		
+		public void getPartID(String partcode) {
+			String data = null;
+			Statement stmt;
+			ResultSet rs;
+			
+			String query = "SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"'";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					data = rs.getString("PARTID");
+					if (!data.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while getting PARTID using Part Code");
+				test.log(LogStatus.FAIL, e);
+			}
+			test.log(LogStatus.PASS, "PARTID for Part Code " +getRuntimeTestdata(partcode)+ " - <b>" + data +"</b>");
+			addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
+			
+			
+
+		}
+		
+		
+		public void activateBOM(String partcode) {
+			String query = "UPDATE CATS_BOM SET ACTIVE='Y' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
+			 executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='Y' ");
+		}
+		
+		public void inactivateBOM(String partcode) {
+			String query = "UPDATE CATS_BOM SET ACTIVE='N' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
+		    executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='N' ");
+			
+		}
 
 }

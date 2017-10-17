@@ -302,7 +302,9 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "deliveryConfirmation":
 					case "createMaterialReceiveReceipt":
 					case "createPurchaseOrder":
-					
+					case "getPartID":
+					case "activateBOM":
+					case "inactivateBOM":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

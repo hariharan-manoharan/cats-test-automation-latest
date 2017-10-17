@@ -766,20 +766,44 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void clickOkPrompt(String msg) throws TimeoutException, NoSuchElementException{
 
 		String data = null;
+		String errormessage1 = null;
+		String errormessage2 = null;
+		String errormessage3 = null;
+		String errormessage = null;
+		
 		if (msg.contains("@")){
 			String[] key =msg.split("@");
-			String errormessage1 =  key [0];
-			String errormessage2 =  key[1];
-			String errormessage3 =  key[2];
+			
+			if(key.length == 3 ) {
+			errormessage1 =  key [0];
+			errormessage2 =  key[1];
+			errormessage3 =  key[2];
+			
+			if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
+				data = distributedRuntimeDataProperties.getProperty(errormessage2);
+				}else {
+				data = parallelRuntimeDataProperties.getProperty(errormessage2);	
+				}
+
+				errormessage = errormessage1 +data+errormessage3;
+				msg=errormessage;
+			
+			}else if(key.length == 2){
+			errormessage1 =  key [0];
+			errormessage2 =  key[1];
+			
 
 			if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
-			data = distributedRuntimeDataProperties.getProperty(errormessage2);
-			}else {
-			data = parallelRuntimeDataProperties.getProperty(errormessage2);	
+				data = distributedRuntimeDataProperties.getProperty(errormessage2);
+				}else {
+				data = parallelRuntimeDataProperties.getProperty(errormessage2);	
+				}
+			
+			errormessage = errormessage1 +data;
+			msg=errormessage;
 			}
 
-			String errormessage = errormessage1 +data+errormessage3;
-			msg=errormessage;
+			
 
 		}
 
