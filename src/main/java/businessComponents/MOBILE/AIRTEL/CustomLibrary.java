@@ -375,5 +375,121 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		    executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='N' ");
 			
 		}
+		
+		
+		
+		public void verifyContainerContentsLocatorCodeAsset(String containerCode, String expectedValue) {
+			
+			
+			String locatorcode = null;
+			String assetcode = null;
+			Statement stmt;
+			ResultSet rs;
+			
+						
+			String query = "SELECT LOCATORCODE, ASSETCODE FROM CATS_ASSET WHERE ASSETID IN "
+							+ "(SELECT ASSETID FROM CATS_CONTAINERDETAIL WHERE CONTAINERID IN "
+							+ "(SELECT CONTAINERID FROM CATS_CONTAINER WHERE CONTAINERCODE='"+getRuntimeTestdata(containerCode)+"'))";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					locatorcode = rs.getString("LOCATORCODE");
+					assetcode =  rs.getString("ASSETCODE");
+					if (!locatorcode.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while verifying locatorcode of Container Contents - Asset");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			if(!locatorcode.equals(null)) {
+				if(expectedValue.equalsIgnoreCase(locatorcode)) {
+					test.log(LogStatus.PASS, "<b>Locatorcode of Asset - "+assetcode+"</b></br>"
+												+ "<b>Expected </b> - "+expectedValue+ "</br>"
+												+ "<b>Actual </b> - "+locatorcode+ "</br>"
+												);
+					}else {
+						test.log(LogStatus.FAIL, "<b>Locatorcode of Asset - "+assetcode+"</b></br>"
+								+ "<b>Expected </b> - "+expectedValue+ "</br>"
+								+ "<b>Actual </b> - "+locatorcode+ "</br>"
+								);
+					}
+				
+			}else{				
+			test.log(LogStatus.FAIL, "");
+			}
+		}
+		
+		public void verifyContainerContentsLocatorCodePart(String containerCode, String expectedValue) {
+			
+			
+			String locatorcode = null;
+			String partcode = null;
+			Statement stmt;
+			ResultSet rs;
+			
+						
+			String query1 = "SELECT LOCATORCODE FROM CATS_PARTDETAIL WHERE LOCATORCODE IS NOT NULL AND CONTAINERID IN "
+							+ "(SELECT CONTAINERID FROM CATS_CONTAINER WHERE CONTAINERCODE='"+getRuntimeTestdata(containerCode)+"')";
+			
+			String query2 = "SELECT PARTCODE FROM CATS_PART WHERE PARTID IN "
+					+ "(SELECT PARTID FROM CATS_PARTDETAIL WHERE LOCATORCODE IS NOT NULL AND CONTAINERID  IN "
+					+ "(SELECT CONTAINERID FROM CATS_CONTAINER WHERE CONTAINERCODE='"+getRuntimeTestdata(containerCode)+"'))";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query1);
+				while (rs.next()) {
+					rs.getObject(1);
+					locatorcode = rs.getString("LOCATORCODE");
+					if (!locatorcode.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while verifying locatorcode of Container Contents - Part");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query2);
+				while (rs.next()) {
+					rs.getObject(1);
+					partcode = rs.getString("PARTCODE");
+					if (!partcode.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while getting Partcode of Container Contents");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			if(!locatorcode.equals(null)) {
+				if(expectedValue.equalsIgnoreCase(locatorcode)) {
+					test.log(LogStatus.PASS, "<b>Locatorcode of Part - "+partcode+"</b></br>"
+												+ "<b>Expected </b> - "+expectedValue+ "</br>"
+												+ "<b>Actual </b> - "+locatorcode+ "</br>"
+												);
+					}else {
+						test.log(LogStatus.FAIL, "<b>Locatorcode of Part - "+partcode+"</b></br>"
+								+ "<b>Expected </b> - "+expectedValue+ "</br>"
+								+ "<b>Actual </b> - "+locatorcode+ "</br>"
+								);
+					}
+				
+			}else{				
+			test.log(LogStatus.FAIL, "");
+			}
+		}
 
 }

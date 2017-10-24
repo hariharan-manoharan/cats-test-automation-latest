@@ -255,6 +255,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "selectQueryReturnSingleValue":
 					case "verifyAssetActiveState":
 					case "verifyPartActiveState":
+					case "verifyContainerContentsLocatorCodeAsset":
+					case "verifyContainerContentsLocatorCodePart":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
