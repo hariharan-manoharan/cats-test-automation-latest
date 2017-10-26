@@ -204,9 +204,11 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 				test.log(LogStatus.FAIL, "ASSETCODE" + " - <b>" + data +"</b>");
 				test.log(LogStatus.FAIL, e);
 			}
+			
+			if (!data.equals(null)) {
 			test.log(LogStatus.INFO, "ASSETCODE" + " - <b>" + data +"</b>");
 			addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
-			
+			}
 			
 
 		}
@@ -232,22 +234,25 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 					}
 					
 				}
+				
+				if (!actualStatus.equals(null)) {
+				if(expectedStatus.equalsIgnoreCase(actualStatus)) {
+					test.log(LogStatus.PASS, "<b>Asset Status </b></br>"
+												+ "<b>Expected </b> - "+expectedStatus+ "</br>"
+												+ "<b>Actual </b> - "+actualStatus+ "</br>"
+												);
+					}else {
+						test.log(LogStatus.FAIL, "<b>Asset Status </b></br>"
+								+ "<b>Expected </b> - "+expectedStatus+ "</br>"
+								+ "<b>Actual </b> - "+actualStatus+ "</br>"
+								);
+					}
+				}
 			} catch (SQLException e) {
 				test.log(LogStatus.FAIL, "Exception occured while validating Asset Status");
 				test.log(LogStatus.FAIL, e);
 			}
 			
-			if(expectedStatus.equalsIgnoreCase(actualStatus)) {
-			test.log(LogStatus.PASS, "<b>Asset Status </b></br>"
-										+ "<b>Expected </b> - "+expectedStatus+ "</br>"
-										+ "<b>Actual </b> - "+actualStatus+ "</br>"
-										);
-			}else {
-				test.log(LogStatus.FAIL, "<b>Asset Status </b></br>"
-						+ "<b>Expected </b> - "+expectedStatus+ "</br>"
-						+ "<b>Actual </b> - "+actualStatus+ "</br>"
-						);
-			}
 			
 		}
 		
@@ -271,22 +276,26 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 					}
 					
 				}
+				
+				if (!isActive.equals(null)) {
+				if(expectedValue.equalsIgnoreCase(isActive)) {
+					test.log(LogStatus.PASS, "<b>Asset ("+getRuntimeTestdata(assetCode)+") Active State </b></br>"
+												+ "<b>Expected </b> - "+expectedValue+ "</br>"
+												+ "<b>Actual </b> - "+isActive+ "</br>"
+												);
+					}else {
+						test.log(LogStatus.FAIL, "<b>Asset ("+getRuntimeTestdata(assetCode)+") Active State </b></br>"
+								+ "<b>Expected </b> - "+expectedValue+ "</br>"
+								+ "<b>Actual </b> - "+isActive+ "</br>"
+								);
+					}
+				
+				}
+				
 			} catch (SQLException e) {
 				test.log(LogStatus.FAIL, "Exception occured while getting Asset's Active State");
 				test.log(LogStatus.FAIL, e);
 			}
-			
-			if(expectedValue.equalsIgnoreCase(isActive)) {
-				test.log(LogStatus.PASS, "<b>Asset ("+getRuntimeTestdata(assetCode)+") Active State </b></br>"
-											+ "<b>Expected </b> - "+expectedValue+ "</br>"
-											+ "<b>Actual </b> - "+isActive+ "</br>"
-											);
-				}else {
-					test.log(LogStatus.FAIL, "<b>Asset ("+getRuntimeTestdata(assetCode)+") Active State </b></br>"
-							+ "<b>Expected </b> - "+expectedValue+ "</br>"
-							+ "<b>Actual </b> - "+isActive+ "</br>"
-							);
-				}
 			
 			
 		}
@@ -311,27 +320,30 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 					}
 					
 				}
+				
+				if(!isActive.equals(null)) {
+					if(expectedValue.equalsIgnoreCase(isActive)) {
+						test.log(LogStatus.PASS, "<b>Part with Lot number "+getRuntimeTestdata(lotNumber)+" Active State </b></br>"
+													+ "<b>Expected </b> - "+expectedValue+ "</br>"
+													+ "<b>Actual </b> - "+isActive+ "</br>"
+													);
+						}else {
+							test.log(LogStatus.FAIL, "<b>Part Active State </b></br>"
+									+ "<b>Expected </b> - "+expectedValue+ "</br>"
+									+ "<b>Actual </b> - "+isActive+ "</br>"
+									);
+						}
+					
+				}else{				
+				test.log(LogStatus.FAIL, "Part Detail record not found");
+				}
+				
 			} catch (SQLException e) {
 				test.log(LogStatus.FAIL, "Exception occured while getting Part's Active State");
 				test.log(LogStatus.FAIL, e);
 			}
 			
-			if(!isActive.equals(null)) {
-				if(expectedValue.equalsIgnoreCase(isActive)) {
-					test.log(LogStatus.PASS, "<b>Part with Lot number "+getRuntimeTestdata(lotNumber)+" Active State </b></br>"
-												+ "<b>Expected </b> - "+expectedValue+ "</br>"
-												+ "<b>Actual </b> - "+isActive+ "</br>"
-												);
-					}else {
-						test.log(LogStatus.FAIL, "<b>Part Active State </b></br>"
-								+ "<b>Expected </b> - "+expectedValue+ "</br>"
-								+ "<b>Actual </b> - "+isActive+ "</br>"
-								);
-					}
-				
-			}else{				
-			test.log(LogStatus.FAIL, "Part Detail record not found");
-			}
+			
 		}
 		
 		
@@ -353,12 +365,15 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 					}
 					
 				}
+				if (!data.equals(null)) {
+				test.log(LogStatus.PASS, "PARTID for Part Code " +getRuntimeTestdata(partcode)+ " - <b>" + data +"</b>");
+				addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
+				}
 			} catch (SQLException e) {
 				test.log(LogStatus.FAIL, "Exception occured while getting PARTID using Part Code");
 				test.log(LogStatus.FAIL, e);
 			}
-			test.log(LogStatus.PASS, "PARTID for Part Code " +getRuntimeTestdata(partcode)+ " - <b>" + data +"</b>");
-			addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
+			
 			
 			
 
@@ -383,12 +398,15 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 					}
 					
 				}
+				if (!data.equals(null)) {
+				test.log(LogStatus.PASS, "Updated POCODE - <b>" + data +"</b>");
+				addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
+				}
+				
 			} catch (SQLException e) {
 				test.log(LogStatus.FAIL, "Exception occured while getting updated POCODE");
 				test.log(LogStatus.FAIL, e);
 			}
-			test.log(LogStatus.PASS, "Updated POCODE - <b>" + data +"</b>");
-			addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
 			
 			
 

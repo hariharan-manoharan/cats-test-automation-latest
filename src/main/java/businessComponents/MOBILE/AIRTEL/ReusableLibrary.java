@@ -766,27 +766,31 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	public void clickOkPrompt(String msg) throws TimeoutException, NoSuchElementException{
 
-		String data = null;
+		String data1 = null;
+		String data2 = null;
+		String data3 = null;
 		String errormessage1 = null;
 		String errormessage2 = null;
 		String errormessage3 = null;
+		String errormessage4 = null;
+		String errormessage5 = null;
 		String errormessage = null;
 		
 		if (msg.contains("@")){
 			String[] key =msg.split("@");
 			
 			if(key.length == 3 ) {
-			errormessage1 =  key [0];
+			errormessage1 =  key[0];
 			errormessage2 =  key[1];
 			errormessage3 =  key[2];
 			
 			if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
-				data = distributedRuntimeDataProperties.getProperty(errormessage2);
+				data1 = distributedRuntimeDataProperties.getProperty(errormessage2);
 				}else {
-				data = parallelRuntimeDataProperties.getProperty(errormessage2);	
+				data1 = parallelRuntimeDataProperties.getProperty(errormessage2);	
 				}
 
-				errormessage = errormessage1 +data+errormessage3;
+				errormessage = errormessage1 +data1+errormessage3;
 				msg=errormessage;
 			
 			}else if(key.length == 2){
@@ -795,14 +799,32 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			
 
 			if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
-				data = distributedRuntimeDataProperties.getProperty(errormessage2);
+				data1 = distributedRuntimeDataProperties.getProperty(errormessage2);
 				}else {
-				data = parallelRuntimeDataProperties.getProperty(errormessage2);	
+				data1 = parallelRuntimeDataProperties.getProperty(errormessage2);	
 				}
 			
-			errormessage = errormessage1 +data;
+			errormessage = errormessage1 +data1;
 			msg=errormessage;
-			}
+			}else if(key.length == 5){
+				errormessage1 =  key[0];
+				errormessage2 =  key[1];
+				errormessage3 =  key[2];
+				errormessage4 =  key[3];
+				errormessage5 =  key[4];
+				
+				if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
+					data1 = distributedRuntimeDataProperties.getProperty(errormessage2);
+					data2 = distributedRuntimeDataProperties.getProperty(errormessage4);
+					}else {
+					data1 = parallelRuntimeDataProperties.getProperty(errormessage2);
+					data2 = parallelRuntimeDataProperties.getProperty(errormessage4);
+					}
+
+					errormessage = errormessage1 +data1+errormessage3+data2+errormessage5;
+					msg=errormessage;
+				
+				}
 
 			
 
