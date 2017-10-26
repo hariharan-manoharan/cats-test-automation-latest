@@ -307,6 +307,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "getPartID":
 					case "activateBOM":
 					case "inactivateBOM":
+					case "getUpdatedPOCode":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

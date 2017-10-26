@@ -7,9 +7,9 @@ public interface RoutineObjectRepository {
 
 	// ADD CONNECTION
 	
-	By NAME_ADD_CONNECTION= By.name("Add Connection");
+	By ID_ADD_CONNECTION= By.id("my_connections");
 	By ID_ADD_CONNECTIONS=By.id("connections_add");
-	By NAME_TXT_CONNECTION_NAME=By.id("connection_edit_name");
+	By ID_TXT_CONNECTION_NAME=By.id("connection_edit_name");
 	By ID_TXT_CONNECTION_HOST=By.id("connection_edit_host");
 	By ID_TXT_CONNECTION_PORT=By.id("connection_edit_port");
 	By ID_TOGGLE_BTN_SSL =By.id("connection_edit_ssl");
@@ -20,6 +20,7 @@ public interface RoutineObjectRepository {
 	
 	By ID_TXT_USERNAME = By.id("username");
 	By ID_TXT_PASSWORD = By.id("password");
+	By ID_REMEMBER_ME = By.id("remember_me");
 	By ID_BTN_CONNECT = By.id("btn_connect");
 	
 	

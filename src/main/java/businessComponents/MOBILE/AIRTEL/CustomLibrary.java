@@ -364,7 +364,35 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 
 		}
 		
-		
+
+		public void getUpdatedPOCode(String poCodeLike) {
+			String data = null;
+			Statement stmt;
+			ResultSet rs;
+			
+			String query = "SELECT POCODE FROM CATS_PO WHERE POCODE LIKE ('"+getRuntimeTestdata(poCodeLike)+"%')";
+
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					data = rs.getString("POCODE");
+					if (!data.equals(null)) {
+						break;
+					}
+					
+				}
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while getting updated POCODE");
+				test.log(LogStatus.FAIL, e);
+			}
+			test.log(LogStatus.PASS, "Updated POCODE - <b>" + data +"</b>");
+			addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), data);
+			
+			
+
+		}
 		public void activateBOM(String partcode) {
 			String query = "UPDATE CATS_BOM SET ACTIVE='Y' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
 			 executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='Y' ");

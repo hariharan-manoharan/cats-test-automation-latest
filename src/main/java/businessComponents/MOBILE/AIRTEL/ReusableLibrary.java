@@ -68,9 +68,9 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	public void createNewConnection() throws TimeoutException, NoSuchElementException  {
 		
-		Click(NAME_ADD_CONNECTION, "Click - AddConnection");
+		Click(ID_ADD_CONNECTION, "Click - AddConnection");
 		Click(ID_ADD_CONNECTIONS, "Click - AddConnection Symbol");
-		EnterText(NAME_TXT_CONNECTION_NAME, "Enter - Connection Name", environmentVariables.get("EnvironmentName"));
+		EnterText(ID_TXT_CONNECTION_NAME, "Enter - Connection Name", environmentVariables.get("EnvironmentName"));
 		EnterText(ID_TXT_CONNECTION_HOST, "Enter - Host", environmentVariables.get("MobilityHost"));
 		EnterText(ID_TXT_CONNECTION_PORT, "Enter - Port", environmentVariables.get("MobilityPort"));
 		if(environmentVariables.get("MobilitySSL").equalsIgnoreCase("Yes")){
@@ -83,8 +83,9 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 
 	public void login() throws TimeoutException, NoSuchElementException {
 
-		// EnterText(ID_TXT_USERNAME, "Enter - Username", "catsadm");
-		// EnterText(ID_TXT_PASSWORD, "Enter - Password", "catscats11");
+		 EnterText(ID_TXT_USERNAME, "Enter - Username", "catsadm");
+		 EnterText(ID_TXT_PASSWORD, "Enter - Password", "catscats11");
+		 Click(ID_REMEMBER_ME, "Click - Remember me checkbox");
 		// HideKeyboard();
 		Click(ID_BTN_CONNECT, "Click - Connect button");
 	}
