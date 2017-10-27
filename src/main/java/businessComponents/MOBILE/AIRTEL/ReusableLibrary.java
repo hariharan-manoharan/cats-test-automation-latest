@@ -416,6 +416,69 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			takeScreenshot("Clicked - " + pickListName + " date picker icon");
 		}			
 
+	/**
+	 * Function to click spyglass  - Need to Fix this one - Avoid getting the fieldIndex from user
+	 * 
+	 * @param1 String reportName	 
+	 * @return void
+	 * @author Hari 
+	 * @since 06/27/2017
+	 * 
+	 */
+
+	@SuppressWarnings("unchecked")
+	public void clickDatePickerSetCustomDate(String pickListName, String DDMONYY) throws TimeoutException, NoSuchElementException {
+		
+		
+		String[] splittedDate = null;
+		String[] changeFormat = new String[3];
+
+		if(DDMONYY.contains("#")) {
+		DDMONYY = getRuntimeTestdata(DDMONYY);
+		}
+		
+		if(!DDMONYY.equals(null)) {
+		splittedDate = DDMONYY.split("-");		
+		changeFormat[1] =  splittedDate[0]; //date
+		changeFormat[0] = splittedDate[1]; //month
+		changeFormat[2] =  splittedDate[2]; //year
+		}
+		
+		
+		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));		
+		
+		
+		WebElement element = driver.findElement(By.xpath(String.format(XPATH_TXT, "Tap to Choose Date")));	
+		element.click();
+
+			if(!isElementPresent(By.id("numberpicker_input"), "Number Picker")) {			
+				test.log(LogStatus.INFO, "Re-Clicking in Web view - "+pickListName);			
+				 clickWebView(By.xpath("//*[contains(text(),'"+pickListName+"')]/following-sibling::div"), pickListName);
+			}
+		
+			takeScreenshot("Clicked - " + pickListName + " date picker icon");
+			
+			
+			List<WebElement> numberPickerInputs = driver.findElements(By.id("numberpicker_input"));
+			
+			if(numberPickerInputs.size()!=0) {
+				for(int i=0;i<numberPickerInputs.size();i++) {
+					if(numberPickerInputs.get(i).getText().equalsIgnoreCase(changeFormat[i])) {
+						continue;
+					}else {
+						int x = numberPickerInputs.get(i).getLocation().getX();
+						int y = numberPickerInputs.get(i).getLocation().getY();				
+						driver.tap(1, x, y, 3);
+						driver.pressKeyCode(19);
+						if(numberPickerInputs.get(i).getText().equalsIgnoreCase(changeFormat[i])) {
+							continue;
+						}
+					}
+				}
+			}
+			
+			
+		}			
 
 
 	/**
@@ -940,8 +1003,10 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 
 				if(properties.getProperty("ExecutionMode").equalsIgnoreCase("DISTRIBUTED")) {	
 					distributedRuntimeDataProperties.put(testParameters.getCurrentTestCase() + "#" + columnName, data);
+					test.log(LogStatus.PASS, testParameters.getCurrentTestCase() + "#" + columnName + " : "+data , "");
 				}else {
 					parallelRuntimeDataProperties.put(testParameters.getCurrentTestCase() + "#" + columnName, data);
+					test.log(LogStatus.PASS, testParameters.getCurrentTestCase() + "#" + columnName + " : "+data , "");
 				}
 
 			} catch (Exception e) {
