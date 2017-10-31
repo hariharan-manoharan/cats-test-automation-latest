@@ -260,6 +260,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "clickDatePickerSetCustomDate":
 					case "verifyMrrTrxIdPOQuarantine":
 					case "verifyLotNumberPOQuarantine":
+					case "stockReviewSerialized":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
@@ -313,6 +314,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "getUpdatedPOCode":
 					case "createMRRPOReceiptQuarantine":
 					case "generateDate":
+					case "createNewReasonCategory":
+					case "getLotNumberSerializedStockTrx":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

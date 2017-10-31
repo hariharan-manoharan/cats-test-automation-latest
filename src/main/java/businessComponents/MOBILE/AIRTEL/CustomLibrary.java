@@ -849,5 +849,221 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			
 		}
 		
+		/*public void createNewReasonCategory(String segment1){
+			String query = null;	
+			String isSegment1Exists = null;
+			int lastCategoryID = getLastTransactionId("SELECT MAX(CATEGORYID) AS CATEGORYID FROM CATS_CATEGORY","CATEGORYID" );
+			
+			try {
+				
+				//check if category already exists
+				
+				isSegment1Exists = selectQuerySingleValue("SELECT SEGMENT1 AS SEGMENT1 FROM CATS_CATEGORY WHERE SEGMENT1='"+segment1+"'", "SEGMENT1");
+				
+				if(isSegment1Exists.equalsIgnoreCase(segment1)){
+					test.log(LogStatus.INFO, "CATEGORY with SEGMENT1 = '"+segment1+"' already exists.");
+				}else {
+					
+					query = "INSERT "
+							+"INTO CATS_CATEGORY("
+							+"CATEGORYID,"
+							+"SEGMENT1,"
+							+"SEGMENT2,"
+							+"TABLENAME,"
+							+"USAGE,"
+							+"SEGMENT3,"
+							+"ACTIVE,"
+							+"ADDCONTACTID,"
+							+"ADDDTTM,"
+							+"MODIFIEDCONTACTID,"
+							+"MODIFIEDDTTM,"
+							+"DISPLAY)"
+							+"VALUES("
+							+(lastCategoryID+1)+","
+							+"'"+segment1+"',"
+							+"NULL,"
+							+"'CATS_REASON',"
+							+"NULL,"
+							+"NULL,"
+							+"'Y',"
+							+1+","
+							+"SYSDATE,"
+							+1+","
+							+"SYSDATE,"
+							+"'"+segment1+"')"
+							;					
+					executeUpdateQuery(query, "Category with SEGMENT1 = '"+segment1+"' is inserted into CATS_CATEGORY");
+					connection.commit();
+					
+					addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), String.valueOf(lastCategoryID));
+					
+				}
+				
+				
+								
+				
+			} catch (SQLException e) {			
+				e.printStackTrace();
+			}
+		}
+		
+		
+		public void createNewReason(LinkedHashMap<String, String> inputValueMap){
+			String query = null;	
+			
+			try {
+				
+				query = "";
+							 
+				//System.out.println(query);
+				executeUpdateQuery(query, "");
+				connection.commit();				
+				
+			} catch (SQLException e) {			
+				e.printStackTrace();
+			}
+		}
+		*/
+		
+		
+		public void stockReviewSerialized(String assetCode, String subInventory) {
+			
+			String query1 = null;
+			
+			if(assetCode.contains("#")) {
+				assetCode = getRuntimeTestdata(assetCode);
+			}
+			
+			try {
+			
+			String CUSTOMTRANSACTIONID = selectQuerySingleValue("SELECT ORIGINATORTRXID FROM CATS_ASSETTRANSACTION WHERE ASSETCODE='"+assetCode+"' AND ORIGINATORTYPETRX='STOCK'", "ORIGINATORTRXID");
+			
+			LinkedHashMap<String, String> customStockTrxData = selectQueryMultipleValues("SELECT CUSTOMTRANSACTIONID,VALUE4, VALUE10,VALUE17,VALUE24,VALUE25,VALUE50,NOTES "
+					+ "FROM CATS_CUSTOMTRANSACTION WHERE CUSTOMTRANSACTIONID="+CUSTOMTRANSACTIONID, "CUSTOMTRANSACTIONID#VALUE4#VALUE10#VALUE17#VALUE24#VALUE25#VALUE50#NOTES");
+			String BUSINESSUNITID = selectQuerySingleValue("SELECT BUSINESSUNITID FROM CATS_LOCATIONBU WHERE LOCATIONID IN (SELECT LOCATIONID FROM CATS_LOCATION WHERE NAME='"+customStockTrxData.get("VALUE24_1")+"')", "BUSINESSUNITID");
+			String MANUFACTURERID = selectQuerySingleValue("SELECT MANUFACTURERID FROM CATSCUST_PARTMANUFACTURER WHERE MFGPARTNUMBER='"+customStockTrxData.get("VALUE10_1")+"'", "MANUFACTURERID");
+			String ASSETID = selectQuerySingleValue("SELECT ASSETID FROM CATS_ASSET WHERE SERIALNUMBER='"+assetCode+"'", "ASSETID");
+			String ASSETACTIVE = selectQuerySingleValue("SELECT ACTIVE FROM CATS_ASSET WHERE SERIALNUMBER='"+assetCode+"'", "ACTIVE");			
+		
+			int STOCKREVIEWID = getLastTransactionId("SELECT STOCKREVIEWID FROM CATSCUST_V_ASSET_UDFDATA WHERE ASSETID IN (SELECT ASSETID FROM CATS_ASSET WHERE ASSETCODE='"+assetCode+"')","STOCKREVIEWID" );
+			
+			query1 = "INSERT "
+					+"INTO CATS_CUSTOMTRANSACTION("
+					+"CUSTOMTRANSACTIONID,"
+					+"ORIGINATOR,"
+					+"ORIGINATORTYPETRX,"
+					+"TYPETRX,"					
+					+"VALIDATIONOVERRIDE,"
+					+"QTYOVERRIDE,"
+					+"VALUE1,"
+					+"VALUE4,"
+					+"VALUE5,"
+					+"VALUE6,"
+					+"VALUE10,"
+					+"VALUE17,"
+					+"VALUE24,"
+					+"VALUE27,"
+					+"VALUE29,"
+					+"VALUE31,"
+					+"VALUE50,"
+					+"NOTES,"
+					+"NUMBER4,"
+					+"PROCESSED,"
+					+"ADDCONTACTCODE,"
+					+"ADDDTTM,"
+					+"NUMBER8,"
+					+"NUMBER10,"
+					+"VALUE90,"
+					+"VALUE91,"
+					+"VALUE92,"
+					+"VALUE93,"
+					+"ASSETID"
+					+ ")"
+					+"VALUES("
+					+"(SELECT DECODE(max(CUSTOMTRANSACTIONID), NULL,1, max(CUSTOMTRANSACTIONID)+1) CUSTOMTRANSACTIONID FROM CATS_CUSTOMTRANSACTION),"
+					+"'CATS_MANAGED_MANAGER',"
+					+"'CUSTOM',"
+					+"'CUSTOM',"					
+					+"NULL,"
+					+"NULL,"
+					+"'STOCK_REVIEW',"
+					+"'"+customStockTrxData.get("VALUE4_1")+"',"
+					+"'"+assetCode+"',"
+					+"'"+ASSETACTIVE+"',"
+					+"'"+customStockTrxData.get("VALUE10_1")+"',"
+					+"'"+customStockTrxData.get("VALUE17_1")+"',"
+					+"'"+customStockTrxData.get("VALUE24_1")+"',"
+					+"'"+subInventory+"',"
+					+"'INVENTORY',"
+					+"'"+customStockTrxData.get("VALUE25_1")+"',"
+					+"'"+customStockTrxData.get("VALUE50_1")+"',"
+					+"'"+customStockTrxData.get("NOTES_1")+"',"
+					+(BUSINESSUNITID)+","
+					+"NULL,"
+					+"'CATSADM',"
+					+"SYSDATE,"
+					+(STOCKREVIEWID)+","
+					+(MANUFACTURERID)+","
+					+"'"+assetCode+"',"
+					+"'APPROVED',"
+					+"'INVENTORY',"
+					+"'STOCK',"
+					+(ASSETID)
+					+ ")"
+					;								
+			executeUpdateQuery(query1, "Stock review is done for Assetcode - "+assetCode);
+			connection.commit();
+			
+			}catch (SQLException e) {			
+				e.printStackTrace();
+			}
+			
+		}
+		
+		public void stockReviewNonSerialized() {
+			
+		}
+		
+		
+		public void getLotNumberSerializedStockTrx(String assetcode) {
+			
+			Statement stmt;
+			ResultSet rs;
+			String lotnumber = null;
+			
+			if(assetcode.contains("#")) {
+				assetcode = 	getRuntimeTestdata(assetcode);
+			}
+			
+				
+			String query = "SELECT LOTNUMBER FROM CATS_ASSETTRANSACTION WHERE ASSETCODE='"+assetcode+"' AND ORIGINATORTYPETRX='STOCK'";
+			
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					lotnumber = rs.getString("LOTNUMBER");
+					if (lotnumber!=null) {
+						break;
+					}
+					
+				}
+				
+			if (lotnumber!=null) {
+			test.log(LogStatus.PASS, "LOTNUMBER for Stock Transaction with ASSETCODE - <b>"+assetcode+"</b> is <b>"+lotnumber+"</b>");
+			if(lotnumber.contains("S-")) {
+				test.log(LogStatus.PASS, "LOTNUMBER for Stock Transaction with ASSETCODE - <b>"+assetcode+"</b> is defaulted with format '<b>S-</b>' ");	
+			}
+			}
+			
+				
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while getting LOTNUMBER for Stock Transaction from CATS_ASSETTRANSACTION table with ASSETCODE - "+assetcode);
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			
+		}
 
 }

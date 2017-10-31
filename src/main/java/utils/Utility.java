@@ -1107,21 +1107,27 @@ public class Utility implements RoutineObjectRepository{
 		try {
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(query);
+			if(rs!=null){
 			while (rs.next()) {
 				rs.getObject(1);
 				data = rs.getString(dataRequired);
 				if (!data.equals(null)) {
 					break;
 				}
-				return data;
 
+			}
 			}
 		} catch (SQLException e) {
 			test.log(LogStatus.FAIL, dataRequired + " - <b>" + data +"</b>");
 			test.log(LogStatus.FAIL, e);
-		}
+		}		
+
+		if (data!=null) {
 		test.log(LogStatus.INFO, dataRequired + " - <b>" + data +"</b>");
 		return data.trim();
+		}else {
+		return "NULL";
+		}
 		
 
 	}
