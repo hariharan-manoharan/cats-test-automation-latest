@@ -1160,7 +1160,7 @@ public class Utility implements RoutineObjectRepository{
 
 				for (int i = 0; i < key.length; i++) {
 					String value = rs.getString(key[i]);
-					data.put(key[i] + "_" + lineCount, value);
+					data.put(key[i], value);
 				}
 
 			}
