@@ -1065,5 +1065,101 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			
 			
 		}
+		
+		
+		public void verifyPartTotalCost(String partcodeAndLotnumber, String expectedTotalCost){
+			String[] arguments = null;			
+			String actualTotalCost = null;
+			Statement stmt;
+			ResultSet rs;
+			
+			if(partcodeAndLotnumber.contains("@")) {
+				arguments = partcodeAndLotnumber.split("@");
+			}
+			
+			String query = "SELECT TOTALVALUE FROM CATS_PARTDETAIL WHERE  LOTNUMBER='"+getRuntimeTestdata(arguments[1])+"' AND PARTID IN " + 
+						   "(SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(arguments[0])+"')";
+			
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					actualTotalCost = rs.getString("TOTALVALUE");
+					if (actualTotalCost!=null) {
+						break;
+					}
+					
+				}
+				
+				if (actualTotalCost!=null) {
+					if(expectedTotalCost.equalsIgnoreCase(actualTotalCost)) {
+						test.log(LogStatus.PASS, "<b>TOTALVALUE</b> matched for Part Detail record with Partcode (<b>"+getRuntimeTestdata(arguments[0])+"</b>) and Lot Number (<b>"+getRuntimeTestdata(arguments[1])+"</b>).</br>"
+													+ "<b>Expected </b> - "+expectedTotalCost+ "</br>"
+													+ "<b>Actual </b> - "+actualTotalCost+ "</br>"
+													);
+						}else {
+						test.log(LogStatus.FAIL, "<b>TOTALVALUE<b></b> not matched for Part Detail record line with Partcode (<b>"+getRuntimeTestdata(arguments[0])+"</b>) and Lot Number (<b>"+getRuntimeTestdata(arguments[1])+"</b>).</br>"
+									+ "<b>Expected </b> - "+expectedTotalCost+ "</br>"
+									+ "<b>Actual </b> - "+actualTotalCost+ "</br>"
+									);
+						}
+					
+				}
+				
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while verifying Part TOTALVALUE");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			
+		}
+		
+		public void verifyAssetTotalCost(String assetcode, String expectedTotalCost){
+			
+			String actualTotalCost = null;
+			Statement stmt;
+			ResultSet rs;		
+			
+			if(assetcode.contains("#")) {				
+				assetcode = getRuntimeTestdata(assetcode);
+			}
+			
+			String query = "SELECT COST FROM CATS_ASSET WHERE ASSETCODE='"+assetcode+"'";
+			
+			try {
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query);
+				while (rs.next()) {
+					rs.getObject(1);
+					actualTotalCost = rs.getString("COST");
+					if (actualTotalCost!=null) {
+						break;
+					}
+					
+				}
+				
+				if (actualTotalCost!=null) {
+					if(expectedTotalCost.equalsIgnoreCase(actualTotalCost)) {
+						test.log(LogStatus.PASS, "<b>COST</b> matched for ASSET (<b>"+assetcode+"</b>).</br>"
+													+ "<b>Expected </b> - "+expectedTotalCost+ "</br>"
+													+ "<b>Actual </b> - "+actualTotalCost+ "</br>"
+													);
+						}else {
+						test.log(LogStatus.FAIL, "<b>COST</b> not matched for ASSET (<b>"+assetcode+"</b>).</br>"
+									+ "<b>Expected </b> - "+expectedTotalCost+ "</br>"
+									+ "<b>Actual </b> - "+actualTotalCost+ "</br>"
+									);
+						}
+					
+				}
+				
+			} catch (SQLException e) {
+				test.log(LogStatus.FAIL, "Exception occured while verifying Asset's Total cost");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			
+		}
 
 }

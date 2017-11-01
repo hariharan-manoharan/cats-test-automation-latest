@@ -261,6 +261,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "verifyMrrTrxIdPOQuarantine":
 					case "verifyLotNumberPOQuarantine":
 					case "stockReviewSerialized":
+					case "verifyPartTotalCost":
+					case "verifyAssetTotalCost":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
