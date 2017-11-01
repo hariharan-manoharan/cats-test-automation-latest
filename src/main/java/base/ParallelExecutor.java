@@ -305,6 +305,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "generateDate":
 					case "createNewReasonCategory":
 					case "getLotNumberSerializedStockTrx":
+					case "isFieldDisplayed":
+					case "isNotFieldDisplayed":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

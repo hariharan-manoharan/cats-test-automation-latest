@@ -201,13 +201,15 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void clickNext() throws TimeoutException, NoSuchElementException{
 		 	
 		waitCommand(By.xpath(String.format(XPATH_TXT_CONTAINS, ":")));		    
-		driver.findElement(By.id("next")).click();				
+		driver.findElement(By.id("next")).click();	
+		test.log(LogStatus.INFO, "Clicked Next Button");
 	}
 	
 	public void clickNextWaitTillFieldContains(String fieldLabel) throws TimeoutException, NoSuchElementException{
 	 	
 		waitCommand(By.xpath(String.format(XPATH_TXT_CONTAINS, fieldLabel)));		    
-		driver.findElement(By.id("next")).click();				
+		driver.findElement(By.id("next")).click();	
+		test.log(LogStatus.INFO, "Clicked Next Button");
 	}
 
 
@@ -216,6 +218,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		for(int i=1;i<=Integer.parseInt(times);i++){ 	
 			waitCommand(By.xpath(String.format(XPATH_TXT_CONTAINS, ":")));		    
 			driver.findElement(By.id("next")).click();	
+			test.log(LogStatus.INFO, "Clicked Next Button");
 			HardDelay(3000L);
 		}
 	}
@@ -225,6 +228,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		for(int i=1;i<=Integer.parseInt(times);i++){ 	
 			waitCommand(By.xpath(String.format(XPATH_TXT, field)));		    
 			driver.findElement(By.id("next")).click();	
+			test.log(LogStatus.INFO, "Clicked Next Button");
 			HardDelay(3000L);
 		}
 	}
@@ -734,9 +738,24 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			report(driver,test, " Transaction is not successfull", LogStatus.FAIL);			
 		}
 	}
-
-
-
+	
+	public void isFieldDisplayed(String fieldName) {		
+		if (isElementPresent(By.xpath(String.format(XPATH_TXT, fieldName)),"Field Name - "+fieldName)) {
+			report(driver,test, "Field with label <b>'"+fieldName+"'</b> is displayed", LogStatus.PASS);			
+		} else {
+			report(driver,test, "Field with label <b>'"+fieldName+"'</b> is not displayed", LogStatus.FAIL);			
+		}
+	}
+	
+	
+	public void isNotFieldDisplayed(String fieldName) {		
+		if (!isElementPresent(By.xpath(String.format(XPATH_TXT, fieldName)),"Field Name - "+fieldName)) {
+			report(driver,test, "Field with label <b>'"+fieldName+"'</b> is not displayed", LogStatus.PASS);			
+		} else {
+			report(driver,test, "Field with label <b>'"+fieldName+"'</b> is displayed", LogStatus.FAIL);			
+		}
+	}
+	
 	/**
 	 * Function to log test report with screenshot and Status PASS
 	 * 
