@@ -416,12 +416,15 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 
 		}
 		public void activateBOM(String partcode) {
-			String query = "UPDATE CATS_BOM SET ACTIVE='Y' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
-			 executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='Y' ");
+			
+			String query = "UPDATE CATS_BOM SET ACTIVE='Y' WHERE BOMID IN (SELECT MAX(BOMID) FROM CATS_BOM WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"'))";
+		    executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='Y' ");
+			
 		}
 		
 		public void inactivateBOM(String partcode) {
-			String query = "UPDATE CATS_BOM SET ACTIVE='N' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
+			
+			String query = "UPDATE CATS_BOM SET ACTIVE='N' WHERE BOMID IN (SELECT MAX(BOMID) FROM CATS_BOM WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"'))";
 		    executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='N' ");
 			
 		}

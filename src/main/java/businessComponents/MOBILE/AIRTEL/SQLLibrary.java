@@ -596,7 +596,8 @@ public class SQLLibrary extends Utility {
 		try {			
 			query = "UPDATE CATSCUST_MRR "
 					+"SET TAX_UPDATE = 'Y', NON_RECOVERABLE_TAX_AMOUNT="+NON_RECOVERABLE_TAX_AMOUNT+", TOTAL_AMOUNT="+TOTAL_AMOUNT
-					+" WHERE MRRID IN (SELECT MRRID FROM CATSCUST_MRR WHERE POCODE='"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+".OU."+inputValueMap.get("VALUE1")+"')";
+					+" WHERE PARTCODE='"+getRuntimeTestdata(inputValueMap.get("VALUE16"))+"' AND POCODE IN ('"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+".OU."+inputValueMap.get("VALUE1")+"')";
+			test.log(LogStatus.INFO,query);
 			executeUpdateQuery(query, "Following details are updated in CATSCUST_MRR for PO - <b>"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+"</b></br></br>"+
 										"<b>TAX_UPDATE</b> = <b>'Y'</b></br>"+
 										"<b>NON_RECOVERABLE_TAX_AMOUNT</b> = <b>"+NON_RECOVERABLE_TAX_AMOUNT+"</b></br>"+
