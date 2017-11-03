@@ -98,13 +98,18 @@ public class SQLLibrary extends Utility {
 			if(iteration!=null) {
 				dataMap = dataTable.getRowData("Data_Staging",
 					testParameters.getCurrentTestCase() + "_DC"+iteration);
+				int recordId = deliveryConfirmationQuery(dataMap,Integer.parseInt(iteration));
+				validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
+						getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
 			}else {
 				dataMap = dataTable.getRowData("Data_Staging",
 						testParameters.getCurrentTestCase() + "_DC");
+				int recordId = deliveryConfirmationQuery(dataMap, 0);
+				validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
+						getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
 			}
-			int recordId = deliveryConfirmationQuery(dataMap);
-			validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
-					getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
+			
+			
 		} finally {
 			lock.unlock();
 		}
@@ -145,17 +150,21 @@ public class SQLLibrary extends Utility {
 
 			lock.lock();
 			String validateMRR = "SELECT * FROM CATSCON_MRR_STG WHERE RECEIPT_NUM='%s' AND RECORD_ID=%d";
-			
+
 			if(iteration!=null) {
 			 dataMap = dataTable.getRowData("Data_Staging",
 					testParameters.getCurrentTestCase() + "_MRR"+iteration);
+			 int recordId = createMaterialReceiveReceiptQuery(dataMap,Integer.parseInt(iteration));
+				validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
+						getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"+iteration), recordId);
 			}else {
 				dataMap = dataTable.getRowData("Data_Staging",
-						testParameters.getCurrentTestCase() + "_MRR");	
+						testParameters.getCurrentTestCase() + "_MRR");
+				int recordId = createMaterialReceiveReceiptQuery(dataMap,0);
+				validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
+						getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
 			}
-			int recordId = createMaterialReceiveReceiptQuery(dataMap);
-			validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
-					getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
+		
 			poTaxUpdateQuery(dataMap);
 
 		} finally {
@@ -349,7 +358,7 @@ public class SQLLibrary extends Utility {
 		return RECORD_ID;
 	}
 
-	public int createMaterialReceiveReceiptQuery(LinkedHashMap<String, String> inputValueMap){
+	public int createMaterialReceiveReceiptQuery(LinkedHashMap<String, String> inputValueMap, int iteration){
 		String query = null;
 		int RECORD_ID = 0;
 		CallableStatement stproc_stmt; 
@@ -359,7 +368,11 @@ public class SQLLibrary extends Utility {
 
 			String mrrNumber = (inputValueMap.get("VALUE9").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE9")) : generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
 			
-			addRuntimeTestData("MRRNUMBER", mrrNumber);
+			if(iteration>0) {
+			addRuntimeTestData("MRRNUMBER"+iteration, mrrNumber);
+			}else {
+			addRuntimeTestData("MRRNUMBER", mrrNumber);	
+			}
 
 			query = "INSERT "
 					+"INTO CATSCON_MRR_STG"
@@ -464,16 +477,23 @@ public class SQLLibrary extends Utility {
 
 
 	@SuppressWarnings("resource")
-	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap) {
+	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap , int Iteration) {
 
 		String query = null;
 		String SERIALIZED;
 		String TRANSACTIONID;
-		String ASSETCODE;	
+		String ASSETCODE;
+		String LOTNUMBER; 
 		int RECORD_ID = 0;
 		ResultSet rs;
 		Statement stmt;
 		CallableStatement stproc_stmt;
+		
+		if(Iteration>0||String.valueOf(Iteration)!=null) {
+		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER"+Iteration);
+		}else {
+		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER");	
+		}
 
 
 		try {
@@ -486,7 +506,7 @@ public class SQLLibrary extends Utility {
 				if (SERIALIZED.equalsIgnoreCase("N")){
 
 					String query2 = "SELECT MAX(PARTTRANSACTIONID) AS PARTTRANSACTIONID FROM CATS_PARTTRANSACTION WHERE ORIGINATOR ="+"'CATS_POTRANSACTION'"
-							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER")+"'";
+							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+LOTNUMBER+"'";
 					stmt = connection.createStatement();
 
 					rs = stmt.executeQuery(query2);	
@@ -510,7 +530,7 @@ public class SQLLibrary extends Utility {
 								+ "("
 								+"'"+TRANSACTIONID+"',"
 								+"'"+inputValueMap.get("VALUE2")+"',"
-								+"'"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER")+"',"
+								+"'"+LOTNUMBER+"',"
 								+"'"+RECORD_ID+"',"
 								+inputValueMap.get("VALUE5")+","
 								+"'"+inputValueMap.get("VALUE6")+"',"
@@ -533,7 +553,7 @@ public class SQLLibrary extends Utility {
 
 				}else{
 					String query3 = "SELECT * FROM CATS_ASSETTRANSACTION WHERE ASSETTRANSACTIONID IN (select MAX(ASSETTRANSACTIONID) AS ASSETTRANSACTIONID  FROM CATS_ASSETTRANSACTION WHERE ORIGINATOR ="+"'CATS_POTRANSACTION'"
-							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER")+"')";
+							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+LOTNUMBER+"')";
 					stmt = connection.createStatement();
 					rs = stmt.executeQuery(query3);	
 					while (rs.next()) {
@@ -558,7 +578,7 @@ public class SQLLibrary extends Utility {
 								+ "("
 								+"'"+TRANSACTIONID+"',"
 								+"'"+inputValueMap.get("VALUE2")+"',"
-								+"'"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER")+"',"
+								+"'"+LOTNUMBER+"',"
 								+"'"+RECORD_ID+"',"
 								+inputValueMap.get("VALUE5")+","
 								+"'"+inputValueMap.get("VALUE6")+"',"
@@ -1111,57 +1131,81 @@ public class SQLLibrary extends Utility {
 	}
 	
 	
-	public void createMoveOrder(){
-		
+	public void createMoveOrder(String iteration){
 
-	LinkedHashMap<String, String> dataMap = dataTable.getRowData("MoveOrder_Request", testParameters.getCurrentTestCase());		
-	
-	long moveordernum =createMoveOrder(dataMap);		
-	
-	String validateBulkTransferRequest = "SELECT * FROM CATSCON_TRANSFERREQ_STG WHERE REFERENCENUMBER='%s' AND STAGEID='%d'";	
-	String selectquery =  "SELECT * FROM CATSCON_TRANSFERREQ_STG WHERE REFERENCENUMBER ="+"'"+moveordernum+"'";
-	String stageId=selectQuerySingleValue(selectquery, "STAGEID");
-	                              
-	boolean successFlag = validateInboundTransaction("Move Order", "PROCESSED", "ERRORMESSAGE", validateBulkTransferRequest,String.valueOf(moveordernum) ,Integer.parseInt(stageId));	
-	
-	if(successFlag){
-		String requestNumber = selectQuerySingleValue(String.format(validateBulkTransferRequest, String.valueOf(moveordernum) ,Integer.parseInt(stageId)), "GENERATEDREQNUM");		
-		String query = "SELECT * FROM CATS_TRANSFER WHERE REFERENCENUMBER ="+"'"+requestNumber+"'";
-		String transferno = selectQuerySingleValue(query, "TRANSFERNUMBER");
-		addRuntimeTestData("REQUESTNUMBER", requestNumber);
-		addRuntimeTestData("TRANSFERNUMBER", transferno);
-	}
+
+
+		LinkedHashMap<String, String> dataMap = dataTable.getRowData("Data_Staging", testParameters.getCurrentTestCase());
+
+		if(iteration!=null) {
+
+			createMoveOrder(dataMap , Integer.parseInt(iteration));
+		}
+		else {
+			createMoveOrder(dataMap , 0);	
+		}
+
 
 }	
 
-public long createMoveOrder(LinkedHashMap<String, String> inputValueMap){		
-	CallableStatement stproc_stmt;
+	public void createMoveOrder(LinkedHashMap<String, String> inputValueMap , int iteration){		
+	
 	
 	String insertquery1 = null;	
 	String insertquery2 = null;
+	String sP1LOTNumber = null;
+	int sMOVEORDERNUMBER = 0;
+	int sMOVEORDERHEADERID;
+	int sMOVEORDERLINEID;
+	int sMOVEORDERLINENO = 0;
+	String nInvOrgName = inputValueMap.get("VALUE1");
+	String nOppUnitName = inputValueMap.get("VALUE2");
+	String sFROMLocationCode =inputValueMap.get("VALUE3");
+	String sTOLocationCode = inputValueMap.get("VALUE4");
+	String sP1QTY =inputValueMap.get("VALUE6");
+	
 
-	String nInvOrgName = inputValueMap.get("INVENTORYORG");
-	String nOppUnitName = inputValueMap.get("OPERATINGUNIT");
-	String sFROMLocationCode =inputValueMap.get("FROMLOCATION");
-	String sTOLocationCode = inputValueMap.get("TOLOCATION");
-	String sP1QTY =inputValueMap.get("QUANTITY");
 	
+	if(iteration>1) {
+		sMOVEORDERNUMBER = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MOVEORDER"));
+		sMOVEORDERHEADERID = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MOVEORDER_HEADERID"));
+		 sMOVEORDERLINEID = sMOVEORDERNUMBER+30;
+		 sMOVEORDERLINENO = iteration;
+		  sP1LOTNumber =inputValueMap.get("VALUE7")+iteration;
+	      sP1LOTNumber= getRuntimeTestdata(sP1LOTNumber);
+	      
+	}else {
+		//String moveOrderquery ="SELECT DECODE(max (cast(MOVE_ORDER_NUMBER as INT)), NULL,1, max(cast(MOVE_ORDER_NUMBER as INT))+1) MOVE_ORDER_NUMBER FROM BTVL_CATS_MO_REQUEST_INT_V";
+		//String moveOrdernum= selectQuerySingleValue(moveOrderquery, "MOVE_ORDER_NUMBER");
+		// sMOVEORDERNUMBER = Long.parseLong(moveOrdernum);
+		 sMOVEORDERNUMBER = generateRandomNum(10000000); 
+		 
+		 if(iteration==1)
+		 {
+		 sP1LOTNumber =inputValueMap.get("VALUE7")+iteration;
+		 sP1LOTNumber= getRuntimeTestdata(sP1LOTNumber);
+		 sMOVEORDERLINENO = iteration;
+		 }else {
+		 sP1LOTNumber =inputValueMap.get("VALUE7");
+		 sP1LOTNumber= getRuntimeTestdata(sP1LOTNumber); 
+		 sMOVEORDERLINENO = 1;
+		 }
+		 
+		 addRuntimeTestData("MOVEORDER",Long.toString(sMOVEORDERNUMBER));
+		 sMOVEORDERHEADERID = sMOVEORDERNUMBER+10;
+		 addRuntimeTestData("MOVEORDER_HEADERID",Long.toString(sMOVEORDERHEADERID));
+		 sMOVEORDERLINEID = sMOVEORDERNUMBER+11;
+	}
 	
-	String moveOrderquery = "SELECT DECODE(max (cast(MOVE_ORDER_NUMBER as INT)), NULL,1, max(cast(MOVE_ORDER_NUMBER as INT))+1) MOVE_ORDER_NUMBER FROM BTVL_CATS_MO_REQUEST_INT_V";
-	String moveOrdernum= selectQuerySingleValue(moveOrderquery, "MOVE_ORDER_NUMBER");
-	long sMOVEORDERNUMBER = Long.parseLong(moveOrdernum);
-	long sMOVEORDERHEADERID = sMOVEORDERNUMBER+1;
-	long sMOVEORDERLINEID = sMOVEORDERNUMBER+2;
-	
-	String transactionQuery= "SELECT DECODE(max(TRANSACTION_ID), NULL,1, max(TRANSACTION_ID)+1) TRANSACTION_ID FROM BTVL_CATS_MO_TRANSACT_INT_V";
-	String transactionId= selectQuerySingleValue(transactionQuery, "TRANSACTION_ID");
-	long TRANSACTIONID = Long.parseLong(transactionId);
-	
-	String sPart1Code = inputValueMap.get("PARTCODE");
+	//String transactionQuery= "SELECT DECODE(max(TRANSACTION_ID), NULL,1, max(TRANSACTION_ID)+1) TRANSACTION_ID FROM BTVL_CATS_MO_TRANSACT_INT_V";
+	//String transactionId= selectQuerySingleValue(transactionQuery, "TRANSACTION_ID");
+	//long TRANSACTIONID = Long.parseLong(transactionId);
+	int TRANSACTIONID = generateRandomNum(100000000);
+			
+	String sPart1Code = inputValueMap.get("VALUE5");
 	sPart1Code =  getRuntimeTestdata(sPart1Code);
 
-	String sP1LOTNumber =inputValueMap.get("LOTNUMBER");
-	sP1LOTNumber= getRuntimeTestdata(sP1LOTNumber);
+	
 	
 	String sP1DeliveryChallan ="DC"+sMOVEORDERNUMBER;
 	//String sEBINNUMBER = inputValueMap.get("EBINNUMBER");
@@ -1213,7 +1257,7 @@ public long createMoveOrder(LinkedHashMap<String, String> inputValueMap){
 				+  sMOVEORDERNUMBER+","
 				+  sMOVEORDERHEADERID+","
 				+ "'"+"APPROVED"+"',"
-				+ 1+","
+				+ sMOVEORDERLINENO+","
 				+  sMOVEORDERLINEID+","
 				+ "'"+"APPROVED"+"',"
 				+ "'"+sPart1Code+"',"
@@ -1301,11 +1345,29 @@ public long createMoveOrder(LinkedHashMap<String, String> inputValueMap){
 
 		executeUpdateQuery(insertquery1, "Inserted Records to BTVL_CATS_MO_REQUEST_INT_V where Move Order Number is "+sMOVEORDERNUMBER);
 		test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:500px;overflow:scroll;><code>"+insertquery1+"</code></div>");
-		executeUpdateQuery(insertquery2, "Inserted Records to BTVL_CATS_MO_TRANSACT_INT_V where Move Order Number is "+sMOVEORDERHEADERID );
+		executeUpdateQuery(insertquery2, "Inserted Records to BTVL_CATS_MO_TRANSACT_INT_V where Move Order Header ID is "+sMOVEORDERHEADERID );
 		test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:500px;overflow:scroll;><code>"+insertquery2+"</code></div>");
 		connection.commit();
 		
+
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}finally{
+		lock.unlock();
+	}
+
+
+}
+
+	public void runMOservices() {
+	int moveordernum;
+	CallableStatement stproc_stmt;
+
+	try{
 		stproc_stmt = connection.prepareCall ("{call CATSCON_P_ORACLE_ORDERS_IN.SP_PULL_MO()}");	
+
 		stproc_stmt.executeUpdate();		
 		stproc_stmt = connection.prepareCall ("{call CATSCON_P_ORACLE_ORDERS_IN.SP_PULL_MOTRX()}");
 		stproc_stmt.executeUpdate();
@@ -1315,16 +1377,29 @@ public long createMoveOrder(LinkedHashMap<String, String> inputValueMap){
 		stproc_stmt.executeUpdate();
 		stproc_stmt = connection.prepareCall ("{call CATSCON_P_ORDERPROCESSING.SP_PROCESS_MO_UPDATES()}");	
 		stproc_stmt.executeUpdate();
-		
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}finally{
-		lock.unlock();
 	}
-	return sMOVEORDERNUMBER;
+	catch (SQLException e){
+		e.printStackTrace();
+		test.log(LogStatus.FAIL, "MO Services Failed");
+	}
 
+	moveordernum = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MOVEORDER"));
+	String validateBulkTransferRequest = "SELECT * FROM CATSCON_TRANSFERREQ_STG WHERE REFERENCENUMBER='%s' AND STAGEID='%d'";	
+	String selectquery =  "SELECT * FROM CATSCON_TRANSFERREQ_STG WHERE REFERENCENUMBER ="+"'"+moveordernum+"'";
+	String stageId=selectQuerySingleValue(selectquery, "STAGEID");
+
+	boolean successFlag = validateInboundTransaction("Move Order", "PROCESSED", "ERRORMESSAGE", validateBulkTransferRequest,String.valueOf(moveordernum) ,Integer.parseInt(stageId));	
+
+	if(successFlag){
+		String requestNumber = selectQuerySingleValue(String.format(validateBulkTransferRequest, String.valueOf(moveordernum) ,Integer.parseInt(stageId)), "GENERATEDREQNUM");		
+		String query = "SELECT * FROM CATS_TRANSFER WHERE REFERENCENUMBER ="+"'"+requestNumber+"'";
+		String transferno = selectQuerySingleValue(query, "TRANSFERNUMBER");
+		addRuntimeTestData("REQUESTNUMBER", requestNumber);
+		addRuntimeTestData("TRANSFERNUMBER", transferno);
+
+	}
 
 }
+
 	
 }

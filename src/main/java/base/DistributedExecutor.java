@@ -320,6 +320,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "getLotNumberSerializedStockTrx":
 					case "isFieldDisplayed":
 					case "isNotFieldDisplayed":
+					case "createMoveOrder":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
