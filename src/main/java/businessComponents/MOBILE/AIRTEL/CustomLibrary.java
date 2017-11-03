@@ -728,12 +728,24 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		}
 
 		public void poTaxUpdateQuery(LinkedHashMap<String, String> inputValueMap){
-			String query = null;		
+			String query = null;
+			int NON_RECOVERABLE_TAX_AMOUNT = 100;
+			int TOTAL_AMOUNT = (Integer.parseInt((inputValueMap.get("VALUE17")))*Integer.parseInt((inputValueMap.get("VALUE19"))))+NON_RECOVERABLE_TAX_AMOUNT;
 			try {			
 				query = "UPDATE CATSCUST_MRR "
-						+"SET TAX_UPDATE = 'Y'"
-						+"WHERE MRRID IN (SELECT MRRID FROM CATSCUST_MRR WHERE POCODE='"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+".OU."+inputValueMap.get("VALUE1")+"')";
-				executeUpdateQuery(query, "Tax Update for PO - <b>"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+"</b>");
+						+"SET TAX_UPDATE = 'Y', NON_RECOVERABLE_TAX_AMOUNT="+NON_RECOVERABLE_TAX_AMOUNT+", TOTAL_AMOUNT="+TOTAL_AMOUNT
+						+" WHERE PARTCODE='"+getRuntimeTestdata(inputValueMap.get("VALUE16"))+"' AND POCODE IN ('"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+".OU."+inputValueMap.get("VALUE1")+"')";
+				test.log(LogStatus.INFO,query);
+				executeUpdateQuery(query, "Following details are updated in CATSCUST_MRR for PO - <b>"+getRuntimeTestdata(testParameters.getCurrentTestCase()+"#PONUMBER")+"</b></br></br>"+
+											"<b>TAX_UPDATE</b> = <b>'Y'</b></br>"+
+											"<b>NON_RECOVERABLE_TAX_AMOUNT</b> = <b>"+NON_RECOVERABLE_TAX_AMOUNT+"</b></br>"+
+											"<b>TOTAL_AMOUNT</b> = <b>"+TOTAL_AMOUNT+"</b></br></br>");
+				test.log(LogStatus.INFO, "Below calculation is performed </br></br>"
+										+"<b>NON_RECOVERABLE_TAX_AMOUNT</b> = <b>"+NON_RECOVERABLE_TAX_AMOUNT+"</b> (value defaulted inside method 'poTaxUpdateQuery' for testing purpose) </br>"
+										+"<b>QUANTITY</b> = <b>"+inputValueMap.get("VALUE17")+"</b></br>"
+										+"<b>PO_UNIT_PRICE</b> = <b>"+inputValueMap.get("VALUE19")+"</b></br>"
+										+ "<b>TOTAL_AMOUNT = (QUANTITY * PO_UNIT_PRICE) + NON_RECOVERABLE_TAX_AMOUNT<b></br>"
+										+"<b>TOTAL_AMOUNT</b> = <b>"+TOTAL_AMOUNT+"</b></br>");
 				connection.commit();			
 
 			} catch (SQLException e) {	
