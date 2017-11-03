@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 
 import org.openqa.selenium.By;
@@ -414,12 +416,15 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 
 		}
 		public void activateBOM(String partcode) {
-			String query = "UPDATE CATS_BOM SET ACTIVE='Y' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
-			 executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='Y' ");
+			
+			String query = "UPDATE CATS_BOM SET ACTIVE='Y' WHERE BOMID IN (SELECT MAX(BOMID) FROM CATS_BOM WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"'))";
+		    executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='Y' ");
+			
 		}
 		
 		public void inactivateBOM(String partcode) {
-			String query = "UPDATE CATS_BOM SET ACTIVE='N' WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"')";
+			
+			String query = "UPDATE CATS_BOM SET ACTIVE='N' WHERE BOMID IN (SELECT MAX(BOMID) FROM CATS_BOM WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE='"+getRuntimeTestdata(partcode)+"'))";
 		    executeUpdateQuery(query, "Update BOM Item "+getRuntimeTestdata(partcode)+" ACTIVE='N' ");
 			
 		}
@@ -1161,5 +1166,91 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			
 			
 		}
+		
+		
+		public void verifyChildAssetWarranty(String parentAssetCode, String childAssetCode){			
+		
+
+			LinkedHashMap<String, String> parentWarrantyDetailsMap = new LinkedHashMap<String, String>();
+			LinkedHashMap<String, String> childWarrantyDetailsMap = new LinkedHashMap<String, String>();
+			
+			if(parentAssetCode.contains("#")) {				
+				parentAssetCode = getRuntimeTestdata(parentAssetCode);
+			}
+			
+			if(childAssetCode.contains("#")) {				
+				childAssetCode = getRuntimeTestdata(childAssetCode);
+			}
+			
+			String query = "SELECT AW.ASSETWARRANTYID,\r\n" + 
+					"							AW.ASSETID,\r\n" + 
+					"							AW.VENDOR,\r\n" + 
+					"							AU.VENDORLOCATION,\r\n" + 
+					"							M.NAME MANUFACTURER,\r\n" + 
+					"							AW.ACTIVE,\r\n" + 
+					"							AW.TYPE,\r\n" + 
+					"							AW.WARRANTYCODE,\r\n" + 
+					"							AW.REFERENCENUMBER,\r\n" + 
+					"							AW.LEADTIME,\r\n" + 
+					"							AW.DURATION,\r\n" + 
+					"							LS.DESCRIPTION STARTSTATUS,\r\n" + 
+					"							AW.STARTDATE\r\n" + 
+					"					FROM 	CATS_ASSET A,\r\n" + 
+					"							CATS_V_ASSETWARRANTY AW,\r\n" + 
+					"							CATSCUST_V_ASSET_UDFDATA AU,\r\n" + 
+					"							CATS_PART P,\r\n" + 
+					"							CATS_MANUFACTURER M,\r\n" + 
+					"							CATS_LOCATIONSTATUS LS\r\n" + 
+					"					WHERE AW.ASSETID = A.ASSETID\r\n" + 
+					"					AND   A.ASSETID = AU.ASSETID(+)\r\n" + 
+					"					AND   A.PARTID = P.PARTID\r\n" + 
+					"					AND   AU.MANUFACTURERID = M.MANUFACTURERID(+)\r\n" + 
+					"					AND   AW.STARTSTATUSID = LS.LOCATIONSTATUSID(+)\r\n" + 
+					"					AND   A.ASSETID IN (SELECT ASSETID FROM CATS_ASSET WHERE ASSETCODE='%s')\r\n" + 
+					"				ORDER BY AW.ASSETWARRANTYID";
+			
+			
+			
+			String getParentWarrantyDetailsQuery = String.format(query,parentAssetCode );
+			String getChildWarrantyDetailsQuery= String.format(query, childAssetCode);	
+
+			
+			try {
+				
+				parentWarrantyDetailsMap = selectQueryMultipleValues(getParentWarrantyDetailsQuery, "VENDOR#VENDORLOCATION#ACTIVE#TYPE#WARRANTYCODE#REFERENCENUMBER#LEADTIME#DURATION#STARTSTATUS#STARTDATE");
+				childWarrantyDetailsMap = selectQueryMultipleValues(getChildWarrantyDetailsQuery, "VENDOR#VENDORLOCATION#ACTIVE#TYPE#WARRANTYCODE#REFERENCENUMBER#LEADTIME#DURATION#STARTSTATUS#STARTDATE");
+				
+				test.log(LogStatus.PASS, "<b> Verifying Child Asset("+childAssetCode+") Warranty Details with Parent Asset ("+parentAssetCode+")...</b>");
+				for (Entry<String, String> entryMap : parentWarrantyDetailsMap.entrySet()) {
+					
+					String parentKey = entryMap.getKey();
+					String parentValue = entryMap.getValue();
+					
+					String childValue = childWarrantyDetailsMap.get(parentKey);
+					
+					if(childValue.equals(parentValue)) {
+						test.log(LogStatus.PASS, "<b>"+parentKey+"</b></br>"
+								+ "<b>Expected </b> - "+parentValue+ "</br>"
+								+ "<b>Actual </b> - "+childValue+ "</br>"
+								);	
+					}else {
+						test.log(LogStatus.FAIL, "<b>"+parentKey+"</b></br>"
+								+ "<b>Expected </b> - "+parentValue+ "</br>"
+								+ "<b>Actual </b> - "+childValue+ "</br>"
+								);
+					}
+					
+				}
+				
+				
+			} catch (Exception e) {
+				test.log(LogStatus.FAIL, "Exception occured while verifying Child Asset's Warranty details.");
+				test.log(LogStatus.FAIL, e);
+			}
+			
+			
+		}
+		
+		
 
 }

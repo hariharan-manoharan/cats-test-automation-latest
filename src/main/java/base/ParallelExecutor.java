@@ -252,6 +252,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "stockReviewSerialized":
 					case "verifyPartTotalCost":
 					case "verifyAssetTotalCost":
+					case "verifyChildAssetWarranty":
 						
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
