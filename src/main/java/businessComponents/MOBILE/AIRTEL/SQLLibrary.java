@@ -489,7 +489,7 @@ public class SQLLibrary extends Utility {
 		Statement stmt;
 		CallableStatement stproc_stmt;
 		
-		if(Iteration>0||String.valueOf(Iteration)!=null) {
+		if(Iteration!=0) {
 		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER"+Iteration);
 		}else {
 		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER");	
