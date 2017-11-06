@@ -368,7 +368,7 @@ public class SQLLibrary extends Utility {
 
 			String mrrNumber = (inputValueMap.get("VALUE9").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE9")) : generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
 			
-			if(iteration>0) {
+			if(iteration!=0) {
 			addRuntimeTestData("MRRNUMBER"+iteration, mrrNumber);
 			}else {
 			addRuntimeTestData("MRRNUMBER", mrrNumber);	
