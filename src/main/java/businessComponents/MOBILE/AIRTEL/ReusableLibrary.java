@@ -594,6 +594,21 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		}
 
 	}
+	
+	
+	
+	public void enterpicklistvalue(String pickListValue) {
+		
+		waitCommand(ID_PICKLIST_SEARCHFIELD);
+		if(pickListValue.contains("#")){
+			pickListValue = getRuntimeTestdata(pickListValue);
+		}	
+		MobileElement  element = (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.EditText\")");			
+		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
+		element.setValue(pickListValue);
+		takeScreenshot(pickListValue);
+		
+	}
 	public void validatePicklistValue(String columnName, String value) throws InterruptedException {
 		
 		int requiredValueIndex = 0;
