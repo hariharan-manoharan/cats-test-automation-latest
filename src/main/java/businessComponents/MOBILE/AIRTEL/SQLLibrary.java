@@ -1164,6 +1164,7 @@ public class SQLLibrary extends Utility {
 	String sFROMLocationCode =inputValueMap.get("VALUE3");
 	String sTOLocationCode = inputValueMap.get("VALUE4");
 	String sP1QTY =inputValueMap.get("VALUE6");
+	String moveOrderStatus = inputValueMap.get("VALUE8");
 	
 
 	
@@ -1192,7 +1193,8 @@ public class SQLLibrary extends Utility {
 		 sMOVEORDERLINENO = 1;
 		 }
 		 
-		 addRuntimeTestData("MOVEORDER",Long.toString(sMOVEORDERNUMBER));
+		 
+
 		 sMOVEORDERHEADERID = sMOVEORDERNUMBER+10;
 		 addRuntimeTestData("MOVEORDER_HEADERID",Long.toString(sMOVEORDERHEADERID));
 		 sMOVEORDERLINEID = sMOVEORDERNUMBER+11;
@@ -1209,6 +1211,7 @@ public class SQLLibrary extends Utility {
 	
 	
 	String sP1DeliveryChallan ="DC"+sMOVEORDERNUMBER;
+	addRuntimeTestData("MOVEORDER",sP1DeliveryChallan);
 	//String sEBINNUMBER = inputValueMap.get("EBINNUMBER");
 	//String sEBINCreationDate =inputValueMap.get("EBINCREATIONDATE");
 	//String sP1VehicleNo = inputValueMap.get("VEHICLENO");
@@ -1257,7 +1260,7 @@ public class SQLLibrary extends Utility {
 				+  FROMLOCATIONID+","
 				+  sMOVEORDERNUMBER+","
 				+  sMOVEORDERHEADERID+","
-				+ "'"+"APPROVED"+"',"
+				+ "'"+moveOrderStatus+"',"
 				+ sMOVEORDERLINENO+","
 				+  sMOVEORDERLINEID+","
 				+ "'"+"APPROVED"+"',"
