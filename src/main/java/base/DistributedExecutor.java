@@ -322,6 +322,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "isFieldDisplayed":
 					case "isNotFieldDisplayed":
 					case "createMoveOrder":
+					case "enterpicklistvalue":
+
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

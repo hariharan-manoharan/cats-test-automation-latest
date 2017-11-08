@@ -310,6 +310,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "getLotNumberSerializedStockTrx":
 					case "isFieldDisplayed":
 					case "isNotFieldDisplayed":
+					case "createMoveOrder":
+					case "enterpicklistvalue":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
