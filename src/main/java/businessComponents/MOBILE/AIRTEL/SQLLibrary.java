@@ -368,11 +368,7 @@ public class SQLLibrary extends Utility {
 
 			String mrrNumber = (inputValueMap.get("VALUE9").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE9")) : generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
 			
-			if(iteration!=0) {
-			addRuntimeTestData("MRRNUMBER"+iteration, mrrNumber);
-			}else {
 			addRuntimeTestData("MRRNUMBER", mrrNumber);	
-			}
 
 			query = "INSERT "
 					+"INTO CATSCON_MRR_STG"
@@ -474,6 +470,8 @@ public class SQLLibrary extends Utility {
 		return RECORD_ID;
 	}
 
+	
+	
 
 
 	@SuppressWarnings("resource")
