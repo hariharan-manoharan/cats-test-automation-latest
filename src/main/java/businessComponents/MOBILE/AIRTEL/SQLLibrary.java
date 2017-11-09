@@ -153,17 +153,15 @@ public class SQLLibrary extends Utility {
 
 			if(iteration!=null) {
 			 dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_MRR"+iteration);
-			 int recordId = createMaterialReceiveReceiptQuery(dataMap,Integer.parseInt(iteration));
-				validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
-						getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"+iteration), recordId);
+					testParameters.getCurrentTestCase() + "_MRR"+iteration);			
 			}else {
 				dataMap = dataTable.getRowData("Data_Staging",
-						testParameters.getCurrentTestCase() + "_MRR");
-				int recordId = createMaterialReceiveReceiptQuery(dataMap,0);
-				validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
-						getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
+						testParameters.getCurrentTestCase() + "_MRR");				
 			}
+			
+			int recordId = createMaterialReceiveReceiptQuery(dataMap,0);
+			validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
+					getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
 		
 			poTaxUpdateQuery(dataMap);
 
