@@ -97,17 +97,16 @@ public class SQLLibrary extends Utility {
 			
 			if(iteration!=null) {
 				dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_DC"+iteration);
-				int recordId = deliveryConfirmationQuery(dataMap,Integer.parseInt(iteration));
-				validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
-						getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
+					testParameters.getCurrentTestCase() + "_DC"+iteration);			
 			}else {
 				dataMap = dataTable.getRowData("Data_Staging",
 						testParameters.getCurrentTestCase() + "_DC");
-				int recordId = deliveryConfirmationQuery(dataMap, 0);
-				validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
-						getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
+				
 			}
+			
+			int recordId = deliveryConfirmationQuery(dataMap);
+			validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
+					getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
 			
 			
 		} finally {
@@ -473,7 +472,7 @@ public class SQLLibrary extends Utility {
 
 
 	@SuppressWarnings("resource")
-	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap , int Iteration) {
+	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap) {
 
 		String query = null;
 		String SERIALIZED;
@@ -485,11 +484,9 @@ public class SQLLibrary extends Utility {
 		Statement stmt;
 		CallableStatement stproc_stmt;
 		
-		if(Iteration!=0) {
-		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER"+Iteration);
-		}else {
+
 		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER");	
-		}
+
 
 
 		try {
