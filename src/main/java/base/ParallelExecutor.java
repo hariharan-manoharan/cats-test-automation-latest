@@ -298,7 +298,9 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "clickOkPromptmovefinish":
 					case "verifyPickListValue":
 					case "deliveryConfirmation":
+					case "deliveryConfirmation1":
 					case "createMaterialReceiveReceipt":
+					case "createMRRwithSinglePO":
 					case "createPurchaseOrder":
 					case "getPartID":
 					case "activateBOM":
