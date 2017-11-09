@@ -159,7 +159,7 @@ public class SQLLibrary extends Utility {
 						testParameters.getCurrentTestCase() + "_MRR");				
 			}
 			
-			int recordId = createMaterialReceiveReceiptQuery(dataMap,0);
+			int recordId = createMaterialReceiveReceiptQuery(dataMap);
 			validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
 					getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
 		
@@ -356,7 +356,7 @@ public class SQLLibrary extends Utility {
 		return RECORD_ID;
 	}
 
-	public int createMaterialReceiveReceiptQuery(LinkedHashMap<String, String> inputValueMap, int iteration){
+	public int createMaterialReceiveReceiptQuery(LinkedHashMap<String, String> inputValueMap){
 		String query = null;
 		int RECORD_ID = 0;
 		CallableStatement stproc_stmt; 
