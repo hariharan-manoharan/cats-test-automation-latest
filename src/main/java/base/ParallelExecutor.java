@@ -314,6 +314,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "isNotFieldDisplayed":
 					case "createMoveOrder":
 					case "enterpicklistvalue":
+					case "createSameMoveOrderMultiLine":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

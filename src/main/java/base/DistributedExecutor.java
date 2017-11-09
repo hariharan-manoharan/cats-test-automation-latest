@@ -325,6 +325,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "isNotFieldDisplayed":
 					case "createMoveOrder":
 					case "enterpicklistvalue":
+					case "createSameMoveOrderMultiLine":
 
 					
 						try {
