@@ -97,17 +97,16 @@ public class SQLLibrary extends Utility {
 			
 			if(iteration!=null) {
 				dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_DC"+iteration);
-				int recordId = deliveryConfirmationQuery(dataMap,Integer.parseInt(iteration));
-				validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
-						getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
+					testParameters.getCurrentTestCase() + "_DC"+iteration);			
 			}else {
 				dataMap = dataTable.getRowData("Data_Staging",
 						testParameters.getCurrentTestCase() + "_DC");
-				int recordId = deliveryConfirmationQuery(dataMap, 0);
-				validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
-						getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
+				
 			}
+			
+			int recordId = deliveryConfirmationQuery(dataMap);
+			validateInboundTransaction("Delivery Confirmation :", "PROCESS_FLAG", "ERROR_MESSAGE", validateDC,
+					getRuntimeTestdata(dataMap.get("VALUE7")), recordId);
 			
 			
 		} finally {
@@ -180,17 +179,15 @@ public class SQLLibrary extends Utility {
 
 			if(iteration!=null) {
 			 dataMap = dataTable.getRowData("Data_Staging",
-					testParameters.getCurrentTestCase() + "_MRR"+iteration);
-			 int recordId = createMaterialReceiveReceiptQuery(dataMap,Integer.parseInt(iteration));
-				validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
-						getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"+iteration), recordId);
+					testParameters.getCurrentTestCase() + "_MRR"+iteration);			
 			}else {
 				dataMap = dataTable.getRowData("Data_Staging",
-						testParameters.getCurrentTestCase() + "_MRR");
-				int recordId = createMaterialReceiveReceiptQuery(dataMap,0);
-				validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
-						getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
+						testParameters.getCurrentTestCase() + "_MRR");				
 			}
+			
+			int recordId = createMaterialReceiveReceiptQuery(dataMap);
+			validateInboundTransaction("MRR", "PROCESS_FLAG", "ERROR_MESSAGE", validateMRR,
+					getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MRRNUMBER"), recordId);
 		
 			poTaxUpdateQuery(dataMap);
 
@@ -411,7 +408,7 @@ public class SQLLibrary extends Utility {
 		return RECORD_ID;
 	}
 
-	public int createMaterialReceiveReceiptQuery(LinkedHashMap<String, String> inputValueMap, int iteration){
+	public int createMaterialReceiveReceiptQuery(LinkedHashMap<String, String> inputValueMap){
 		String query = null;
 		int RECORD_ID = 0;
 		CallableStatement stproc_stmt; 
@@ -420,12 +417,8 @@ public class SQLLibrary extends Utility {
 			RECORD_ID = generateRandomNum(10000000);
 
 			String mrrNumber = (inputValueMap.get("VALUE9").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE9")) : generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
-			
-			if(iteration!=0) {
-			addRuntimeTestData("MRRNUMBER"+iteration, mrrNumber);
-			}else {
+
 			addRuntimeTestData("MRRNUMBER", mrrNumber);	
-			}
 
 			query = "INSERT "
 					+"INTO CATSCON_MRR_STG"
@@ -526,6 +519,7 @@ public class SQLLibrary extends Utility {
 		}
 		return RECORD_ID;
 	}
+
 
 	public int createMRRwithsinglePO(LinkedHashMap<String, String> inputValueMap, int iteration){
 		String query = null;
@@ -644,8 +638,9 @@ public class SQLLibrary extends Utility {
 	}
 
 
+
 	@SuppressWarnings("resource")
-	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap , int Iteration) {
+	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap) {
 
 		String query = null;
 		String SERIALIZED;
@@ -657,11 +652,9 @@ public class SQLLibrary extends Utility {
 		Statement stmt;
 		CallableStatement stproc_stmt;
 		
-		if(Iteration!=0) {
-		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER"+Iteration);
-		}else {
+
 		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER");	
-		}
+
 
 
 		try {
