@@ -1636,10 +1636,8 @@ public class SQLLibrary extends Utility {
 					+"'"+"N"+"'"
 					+")";
 
-			executeUpdateQuery(insertquery1, "Inserted Records to BTVL_CATS_MO_REQUEST_INT_V where Move Order Number is "+sMOVEORDERNUMBER);
-			test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:500px;overflow:scroll;><code>"+insertquery1+"</code></div>");
-			executeUpdateQuery(insertquery2, "Inserted Records to BTVL_CATS_MO_TRANSACT_INT_V where Move Order Header ID is "+sMOVEORDERHEADERID );
-			test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:500px;overflow:scroll;><code>"+insertquery2+"</code></div>");
+			executeUpdateQuery(insertquery1, "Inserted Records to BTVL_CATS_MO_REQUEST_INT_V where Move Order Number is "+sMOVEORDERNUMBER);			
+			executeUpdateQuery(insertquery2, "Inserted Records to BTVL_CATS_MO_TRANSACT_INT_V where Move Order Header ID is "+sMOVEORDERHEADERID );		
 			connection.commit();
 
 
@@ -1900,14 +1898,16 @@ public class SQLLibrary extends Utility {
 	}
 	catch (SQLException e){
 		e.printStackTrace();
+		test.log(LogStatus.FAIL, e);
 		test.log(LogStatus.FAIL, "MO Services Failed");
 	}
 
 	moveordernum = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MOVEORDER"));
 	String validateBulkTransferRequest = "SELECT * FROM CATSCON_TRANSFERREQ_STG WHERE REFERENCENUMBER='%s' AND STAGEID='%d'";	
 	String selectquery =  "SELECT * FROM CATSCON_TRANSFERREQ_STG WHERE REFERENCENUMBER ="+"'"+moveordernum+"'";
+	
 	String stageId=selectQuerySingleValue(selectquery, "STAGEID");
-
+	
 	boolean successFlag = validateInboundTransaction("Move Order", "PROCESSED", "ERRORMESSAGE", validateBulkTransferRequest,String.valueOf(moveordernum) ,Integer.parseInt(stageId));	
 
 	if(successFlag){
@@ -1919,7 +1919,7 @@ public class SQLLibrary extends Utility {
 
 	}
 
-}
-
+}	
 	
+
 }
