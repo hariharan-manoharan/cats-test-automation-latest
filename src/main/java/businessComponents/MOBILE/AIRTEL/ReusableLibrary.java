@@ -626,6 +626,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			
 			if(valueSplit[1].contains("#")){
 				valueSplit[1] = getRuntimeTestdata(valueSplit[1]);
+				takeScreenshot(valueSplit[1]);
 			}else if(valueSplit[1].equalsIgnoreCase("EMPTY")) {
 				valueSplit[1] = "";
 			}
