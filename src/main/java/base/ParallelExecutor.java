@@ -253,6 +253,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "verifyPartTotalCost":
 					case "verifyAssetTotalCost":
 					case "verifyChildAssetWarranty":
+					case "selectPickListValue":
 						
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
@@ -278,8 +279,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 							method.invoke(classInstance, fieldMap.get(currentKey), dataMap.get(currentKey), currentKey);							
 						}
 						break;
-					case "clickRoutineFolder":					
-					case "selectPickListValue":
+					case "clickRoutineFolder":							
 					case "validateLoopField":
 					case "clickYesConfirmPromptContains":
 					case "clickNoConfirmPromptContains":
@@ -314,6 +314,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "isNotFieldDisplayed":
 					case "createMoveOrder":
 					case "enterpicklistvalue":
+					case "createSameMoveOrderMultiLine":
+					case "clickOkConfirmPromptContains":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

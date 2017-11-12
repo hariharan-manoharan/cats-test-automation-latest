@@ -495,7 +495,9 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	 */
 
 	@SuppressWarnings("unchecked")
-	public void selectPickListValue(String pickListValue) throws TimeoutException, NoSuchElementException{
+	public void selectPickListValue(String columnIndex, String pickListValue) throws TimeoutException, NoSuchElementException{
+		
+		List<WebElement> elements = null;
 		
 		TouchAction action = new TouchAction((MobileDriver)driver);
 
@@ -504,8 +506,12 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		if(pickListValue.contains("#")){
 			pickListValue = getRuntimeTestdata(pickListValue);
 		}			
-
-		List<WebElement> elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout/android.widget.TextView[@index='0']");
+		
+		if(columnIndex!=null) {
+		elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout/android.widget.TextView[@index='"+(Integer.parseInt(columnIndex)-1)+"']");
+		}else {
+		elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout/android.widget.TextView[@index='0']");	
+		}	
 		int size = elements.size();
 		for(WebElement element: elements){			
 			size--;
@@ -856,6 +862,15 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		if (GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")).contains(msgContains)) {
 			report(driver,test, msgContains + " is displayed", LogStatus.PASS);		
 			Click(ID_MESSAGE_CONFIRM_NO, "Clicked 'No' for prompt - " + msgContains);
+		} else {
+			report(driver,test, msgContains + " is not displayed", LogStatus.FAIL);			
+		}
+	}
+	
+	public void clickOkConfirmPromptContains(String msgContains) throws TimeoutException, NoSuchElementException{		
+		if (GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")).contains(msgContains)) {
+			report(driver,test, msgContains + " is displayed", LogStatus.PASS);		
+			Click(ID_MESSAGE_OK, "Clicked 'Ok' for prompt - " + msgContains);
 		} else {
 			report(driver,test, msgContains + " is not displayed", LogStatus.FAIL);			
 		}
