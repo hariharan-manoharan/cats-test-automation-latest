@@ -507,7 +507,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 			pickListValue = getRuntimeTestdata(pickListValue);
 		}			
 		
-		if(columnIndex!=null) {
+		if((columnIndex!=null) && !(columnIndex.equals(""))) {
 		elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout/android.widget.TextView[@index='"+(Integer.parseInt(columnIndex)-1)+"']");
 		}else {
 		elements = driver.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout/android.widget.TextView[@index='0']");	
