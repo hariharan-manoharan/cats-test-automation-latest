@@ -22,6 +22,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import com.codepine.api.testrail.TestRailException;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -490,19 +491,75 @@ public class DistributedExecutor extends Utility implements Runnable {
 	
 	private void testRailReport() {
 		
+		String groupedTestRailTestcaseIDs[] = null;
+		
 		try {
 		
-		if(!testParameters.getCurrentTestCase().contains("STAGE_DATA") && !testParameters.getTestRailTestcaseID().equalsIgnoreCase("NA")) {					
-			if(test.getRunStatus() == LogStatus.PASS && testRailEnabled.equalsIgnoreCase("True")){
-			testRailListenter.addTestResult(Integer.parseInt(testParameters.getTestRailTestcaseID()), 1);
-			}else if (testRailEnabled.equalsIgnoreCase("True")) {
-			testRailListenter.addTestResult(Integer.parseInt(testParameters.getTestRailTestcaseID()), 5);	
+		if(!testParameters.getCurrentTestCase().contains("STAGE_DATA") && !testParameters.getTestRailTestcaseID().equalsIgnoreCase("NA")) {	
+			
+			if(testParameters.getTestRailTestcaseID().contains(",")) {
+				groupedTestRailTestcaseIDs = testParameters.getTestRailTestcaseID().split(",");
+				
+				for(int i=0;i<groupedTestRailTestcaseIDs.length;i++) {
+					updateTestRail(groupedTestRailTestcaseIDs[i]);					
+				}
+				
+			}else {					
+			updateTestRail(testParameters.getTestRailTestcaseID());
 			}
+			
+			
 			}
+		
+		
 		}catch(RuntimeException e) {
 			test.log(LogStatus.WARNING, "Exception occured while updating test result in test rail.");
 			test.log(LogStatus.WARNING, e);
 		}
+	}
+	
+	private void updateTestRail(String testRailTCID) {
+		
+		String[] testRailRunID = null;
+		
+		if(testRailProperties.getProperty("testRail.runId").contains(",")) {		
+			testRailRunID = testRailProperties.getProperty("testRail.runId").split(",");
+		}else {
+			testRailRunID= new String[1];
+			testRailRunID[0] =  testRailProperties.getProperty("testRail.runId");			
+		}
+
+		try {
+
+			if (test.getRunStatus() == LogStatus.PASS && testRailEnabled.equalsIgnoreCase("True")) {
+				testRailListenter.addTestResult(Integer.parseInt(testRailRunID[0]),Integer.parseInt(testRailTCID), 1);
+				test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>PASSED</b> in TestRail (Test Run ID - <b>"+testRailRunID[0]+"</b>)");
+			} else if (testRailEnabled.equalsIgnoreCase("True")) {
+				testRailListenter.addTestResult(Integer.parseInt(testRailRunID[0]),Integer.parseInt(testRailTCID), 5);
+				test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>FAILED</b> in TestRail (Test Run ID - <b>"+testRailRunID[0]+"</b>)");
+			}
+		} catch (TestRailException e) {
+			if(e.getResponseCode()==400) {
+				test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is not updated in Test Run with ID <b>"+testRailRunID[0]+"</b>. Response code '400' is returned (400 - No (active) test found for the run/case combination.)");
+				test.log(LogStatus.INFO,"Checking if more than one Test Run ID's are provided.");
+				if(testRailRunID.length>1) {
+					for(int i=1;i<testRailRunID.length;i++) {
+						if (test.getRunStatus() == LogStatus.PASS && testRailEnabled.equalsIgnoreCase("True")) {
+							testRailListenter.addTestResult(Integer.parseInt(testRailRunID[i]),Integer.parseInt(testRailTCID), 1);
+							test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>PASSED</b> in TestRail (Test Run ID - <b>"+testRailRunID[i]+"</b>)");
+						} else if (testRailEnabled.equalsIgnoreCase("True")) {
+							testRailListenter.addTestResult(Integer.parseInt(testRailRunID[i]),Integer.parseInt(testRailTCID), 5);
+							test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>FAILED</b> in TestRail (Test Run ID - <b>"+testRailRunID[i]+"</b>)");
+						}
+					}
+				}else {
+					test.log(LogStatus.INFO,"Only one Test Run is provided.Not updating results in Test Rail.");				
+					
+				}
+			
+			}
+		}
+		
 	}
 
 }

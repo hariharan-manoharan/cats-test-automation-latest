@@ -32,9 +32,9 @@ public class TestRailListener extends Utility {
 		testRailProperties.setProperty("testRail.runId", String.valueOf(run.getId()));
 	}
 
-	public void addTestResult(int testCaseId, int statusId) {
+	public void addTestResult(int testRunID, int testCaseId, int statusId) {
 		List<ResultField> customResultFields = testRail.resultFields().list().execute();
-		testRail.results().addForCase(Integer.parseInt(testRailProperties.getProperty("testRail.runId")), testCaseId, new Result().setStatusId(statusId), customResultFields).execute();
+		testRail.results().addForCase(testRunID, testCaseId, new Result().setStatusId(statusId), customResultFields).execute();
 	}
 
 	public void closeTestRun() {
