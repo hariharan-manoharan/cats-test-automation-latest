@@ -255,6 +255,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "verifyAssetTotalCost":
 					case "verifyChildAssetWarranty":
 					case "selectPickListValue":
+					case "isPickListLineValueRepeated":
 						
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
@@ -317,6 +318,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "enterpicklistvalue":
 					case "createSameMoveOrderMultiLine":
 					case "clickOkConfirmPromptContains":
+					case "compareLineValues":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

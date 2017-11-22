@@ -266,6 +266,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "verifyAssetTotalCost":
 					case "verifyChildAssetWarranty":
 					case "selectPickListValue":
+					case "isPickListLineValueRepeated":
+					
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
@@ -328,6 +330,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "enterpicklistvalue":
 					case "createSameMoveOrderMultiLine":
 					case "clickOkConfirmPromptContains":
+					case "compareLineValues":
 
 					
 						try {

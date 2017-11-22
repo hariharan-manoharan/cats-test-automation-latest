@@ -8,12 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
@@ -299,7 +302,11 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		int size = element.size();
 		if (size > 1) {						
 	
-			element.get(size - 1).click();
+			if(size==3) {
+				element.get(size - 2).click();
+			}else if(size==2) {
+				element.get(size - 1).click();	
+			}
 				
 			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
 				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
@@ -1305,5 +1312,162 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 	}
 
 
+	/**
+	 * Function to get Pick List value
+	 * 	 
+	 * @return void
+	 * @author Saran 
+	 * @throws InterruptedException 
+	 * @since 09/19/2017
+	 * 
+	 */
 
+	@SuppressWarnings("unchecked")
+	public void isPickListLineValueRepeated(String referenceHeaderName, String referenceColumnValue)
+			throws TimeoutException, NoSuchElementException, InterruptedException {
+
+		waitCommand(ID_PICKLIST_SEARCHFIELD);
+
+		if (referenceColumnValue.contains("#")) {
+			referenceColumnValue = getRuntimeTestdata(referenceColumnValue);
+		}
+
+		@SuppressWarnings("unchecked")
+		List<WebElement> currentVisibleHeaders = driver.findElementsByXPath(
+				".//android.widget.LinearLayout[@resource-id='net.fulcrum.mobility:id/lookup_headers']"
+						+ "/android.widget.TextView");
+
+		List<WebElement> pickListLines = driver
+				.findElementsByXPath(".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout");
+		int pickListSize = pickListLines.size();
+		
+		boolean isReferenceColumnVisible = false;
+		ArrayList<Integer> matchingPickListNumbers = new ArrayList<Integer>();
+
+		for (int columnIndex = 0; columnIndex < currentVisibleHeaders.size(); columnIndex++) {
+				
+			if (currentVisibleHeaders.get(columnIndex).getText().equalsIgnoreCase(referenceHeaderName)) {
+				isReferenceColumnVisible = true;
+				for (int pickListLine = 0; pickListLine < pickListSize; pickListLine++) {
+
+					List<WebElement> pickListColumnJValues = driver.findElementsByXPath(
+							".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout[@index='"
+									+ pickListLine + "']/android.widget.TextView");
+					
+						if (pickListColumnJValues.get(columnIndex).getText().equalsIgnoreCase(referenceColumnValue)) {
+							matchingPickListNumbers.add(pickListLine);
+						}
+
+
+				}
+
+			}
+
+		}
+		
+		if(!isReferenceColumnVisible) {
+			swipingHorizontal("Right To Left");
+			isPickListLineValueRepeated(referenceHeaderName,referenceColumnValue);
+		}else {		
+		
+		if (matchingPickListNumbers.size() > 1) {
+				test.log(LogStatus.INFO,"<b>"+ matchingPickListNumbers.size() + "</b> lines with same <b>" + referenceHeaderName
+						+ "</b> - <b>" + referenceColumnValue + "</b> is identified");
+				addRuntimeTestData("TOTAL_MATCHING_LINES", String.valueOf(matchingPickListNumbers.size()));
+				for(int i = 0;i<matchingPickListNumbers.size();i++) {
+					addRuntimeTestData("MATCHING_LINENUMBER_"+i, String.valueOf(matchingPickListNumbers.get(i)));
+				}
+				
+			} else if (matchingPickListNumbers.size() == 1) {
+				test.log(LogStatus.INFO,
+						"Only one line with " + referenceHeaderName + " - " + referenceColumnValue + "is identified");
+				addRuntimeTestData("TOTAL_MATCHING_LINES", String.valueOf(matchingPickListNumbers.size()));
+			} else {
+				test.log(LogStatus.INFO,
+						"No line with " + referenceHeaderName + " - " + referenceColumnValue + "is identified");
+			}
+		}
+	}
+	
+	
+	public void compareLineValues(String verifyColumnNames) throws InterruptedException {
+
+		String[] splittedVerifyColumnNames = null;
+		int totalMatchingLines = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase() + "#TOTAL_MATCHING_LINES"));
+		List<String> lineValuesList  = new ArrayList<String>();
+		TreeSet<String> nonduplicateValuesSet = new TreeSet<String>(new StringComparator());
+		boolean isReferenceColumnVisible = false;
+
+		if (verifyColumnNames.contains("@")) {
+			splittedVerifyColumnNames = verifyColumnNames.split("@");
+		} else {
+			splittedVerifyColumnNames = new String[1];
+			splittedVerifyColumnNames[0] = verifyColumnNames;
+		}
+
+		@SuppressWarnings("unchecked")
+		List<WebElement> currentVisibleHeaders = driver.findElementsByXPath(
+				".//android.widget.LinearLayout[@resource-id='net.fulcrum.mobility:id/lookup_headers']"
+						+ "/android.widget.TextView");
+
+		
+		for(int i=0;i<splittedVerifyColumnNames.length;i++) {
+			
+		for (int columnIndex = 0; columnIndex < currentVisibleHeaders.size(); columnIndex++) {
+
+			if (currentVisibleHeaders.get(columnIndex).getText().equalsIgnoreCase(splittedVerifyColumnNames[i])) {
+				isReferenceColumnVisible = true;
+				for (int j = 0; j < totalMatchingLines; j++) {
+
+					@SuppressWarnings("unchecked")
+					List<WebElement> values = driver.findElementsByXPath(
+							".//android.widget.ListView[@resource-id='android:id/list']/android.widget.LinearLayout[@index='"
+									+ getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MATCHING_LINENUMBER_" + j)
+									+ "']/android.widget.TextView");
+					
+					
+					lineValuesList.add(values.get(columnIndex).getText());
+			
+
+				}
+				
+				for(int j=0;j<lineValuesList.size();j++)
+				{
+				    if(!nonduplicateValuesSet.add(lineValuesList.get(j)))
+				    {
+				    	test.log(LogStatus.FAIL,"Duplicate value found for column '<b>"+splittedVerifyColumnNames[i]+"<b/>' in pick list line number  <b>"+getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MATCHING_LINENUMBER_" + j)+"</b>");
+				    }else {
+				    	test.log(LogStatus.PASS,"Line Number: <b>"+(Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase() + "#MATCHING_LINENUMBER_" + j))+1)+"</b></br>"
+				    						    +"<b>"+splittedVerifyColumnNames[i]+"<b/> - <b>"+lineValuesList.get(j)+"</b>");
+				    }
+				}
+				
+				if(nonduplicateValuesSet.size() == totalMatchingLines) {
+					test.log(LogStatus.PASS,"<b>No duplicate value found for column '"+splittedVerifyColumnNames[i]+"'</b>");
+				}
+				
+				
+				
+			}
+		}
+		}
+			
+			if(!isReferenceColumnVisible) {
+				swipingHorizontal("Right To Left");
+				compareLineValues(verifyColumnNames);
+			}
+
+		}
+	
+
+	
+}
+
+class StringComparator implements Comparator<String>
+{	
+	@Override
+	public int compare(String arg0, String arg1) {		
+		return arg0.compareTo(arg1);
+		
+	}
 }
