@@ -407,22 +407,22 @@ public class Main{
 
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("deviceName", adbDevices.get(selectDevice-1));
-		capabilities.setCapability("udid", adbDevices.get(selectDevice-1));
-		capabilities.setCapability(CapabilityType.BROWSER_NAME, desiredCapabilitiesProperties.getProperty("browserName"));
-		capabilities.setCapability(CapabilityType.VERSION, desiredCapabilitiesProperties.getProperty("version"));
-		capabilities.setCapability("app", absolutePath + "\\resources\\Libs\\" + desiredCapabilitiesProperties.getProperty("app"));
-		capabilities.setCapability("platformName", desiredCapabilitiesProperties.getProperty("platformName"));
-		capabilities.setCapability("appPackage", desiredCapabilitiesProperties.getProperty("appPackage"));
-		capabilities.setCapability("appActivity", desiredCapabilitiesProperties.getProperty("appActivity"));
-		capabilities.setCapability("unicodeKeyboard", desiredCapabilitiesProperties.getProperty("unicodeKeyboard"));
-		capabilities.setCapability("resetKeyboard", desiredCapabilitiesProperties.getProperty("resetKeyboard"));
-		capabilities.setCapability("newCommandTimeout", desiredCapabilitiesProperties.getProperty("newCommandTimeout"));
-		capabilities.setCapability("noReset", desiredCapabilitiesProperties.getProperty("noReset"));
+        capabilities.setCapability("udid", adbDevices.get(selectDevice-1));
+        capabilities.setCapability("platformName", desiredCapabilitiesProperties.getProperty("platformName"));
+        capabilities.setCapability("platformVersion", desiredCapabilitiesProperties.getProperty("platformVersion"));
+        capabilities.setCapability("app", absolutePath + "\\resources\\Libs\\" + desiredCapabilitiesProperties.getProperty("app"));  
+        capabilities.setCapability("appPackage", desiredCapabilitiesProperties.getProperty("appPackage"));
+        capabilities.setCapability("appActivity", desiredCapabilitiesProperties.getProperty("appActivity"));
+        capabilities.setCapability("unicodeKeyboard", desiredCapabilitiesProperties.getProperty("unicodeKeyboard"));
+        capabilities.setCapability("resetKeyboard", desiredCapabilitiesProperties.getProperty("resetKeyboard"));
+        capabilities.setCapability("newCommandTimeout", desiredCapabilitiesProperties.getProperty("newCommandTimeout"));
+        capabilities.setCapability("noReset", desiredCapabilitiesProperties.getProperty("noReset"));
+
 
 		
 		driver = new AndroidDriver(new URL(	"http://" + properties.getProperty("RemoteAddress") + ":" + desiredCapabilitiesProperties.getProperty("device"+selectDevice+".appium.port") + "/wd/hub"),capabilities);
 		
-		driver.manage().timeouts().implicitlyWait(25, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		
 		androidDriverList.add(driver);
 		
