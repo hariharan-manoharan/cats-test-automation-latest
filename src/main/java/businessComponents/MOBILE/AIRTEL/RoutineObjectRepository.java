@@ -48,9 +48,9 @@ public interface RoutineObjectRepository {
 	By XPATH_SEARCH = By.xpath("");
 	
 	
-	String XPATH_TXT = ".//android.view.View[@content-desc='%s']";
+	String XPATH_TXT = ".//android.view.View[@text='%1$s' or @content-desc='%1$s']";
 	String XPATH_TXT_NAME = ".//android.view.View[@name='%s']";
-	String XPATH_TXT_CONTAINS = ".//android.view.View[contains(@content-desc, '%s')]";
+	String XPATH_TXT_CONTAINS = ".//android.view.View[contains(@content-desc, '%1$s') or contains(@text, '%1$s') ]";
 	
 	By ID_PICKLIST_SEARCHFIELD = By.id("input");
 	
