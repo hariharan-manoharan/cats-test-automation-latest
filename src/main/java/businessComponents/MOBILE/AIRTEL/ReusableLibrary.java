@@ -263,13 +263,14 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void clickRoutineBackButton(){	
 		
 		try {
-		
-		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
+				
+		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
 		element.click();
 		takeScreenshot("Click Routine back Button");
 		
 		}catch(Exception e) {
-			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
+			
+			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
 			element.click();
 			takeScreenshot("Click Routine back Button");
 		}
@@ -1392,12 +1393,14 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 	
 	public void compareLineValues(String verifyColumnNames) throws InterruptedException {
 
-		String[] splittedVerifyColumnNames = null;
-		int totalMatchingLines = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase() + "#TOTAL_MATCHING_LINES"));
+		String[] splittedVerifyColumnNames = null;		
 		List<String> lineValuesList  = new ArrayList<String>();
 		TreeSet<String> nonduplicateValuesSet = new TreeSet<String>(new StringComparator());
 		boolean isReferenceColumnVisible = false;
 
+		
+		int totalMatchingLines = Integer.parseInt(getRuntimeTestdata(testParameters.getCurrentTestCase() + "#TOTAL_MATCHING_LINES"));
+		
 		if (verifyColumnNames.contains("@")) {
 			splittedVerifyColumnNames = verifyColumnNames.split("@");
 		} else {
