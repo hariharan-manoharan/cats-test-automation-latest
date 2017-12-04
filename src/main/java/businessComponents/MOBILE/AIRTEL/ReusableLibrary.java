@@ -29,7 +29,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -167,6 +169,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	 * @param2 String value	
 	 * @return void
 	 * @author Hari
+	 * @throws InterruptedException 
 	 * @since 06/27/2017
 	 * 
 	 */
@@ -175,11 +178,17 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void enterText(String field, String data) throws TimeoutException, NoSuchElementException {
 
 		By by = By.xpath(String.format(XPATH_TXT, field));
+		waitCommand(by);
+		
+		/*String xpath="new UiSelector().className(\"android.view.View\").text(\""+field+ "\")";
+		waitCommand1(xpath);
+		MobileElement  ele = (MobileElement) driver.findElementByAndroidUIAutomator(xpath);			
+		WebDriverWait wait = new WebDriverWait(driver,20);
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		*/
 		
 		MobileElement  element = (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.EditText\")");		
 		
-
-		waitCommand(by);
 		
 		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
 		if(data.contains("&")) { // setValue function not working if data contains '&', so included this check. Need to research if there is any alternative approach to handle this issue.
@@ -260,7 +269,8 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	}
 
 
-	public void clickRoutineBackButton(){	
+	public void clickRoutineBackButton(){
+		
 		
 		try {
 				
@@ -1182,11 +1192,12 @@ public void addRuntimeTestData(String columnName, String columnValue) {
 
 		WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, field1)+"/following-sibling::android.view.View"));
 		String fieldValue = element.getAttribute("name");
-
-		if(fieldValue.equals("")) {
+		String fieldValue1 = element.getText();
+		if(fieldValue.equals("")||fieldValue1.equals("")) {
 			test.log(LogStatus.PASS, "<b>"+ field1 +"</b>  is displayed as blank and it is non mandatory field", "");
 		}
 		else {
+			
 
 			test.log(LogStatus.FAIL, "<b>"+ field1 +"</b>  is not displayed as blank", "");
 		}
