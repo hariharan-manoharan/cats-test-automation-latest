@@ -784,6 +784,8 @@ public class SQLLibrary extends Utility {
 		Statement stmt;
 		CallableStatement stproc_stmt;
 		
+		RECORD_ID = generateRandomNum(10000000);
+		
 		if(Iteration!=0) {
 		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER"+Iteration);
 		}else {
