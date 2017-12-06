@@ -272,17 +272,18 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 	public void clickRoutineBackButton(){
 		
 		
-		try {
-				
-		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
+		try {				
+
+		WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
 		element.click();
 		takeScreenshot("Click Routine back Button");
 		
 		}catch(Exception e) {
 			
-			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").clickable(true)");
+			WebElement element = driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.TextView\").clickable(true)");
 			element.click();
 			takeScreenshot("Click Routine back Button");
+			
 		}
 
 	}
@@ -304,20 +305,16 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		
 		waitCommand(By.xpath(String.format(XPATH_TXT, pickListName)));	
 		driver.pressKeyCode(112); 
+
 		
-		List<WebElement> element = driver.findElementsByAndroidUIAutomator(
-				"new UiSelector().className(\"android.view.View\").index(0).clickable(true)");	
-		
+		List<WebElement> element = driver.findElementsByAndroidUIAutomator("new UiSelector().text(\"\")");
+				
 		isWebviewExist = isWebviewExist();
 		
 		int size = element.size();
-		if (size > 1) {						
-	
-			if(size==3) {
-				element.get(size - 2).click();
-			}else if(size==2) {
-				element.get(size - 1).click();	
-			}
+		if (size >= 1) {			
+
+			element.get(0).click();
 				
 			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
 				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
@@ -331,46 +328,8 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 								pickListName);
 					} else {
 						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
-						int x = element.get(size - 1).getLocation().getX();
-						int y = element.get(size - 1).getLocation().getY();				
-						driver.tap(1, x, y, 3);
-					}
-				} else {
-					if (isWebviewExist) {
-						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
-						clickWebView(
-								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
-								pickListName);
-					} else {
-						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
-						int x = element.get(size - 1).getLocation().getX();
-						int y = element.get(size - 1).getLocation().getY();				
-						driver.tap(1, x, y, 3);
-					}
-				}
-			}
-			
-			
-			takeScreenshot("Clicked - " + pickListName + " spyglass");
-		} else {
-
-			element.get(0).click();
-			
-			
-			if (!isElementPresent(ID_PICKLIST_SEARCHFIELD, "Pick list search field")) {
-				if (isElementPresent(ID_MESSAGE_OK, "Prompt")) {
-					Click(ID_MESSAGE_OK,
-							"Clicked 'Ok' for prompt - " + GetText(ID_MESSAGE, GetText(ID_ALERT_TITLE, "Alert Title")));
-
-					if (isWebviewExist) {
-						test.log(LogStatus.INFO, "Re-Clicking in Web view - " + pickListName);
-						clickWebView(
-								By.xpath("//*[contains(text(),'" + pickListName + "')]/following-sibling::div/div"),
-								pickListName);
-					} else {
-						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
 						int x = element.get(0).getLocation().getX();
-						int y = element.get(0).getLocation().getY();	
+						int y = element.get(0).getLocation().getY();				
 						driver.tap(1, x, y, 3);
 					}
 				} else {
@@ -382,14 +341,15 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 					} else {
 						test.log(LogStatus.INFO, "Re-Clicking in Native view - " + pickListName);
 						int x = element.get(0).getLocation().getX();
-						int y = element.get(0).getLocation().getY();	
+						int y = element.get(0).getLocation().getY();				
 						driver.tap(1, x, y, 3);
 					}
 				}
 			}
 			
+			
 			takeScreenshot("Clicked - " + pickListName + " spyglass");
-		}			
+		} 		
 
 	}
 	
