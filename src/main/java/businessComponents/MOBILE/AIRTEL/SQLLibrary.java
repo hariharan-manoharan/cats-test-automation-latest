@@ -641,141 +641,143 @@ public class SQLLibrary extends Utility {
 
 	@SuppressWarnings("resource")
 	public int deliveryConfirmationQuery(LinkedHashMap<String, String> inputValueMap) {
-
+		
 		String query = null;
-		String SERIALIZED;
-		String TRANSACTIONID;
-		String ASSETCODE;
-		String LOTNUMBER; 
-		int RECORD_ID = 0;
+		String SERIALIZED = null;
+		String ASSETCODE = null;
+		String LOTNUMBER;
 		ResultSet rs;
 		Statement stmt;
 		CallableStatement stproc_stmt;
+
+ 
+		int RECORD_ID = generateRandomNum(10000000);
 		
+		
+
 
 		 LOTNUMBER = getRuntimeTestdata(testParameters.getCurrentTestCase()+"#MRRNUMBER");	
 
-
-
-		try {
-			String	query1 =  "SELECT * FROM CATS_PART WHERE PARTCODE =" +"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'";
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery(query1);
-			while (rs.next()) {
-				SERIALIZED = rs.getString("SERIALIZED");
-
-				if (SERIALIZED.equalsIgnoreCase("N")){
-
-					String query2 = "SELECT MAX(PARTTRANSACTIONID) AS PARTTRANSACTIONID FROM CATS_PARTTRANSACTION WHERE ORIGINATOR ="+"'CATS_POTRANSACTION'"
-							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+LOTNUMBER+"'";
-					stmt = connection.createStatement();
-
-					rs = stmt.executeQuery(query2);	
-					while (rs.next()) {
-						TRANSACTIONID = rs.getString("PARTTRANSACTIONID");	
-						RECORD_ID = generateRandomNum(10000000);
-						query = "INSERT INTO "
-								+"CATS.CATSCON_POREC_STG"
-								+"("
-								+"CATS_RCPT_LINE_DLVR_TRX_ID,"
-								+"PO_RCPT_LINE_DLVR_ID,"
-								+"LOT_NUMBER,"
-								+"RECORD_ID,"
-								+"CREATION_DATE,"
-								+"PROCESS_FLAG,"
-								+"ITEM_CODE,"
-								+"CREATED_BY"
-								+")"
-								+
-								"VALUES"
-								+ "("
-								+"'"+TRANSACTIONID+"',"
-								+"'"+inputValueMap.get("VALUE2")+"',"
-								+"'"+LOTNUMBER+"',"
-								+"'"+RECORD_ID+"',"
-								+inputValueMap.get("VALUE5")+","
-								+"'"+inputValueMap.get("VALUE6")+"',"
-								+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"',"
-								+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3")
-								+")";
-						executeUpdateQuery(query, "Delivery Confirmation  - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b>");
-						connection.commit();
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
-						stproc_stmt.executeUpdate();		
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
-						stproc_stmt.setString(1, "");
-						stproc_stmt.executeUpdate();
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
-						stproc_stmt.executeUpdate();
-
-						stproc_stmt.close();		
-
-					}
-
-				}else{
-					String query3 = "SELECT * FROM CATS_ASSETTRANSACTION WHERE ASSETTRANSACTIONID IN (select MAX(ASSETTRANSACTIONID) AS ASSETTRANSACTIONID  FROM CATS_ASSETTRANSACTION WHERE ORIGINATOR ="+"'CATS_POTRANSACTION'"
-							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+LOTNUMBER+"')";
-					stmt = connection.createStatement();
-					rs = stmt.executeQuery(query3);	
-					while (rs.next()) {
-						TRANSACTIONID = rs.getString("ASSETTRANSACTIONID");	
-						ASSETCODE = rs.getString("ASSETCODE");				
-						addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), ASSETCODE);				
-						RECORD_ID = generateRandomNum(10000000);
-						query = "INSERT INTO "
-								+"CATS.CATSCON_POREC_STG"
-								+"("
-								+"CATS_RCPT_LINE_DLVR_TRX_ID,"
-								+"PO_RCPT_LINE_DLVR_ID,"
-								+"LOT_NUMBER,"
-								+"RECORD_ID,"
-								+"CREATION_DATE,"
-								+"PROCESS_FLAG,"
-								+"ITEM_CODE,"
-								+"CREATED_BY"
-								+")"
-								+
-								"VALUES"
-								+ "("
-								+"'"+TRANSACTIONID+"',"
-								+"'"+inputValueMap.get("VALUE2")+"',"
-								+"'"+LOTNUMBER+"',"
-								+"'"+RECORD_ID+"',"
-								+inputValueMap.get("VALUE5")+","
-								+"'"+inputValueMap.get("VALUE6")+"',"
-								+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"',"
-								+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3")
-								+")";
-						connection.commit();
-						executeUpdateQuery(query, "Delivery Confirmation ITEMCODE : - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b> with Assetcode : <b>" + ASSETCODE +"</b>");
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
-						stproc_stmt.executeUpdate();		
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
-						stproc_stmt.setString(1, "");
-						stproc_stmt.executeUpdate();
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
-						stproc_stmt.executeUpdate();
-
-						stproc_stmt.close();		
-					}
-
+		 try {
+			 
+			 stproc_stmt = connection.prepareCall ("{call CATSCON_P_SUMMARYINTERFACE.SP_SUMM_INT_STG}");
+			 stproc_stmt.executeUpdate();
+			 
+				String	query1 =  "SELECT * FROM CATS_PART WHERE PARTCODE =" +"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'";
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query1);
+				while (rs.next()) {
+					SERIALIZED = rs.getString("SERIALIZED");
 				}
 
+					if (SERIALIZED.equalsIgnoreCase("N")){
+
+						query = "INSERT INTO "
+								+"CATS.CATSCON_POREC_STG"
+								+"("
+								+"CATS_RCPT_LINE_DLVR_TRX_ID,"
+								+"PO_RCPT_LINE_DLVR_ID,"
+								+"LOT_NUMBER,"
+								+"RECORD_ID,"
+								+"CREATION_DATE,"
+								+"PROCESS_FLAG,"
+								+"ITEM_CODE,"
+								+"CREATED_BY"
+								+")"
+								+"SELECT "
+								+"CATS_TRXID,"
+								+"SHIPMENT_LINE_ID,"
+								+"RECEIPT_NUM,"
+								+RECORD_ID+","
+								+"SYSDATE,"
+								+"'N',"								
+								+"ITEM_CODE,"
+								+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3") 
+								+" FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+								+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"'"
+								+" AND ITEM_CODE = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'";		
+						
+						executeUpdateQuery(query, "Delivery Confirmation  - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b>");
+						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
+						stproc_stmt.executeUpdate();		
+						stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
+						stproc_stmt.setString(1, "");
+						stproc_stmt.executeUpdate();
+						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
+						stproc_stmt.executeUpdate();
+
+						stproc_stmt.close();		
+
+					
+					}else{
+						String query3 = "SELECT ASSETCODE FROM CATSCON_SUMMARYTRX_STG WHERE RECORD_ID IN (SELECT MAX(RECORD_ID) FROM CATSCON_SUMMARYTRX_STG WHERE CUSTOMTRXTYPE = 'RECEIPT DELIVER' AND RECORD_ID IN (SELECT "
+										+"RECORD_ID "
+										+"FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+										+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"' "
+										+"AND ITEM_CODE     = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'))";
+											
+						stmt = connection.createStatement();
+						rs = stmt.executeQuery(query3);	
+						while (rs.next()) {						
+							ASSETCODE = rs.getString("ASSETCODE");				
+							addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), ASSETCODE);
+						}
+
+							query = "INSERT INTO "
+									+"CATS.CATSCON_POREC_STG"
+									+"("
+									+"CATS_RCPT_LINE_DLVR_TRX_ID,"
+									+"PO_RCPT_LINE_DLVR_ID,"
+									+"LOT_NUMBER,"
+									+"RECORD_ID,"
+									+"CREATION_DATE,"
+									+"PROCESS_FLAG,"
+									+"ITEM_CODE,"
+									+"CREATED_BY"
+									+")"
+									+"SELECT "
+									+"CATS_TRXID,"
+									+"SHIPMENT_LINE_ID,"
+									+"RECEIPT_NUM,"
+									+RECORD_ID+","
+									+"SYSDATE,"
+									+"'N',"								
+									+"ITEM_CODE,"
+									+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3") 
+									+" FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+									+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"' "
+									+"AND ITEM_CODE = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' "
+									+"AND CATS_TRXID IN (SELECT MAX(CATS_TRXID) FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+									+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"' "
+									+"AND ITEM_CODE = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"')";
+							
+							connection.commit();
+							executeUpdateQuery(query, "Delivery Confirmation ITEMCODE : - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b> with Assetcode : <b>" + ASSETCODE +"</b>");
+							stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
+							stproc_stmt.executeUpdate();		
+							stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
+							stproc_stmt.setString(1, "");
+							stproc_stmt.executeUpdate();
+							stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
+							stproc_stmt.executeUpdate();
+
+							stproc_stmt.close();		
+						}
+
+
+			}catch (SQLException e) {	
+				test.log(LogStatus.FAIL, "Delivery Confirmation   - "+getRuntimeTestdata(inputValueMap.get("VALUE7"))+" is not done successfully");
+				e.printStackTrace();			
 			}
-		}catch (SQLException e) {	
-			test.log(LogStatus.FAIL, "Delivery Confirmation   - "+getRuntimeTestdata(inputValueMap.get("VALUE7"))+" is not done successfully");
-			e.printStackTrace();			
+			return RECORD_ID;
 		}
-		return RECORD_ID;
-	}
 
 	@SuppressWarnings("resource")
 	public int deliveryConfirmationQuery1(LinkedHashMap<String, String> inputValueMap , int Iteration) {
 
 		String query = null;
-		String SERIALIZED;
-		String TRANSACTIONID;
-		String ASSETCODE;
+		String SERIALIZED = null;
+		String ASSETCODE = null;
 		String LOTNUMBER; 
 		int RECORD_ID = 0;
 		ResultSet rs;
@@ -790,111 +792,113 @@ public class SQLLibrary extends Utility {
 
 
 		try {
-			String	query1 =  "SELECT * FROM CATS_PART WHERE PARTCODE =" +"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'";
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery(query1);
-			while (rs.next()) {
-				SERIALIZED = rs.getString("SERIALIZED");
-
-				if (SERIALIZED.equalsIgnoreCase("N")){
-
-					String query2 = "SELECT MAX(PARTTRANSACTIONID) AS PARTTRANSACTIONID FROM CATS_PARTTRANSACTION WHERE ORIGINATOR ="+"'CATS_POTRANSACTION'"
-							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+LOTNUMBER+"'";
-					stmt = connection.createStatement();
-
-					rs = stmt.executeQuery(query2);	
-					while (rs.next()) {
-						TRANSACTIONID = rs.getString("PARTTRANSACTIONID");	
-						RECORD_ID = generateRandomNum(10000000);
-						query = "INSERT INTO "
-								+"CATS.CATSCON_POREC_STG"
-								+"("
-								+"CATS_RCPT_LINE_DLVR_TRX_ID,"
-								+"PO_RCPT_LINE_DLVR_ID,"
-								+"LOT_NUMBER,"
-								+"RECORD_ID,"
-								+"CREATION_DATE,"
-								+"PROCESS_FLAG,"
-								+"ITEM_CODE,"
-								+"CREATED_BY"
-								+")"
-								+
-								"VALUES"
-								+ "("
-								+"'"+TRANSACTIONID+"',"
-								+"'"+inputValueMap.get("VALUE2")+"',"
-								+"'"+LOTNUMBER+"',"
-								+"'"+RECORD_ID+"',"
-								+inputValueMap.get("VALUE5")+","
-								+"'"+inputValueMap.get("VALUE6")+"',"
-								+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"',"
-								+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3")
-								+")";
-						executeUpdateQuery(query, "Delivery Confirmation  - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b>");
-						connection.commit();
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
-						stproc_stmt.executeUpdate();		
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
-						stproc_stmt.setString(1, "");
-						stproc_stmt.executeUpdate();
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
-						stproc_stmt.executeUpdate();
-
-						stproc_stmt.close();		
-
-					}
-
-				}else{
-					String query3 = "SELECT * FROM CATS_ASSETTRANSACTION WHERE ASSETTRANSACTIONID IN (select MAX(ASSETTRANSACTIONID) AS ASSETTRANSACTIONID  FROM CATS_ASSETTRANSACTION WHERE ORIGINATOR ="+"'CATS_POTRANSACTION'"
-							+"AND PARTCODE= "+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' AND LOTNUMBER="+"'"+LOTNUMBER+"')";
-					stmt = connection.createStatement();
-					rs = stmt.executeQuery(query3);	
-					while (rs.next()) {
-						TRANSACTIONID = rs.getString("ASSETTRANSACTIONID");	
-						ASSETCODE = rs.getString("ASSETCODE");				
-						addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), ASSETCODE);				
-						RECORD_ID = generateRandomNum(10000000);
-						query = "INSERT INTO "
-								+"CATS.CATSCON_POREC_STG"
-								+"("
-								+"CATS_RCPT_LINE_DLVR_TRX_ID,"
-								+"PO_RCPT_LINE_DLVR_ID,"
-								+"LOT_NUMBER,"
-								+"RECORD_ID,"
-								+"CREATION_DATE,"
-								+"PROCESS_FLAG,"
-								+"ITEM_CODE,"
-								+"CREATED_BY"
-								+")"
-								+
-								"VALUES"
-								+ "("
-								+"'"+TRANSACTIONID+"',"
-								+"'"+inputValueMap.get("VALUE2")+"',"
-								+"'"+LOTNUMBER+"',"
-								+"'"+RECORD_ID+"',"
-								+inputValueMap.get("VALUE5")+","
-								+"'"+inputValueMap.get("VALUE6")+"',"
-								+"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"',"
-								+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3")
-								+")";
-						connection.commit();
-						executeUpdateQuery(query, "Delivery Confirmation ITEMCODE : - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b> with Assetcode : <b>" + ASSETCODE +"</b>");
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
-						stproc_stmt.executeUpdate();		
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
-						stproc_stmt.setString(1, "");
-						stproc_stmt.executeUpdate();
-						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
-						stproc_stmt.executeUpdate();
-
-						stproc_stmt.close();		
-					}
-
+			 
+			 stproc_stmt = connection.prepareCall ("{call CATSCON_P_SUMMARYINTERFACE.SP_SUMM_INT_STG}");
+			 stproc_stmt.executeUpdate();
+			 
+				String	query1 =  "SELECT * FROM CATS_PART WHERE PARTCODE =" +"'"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'";
+				stmt = connection.createStatement();
+				rs = stmt.executeQuery(query1);
+				while (rs.next()) {
+					SERIALIZED = rs.getString("SERIALIZED");
 				}
 
-			}
-		}catch (SQLException e) {	
+					if (SERIALIZED.equalsIgnoreCase("N")){
+
+						query = "INSERT INTO "
+								+"CATS.CATSCON_POREC_STG"
+								+"("
+								+"CATS_RCPT_LINE_DLVR_TRX_ID,"
+								+"PO_RCPT_LINE_DLVR_ID,"
+								+"LOT_NUMBER,"
+								+"RECORD_ID,"
+								+"CREATION_DATE,"
+								+"PROCESS_FLAG,"
+								+"ITEM_CODE,"
+								+"CREATED_BY"
+								+")"
+								+"SELECT "
+								+"CATS_TRXID,"
+								+"SHIPMENT_LINE_ID,"
+								+"RECEIPT_NUM,"
+								+RECORD_ID+","
+								+"SYSDATE,"
+								+"'N',"								
+								+"ITEM_CODE,"
+								+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3") 
+								+" FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+								+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"'"
+								+" AND ITEM_CODE = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'";		
+						
+						executeUpdateQuery(query, "Delivery Confirmation  - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b>");
+						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
+						stproc_stmt.executeUpdate();		
+						stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
+						stproc_stmt.setString(1, "");
+						stproc_stmt.executeUpdate();
+						stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
+						stproc_stmt.executeUpdate();
+
+						stproc_stmt.close();		
+
+					
+					}else{
+						String query3 = "SELECT ASSETCODE FROM CATSCON_SUMMARYTRX_STG WHERE RECORD_ID IN (SELECT MAX(RECORD_ID) FROM CATSCON_SUMMARYTRX_STG WHERE CUSTOMTRXTYPE = 'RECEIPT DELIVER' AND RECORD_ID IN (SELECT "
+										+"RECORD_ID "
+										+"FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+										+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"' "
+										+"AND ITEM_CODE     = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"'))";
+											
+						stmt = connection.createStatement();
+						rs = stmt.executeQuery(query3);	
+						while (rs.next()) {						
+							ASSETCODE = rs.getString("ASSETCODE");				
+							addRuntimeTestData(testParameters.getCurrentKeywordColumnName(), ASSETCODE);
+						}
+
+							query = "INSERT INTO "
+									+"CATS.CATSCON_POREC_STG"
+									+"("
+									+"CATS_RCPT_LINE_DLVR_TRX_ID,"
+									+"PO_RCPT_LINE_DLVR_ID,"
+									+"LOT_NUMBER,"
+									+"RECORD_ID,"
+									+"CREATION_DATE,"
+									+"PROCESS_FLAG,"
+									+"ITEM_CODE,"
+									+"CREATED_BY"
+									+")"
+									+"SELECT "
+									+"CATS_TRXID,"
+									+"SHIPMENT_LINE_ID,"
+									+"RECEIPT_NUM,"
+									+RECORD_ID+","
+									+"SYSDATE,"
+									+"'N',"								
+									+"ITEM_CODE,"
+									+selectQuerySingleValue("SELECT * FROM CATS_CONTACT_UDFDATA WHERE CONTACTID=1", "NUMBER3") 
+									+" FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+									+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"' "
+									+"AND ITEM_CODE = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"' "
+									+"AND CATS_TRXID IN (SELECT MAX(CATS_TRXID) FROM BTVL_CATS_DELIVER_INB_STAG_TAB "
+									+"WHERE RECEIPT_NUM = '"+LOTNUMBER+"' "
+									+"AND ITEM_CODE = '"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"')";
+							
+							connection.commit();
+							executeUpdateQuery(query, "Delivery Confirmation ITEMCODE : - <b>"+getRuntimeTestdata(inputValueMap.get("VALUE7"))+"</b> with Assetcode : <b>" + ASSETCODE +"</b>");
+							stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_POREC}");	
+							stproc_stmt.executeUpdate();		
+							stproc_stmt = connection.prepareCall ("{call CATSCON_P_POCONFINTERFACE.SP_INITPOCONFINTERFACE(?)}");
+							stproc_stmt.setString(1, "");
+							stproc_stmt.executeUpdate();
+							stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_POREC_ERPACK}");	
+							stproc_stmt.executeUpdate();
+
+							stproc_stmt.close();		
+						}
+
+
+			}catch (SQLException e) {	
 			test.log(LogStatus.FAIL, "Delivery Confirmation   - "+getRuntimeTestdata(inputValueMap.get("VALUE7"))+" is not done successfully");
 			e.printStackTrace();			
 		}
