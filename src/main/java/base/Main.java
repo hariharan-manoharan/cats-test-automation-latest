@@ -16,12 +16,16 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -261,9 +265,16 @@ public class Main{
 					groupedtestInstancesToRun.add(groupedTestInstances);
 				}
 			}
+			
+			Map<String, Integer> idleThreadPositionMap= decideWhenToKillIdleSession(groupedtestInstancesToRun);
 
 			for (int k = 0; k < groupedtestInstancesToRun.size(); k++) {
 				if(appsdatavsmobility) {
+					
+					if(!idleThreadPositionMap.isEmpty() && idleThreadPositionMap.get("POSITION")==k) {
+						shutDownAppiumAndAndroidDriver(idleThreadPositionMap.get("IDLE_THREAD_COUNT"));
+					}
+					
 					ExecutorService distributedExecutor = Executors.newFixedThreadPool(nThreads);
 
 					int groupedTestInstanceSize = groupedtestInstancesToRun.get(k).size();			
@@ -307,6 +318,52 @@ public class Main{
 	}
 	
 	
+	private static Map<String, Integer> decideWhenToKillIdleSession(ArrayList<ArrayList<TestParameters>> groupedtestInstancesToRun) {
+
+		int totalGroups = groupedtestInstancesToRun.size();
+		ArrayList<Integer> noOfIdleSessions = new ArrayList<Integer>();
+		Map<String, Integer> returnMap = new HashMap<String, Integer>();
+
+		for (int i = 0; i < totalGroups; i++) {
+			int groupSize = groupedtestInstancesToRun.get(i).size();
+			noOfIdleSessions.add(nThreads - groupSize);
+		}
+
+
+		Stack<Integer> positionStack = new Stack<Integer>();
+		Stack<Integer> idleThreadStack = new Stack<Integer>();	
+
+			for (int j = 0; j < noOfIdleSessions.size() - 1; j++) {
+				
+				if (noOfIdleSessions.get(j) > 0) {
+					int currentval =noOfIdleSessions.get(j);
+					int nextval = noOfIdleSessions.get(j + 1);
+					if ( currentval == nextval) {
+						positionStack.push(j);
+						idleThreadStack.push(currentval);
+					}else if (currentval > nextval) {
+						if(!positionStack.isEmpty()) {
+							int positionStackSize = positionStack.size();
+							for(int i=0;i<positionStackSize;i++) {
+								positionStack.pop();
+								idleThreadStack.pop();
+							}
+					}
+
+				}
+			}
+			}
+		
+			if(!positionStack.isEmpty()) {
+				returnMap.put("POSITION", positionStack.get(0));
+				returnMap.put("IDLE_THREAD_COUNT", idleThreadStack.get(0));
+				return returnMap;
+			}else {
+				return returnMap;
+			}
+
+	}
+
 	/**
 	 * parallelExecution method is used to handle the execution of the test instances in parallel mode across available devices. 
 	 * 
@@ -407,22 +464,21 @@ public class Main{
 
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("deviceName", adbDevices.get(selectDevice-1));
-        capabilities.setCapability("udid", adbDevices.get(selectDevice-1));
-        capabilities.setCapability("platformName", desiredCapabilitiesProperties.getProperty("platformName"));
-        capabilities.setCapability("platformVersion", desiredCapabilitiesProperties.getProperty("platformVersion"));
-        capabilities.setCapability("app", absolutePath + "\\resources\\Libs\\" + desiredCapabilitiesProperties.getProperty("app"));  
-        capabilities.setCapability("appPackage", desiredCapabilitiesProperties.getProperty("appPackage"));
-        capabilities.setCapability("appActivity", desiredCapabilitiesProperties.getProperty("appActivity"));
-        capabilities.setCapability("unicodeKeyboard", desiredCapabilitiesProperties.getProperty("unicodeKeyboard"));
-        capabilities.setCapability("resetKeyboard", desiredCapabilitiesProperties.getProperty("resetKeyboard"));
-        capabilities.setCapability("newCommandTimeout", desiredCapabilitiesProperties.getProperty("newCommandTimeout"));
-        capabilities.setCapability("noReset", desiredCapabilitiesProperties.getProperty("noReset"));
-
+		capabilities.setCapability("udid", adbDevices.get(selectDevice-1));
+		capabilities.setCapability("platformName", desiredCapabilitiesProperties.getProperty("platformName"));
+		capabilities.setCapability("platformVersion", desiredCapabilitiesProperties.getProperty("platformVersion"));
+		capabilities.setCapability("app", absolutePath + "\\resources\\Libs\\" + desiredCapabilitiesProperties.getProperty("app"));	
+		capabilities.setCapability("appPackage", desiredCapabilitiesProperties.getProperty("appPackage"));
+		capabilities.setCapability("appActivity", desiredCapabilitiesProperties.getProperty("appActivity"));
+		capabilities.setCapability("unicodeKeyboard", desiredCapabilitiesProperties.getProperty("unicodeKeyboard"));
+		capabilities.setCapability("resetKeyboard", desiredCapabilitiesProperties.getProperty("resetKeyboard"));
+		capabilities.setCapability("newCommandTimeout", desiredCapabilitiesProperties.getProperty("newCommandTimeout"));
+		capabilities.setCapability("noReset", desiredCapabilitiesProperties.getProperty("noReset"));
 
 		
 		driver = new AndroidDriver(new URL(	"http://" + properties.getProperty("RemoteAddress") + ":" + desiredCapabilitiesProperties.getProperty("device"+selectDevice+".appium.port") + "/wd/hub"),capabilities);
 		
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 		
 		androidDriverList.add(driver);
 		
@@ -451,6 +507,24 @@ public class Main{
 				}
 
 			}
+	}
+	
+	public static void shutDownAppiumAndAndroidDriver(int idleThreadCount) {
+
+		if (!androidDriverList.isEmpty() && !appiumServerInstanceList.isEmpty())
+			
+			for(int i=idleThreadCount; idleThreadCount>0;idleThreadCount--) {
+
+				if (androidDriverList.get(i) != null) {
+					androidDriverList.get(i).quit();
+				}
+
+				if (appiumServerInstanceList.get(i) != null) {
+					appiumServerInstanceList.get(i).appiumServerStop();
+				}
+				
+			}
+			
 	}
 	
 	
