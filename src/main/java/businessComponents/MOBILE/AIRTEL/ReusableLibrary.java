@@ -103,9 +103,6 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(profile)) {
-				//int x = element.getLocation().getX();
-				//int y = element.getLocation().getY();				
-				//action.press(element).release().perform();	
 				element.click();
 				takeScreenshot("Profile - <b>"+profile+"</b> is clicked");
 				break;				
@@ -121,10 +118,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		waitUntilTextDisplayed(ID_ACTION_BAR_BTN, "Routines");
 		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
-			if (element.getText().equalsIgnoreCase(folderName)) {
-				//int x = element.getLocation().getX();
-				//int y = element.getLocation().getY();				
-				//action.press(element).release().perform();
+			if (element.getText().equalsIgnoreCase(folderName)) {;
 				element.click();
 				takeScreenshot("Routine Folder - <b>"+folderName+"</b> is clicked");
 				isClicked = true;
@@ -145,9 +139,6 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		TouchAction action = new TouchAction((MobileDriver)driver);
 		for (WebElement element : elements) {
 			if (element.getText().equalsIgnoreCase(routineName)) {
-				//int x = element.getLocation().getX();
-				//int y = element.getLocation().getY();				
-				//action.press(element).release().perform();
 				element.click();
 				takeScreenshot("Routine - <b>"+routineName+"</b> is clicked");
 				isClicked = true;
@@ -180,15 +171,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		By by = By.xpath(String.format(XPATH_TXT, field));
 		waitCommand(by);
 		
-		/*String xpath="new UiSelector().className(\"android.view.View\").text(\""+field+ "\")";
-		waitCommand1(xpath);
-		MobileElement  ele = (MobileElement) driver.findElementByAndroidUIAutomator(xpath);			
-		WebDriverWait wait = new WebDriverWait(driver,20);
-		wait.until(ExpectedConditions.visibilityOf(ele));
-		*/
-		
-		MobileElement  element = (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.EditText\")");		
-		
+		MobileElement  element = (MobileElement) driver.findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.EditText\")");			
 		
 		driver.pressKeyCode(112); // DELETE Key event - https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_FORWARD_DEL
 		if(data.contains("&")) { // setValue function not working if data contains '&', so included this check. Need to research if there is any alternative approach to handle this issue.
@@ -307,8 +290,8 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		driver.pressKeyCode(112); 
 
 		
-		List<WebElement> element = driver.findElementsByAndroidUIAutomator("new UiSelector().text(\"\")");
-				
+		//List<WebElement> element = driver.findElementsByAndroidUIAutomator("new UiSelector().text(\"\")");
+		List<WebElement> element = driver.findElements(By.xpath(String.format(XPATH_TXT, "")));	
 		isWebviewExist = isWebviewExist();
 		
 		int size = element.size();
@@ -493,10 +476,7 @@ public class ReusableLibrary extends Utility implements RoutineObjectRepository 
 		int size = elements.size();
 		for(WebElement element: elements){			
 			size--;
-			if(element.getText().equalsIgnoreCase(pickListValue)){
-				//int x = element.getLocation().getX();
-				//int y = element.getLocation().getY();				
-				//action.press(element).release().perform();	
+			if(element.getText().equalsIgnoreCase(pickListValue)){	
 				element.click();
 				takeScreenshot("Pick List Value - <b>"+pickListValue+"</b> is selected");
 				break;
