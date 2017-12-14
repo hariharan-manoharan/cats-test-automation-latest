@@ -331,6 +331,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "createSameMoveOrderMultiLine":
 					case "clickOkConfirmPromptContains":
 					case "compareLineValues":
+					case "getNSpartStatus":
 
 					
 						try {
