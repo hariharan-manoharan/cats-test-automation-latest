@@ -319,6 +319,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "createSameMoveOrderMultiLine":
 					case "clickOkConfirmPromptContains":
 					case "compareLineValues":
+					case "getNSpartStatus":
 					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);

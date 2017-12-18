@@ -1263,6 +1263,16 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 			
 		}
 		
+	public void getNSpartStatus(String itemcode) {
 		
+		String query1 = "SELECT MAX(PARTDETAILID) AS PARTDETAILID FROM CATS_PARTDETAIL WHERE PARTID IN (SELECT PARTID FROM CATS_PART WHERE PARTCODE ='"+ getRuntimeTestdata(itemcode)+"')";		
+		String partDetailID= selectQuerySingleValue(query1, "PARTDETAILID");
+		
+		String query2 = "SELECT DESCRIPTION FROM CATS_LOCATIONSTATUS WHERE LOCATIONSTATUSID IN (SELECT LOCATIONSTATUSID FROM CATS_PARTDETAIL WHERE PARTDETAILID = '"+partDetailID+"')";
+		String status = selectQuerySingleValue(query2, "DESCRIPTION");
+		
+		test.log(LogStatus.INFO, "Status of the NS Part "+getRuntimeTestdata(itemcode)+" is "+status);
+				
+	}
 
 }
