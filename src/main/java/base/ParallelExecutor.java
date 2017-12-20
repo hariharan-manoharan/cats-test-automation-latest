@@ -468,9 +468,13 @@ public class ParallelExecutor extends Utility implements Runnable {
 	
 private void testRailReport() {
 		
+		
+		
 		String groupedTestRailTestcaseIDs[] = null;
 		
 		try {
+			
+			if (testRailProperties.getProperty("testRail.enabled").equalsIgnoreCase("True")) {	
 		
 		if(!testParameters.getCurrentTestCase().contains("STAGE_DATA") && !testParameters.getTestRailTestcaseID().equalsIgnoreCase("NA")) {	
 			
@@ -488,11 +492,13 @@ private void testRailReport() {
 			
 			}
 		
-		
+			}
 		}catch(RuntimeException e) {
 			test.log(LogStatus.WARNING, "Exception occured while updating test result in test rail.");
 			test.log(LogStatus.WARNING, e);
 		}
+		
+		
 	}
 	
 	private void updateTestRail(String testRailTCID) {
@@ -519,22 +525,29 @@ private void testRailReport() {
 			if(e.getResponseCode()==400) {
 				test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is not updated in Test Run with ID <b>"+testRailRunID[0]+"</b>. Response code '400' is returned (400 - No (active) test found for the run/case combination.)");
 				test.log(LogStatus.INFO,"Checking if more than one Test Run ID's are provided.");
-				if(testRailRunID.length>1) {
-					for(int i=1;i<testRailRunID.length;i++) {
+				
+				int runIndex = 0;
+				
+				try {
+					if(testRailRunID.length>1) {					
+					for(runIndex =1;runIndex<testRailRunID.length;runIndex++) {
 						if (test.getRunStatus() == LogStatus.PASS && testRailEnabled.equalsIgnoreCase("True")) {
-							testRailListenter.addTestResult(Integer.parseInt(testRailRunID[i]),Integer.parseInt(testRailTCID), 1);
-							test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>PASSED</b> in TestRail (Test Run ID - <b>"+testRailRunID[i]+"</b>)");
+							testRailListenter.addTestResult(Integer.parseInt(testRailRunID[runIndex]),Integer.parseInt(testRailTCID), 1);
+							test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>PASSED</b> in TestRail (Test Run ID - <b>"+testRailRunID[runIndex]+"</b>)");
 						} else if (testRailEnabled.equalsIgnoreCase("True")) {
-							testRailListenter.addTestResult(Integer.parseInt(testRailRunID[i]),Integer.parseInt(testRailTCID), 5);
-							test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>FAILED</b> in TestRail (Test Run ID - <b>"+testRailRunID[i]+"</b>)");
+							testRailListenter.addTestResult(Integer.parseInt(testRailRunID[runIndex]),Integer.parseInt(testRailTCID), 5);
+							test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is <b>FAILED</b> in TestRail (Test Run ID - <b>"+testRailRunID[runIndex]+"</b>)");
 						}
 					}
 				}else {
 					test.log(LogStatus.INFO,"Only one Test Run is provided.Not updating results in Test Rail.");				
 					
 				}
+				} catch (TestRailException ex) {
+					test.log(LogStatus.INFO, "Result for Test case with ID <b>" + testRailTCID + "</b> is not updated in Test Run with ID <b>"+testRailRunID[runIndex]+"</b>. Response code '400' is returned (400 - No (active) test found for the run/case combination.)");
 			
-			}
+				}
+				}
 		}
 		
 	}
