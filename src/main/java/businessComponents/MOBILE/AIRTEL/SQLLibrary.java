@@ -419,7 +419,12 @@ public class SQLLibrary extends Utility {
 			String mrrNumber = (inputValueMap.get("VALUE9").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE9")) : generateTestData("MRRNUMBER", inputValueMap.get("VALUE9"));
 
 			addRuntimeTestData("MRRNUMBER", mrrNumber);	
-
+			
+			int SHIPMENT_LINE_ID = generateRandomNum(10000000);
+			
+			addRuntimeTestData("SHIPMENT_LINE_ID_"+inputValueMap.get("VALUE7"), inputValueMap.get("VALUE7")+"."+SHIPMENT_LINE_ID);	
+			
+		
 			query = "INSERT "
 					+"INTO CATSCON_MRR_STG"
 					+"("
@@ -476,7 +481,7 @@ public class SQLLibrary extends Utility {
 					+inputValueMap.get("VALUE12")+","
 					+generateRandomNum(10000000)+","
 					+generateRandomNum(10000000)+","
-					+ Integer.parseInt(inputValueMap.get("VALUE15"))+","
+					+SHIPMENT_LINE_ID+","
 					+"'"+getRuntimeTestdata(inputValueMap.get("VALUE16"))+"',"
 					+ Integer.parseInt(inputValueMap.get("VALUE17"))+","
 					+ Integer.parseInt(inputValueMap.get("VALUE18"))+","
