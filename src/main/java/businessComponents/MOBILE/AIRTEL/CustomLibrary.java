@@ -1274,5 +1274,70 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 		test.log(LogStatus.INFO, "Status of the NS Part "+getRuntimeTestdata(itemcode)+" is "+status);
 				
 	}
+	
+	
+	public void verifyPendingInstallCount(String locationName) {
+		 String query= String.format(PENDINGINSTALL_COUNT, locationName);
+		  String sqlPendingInstallCount = selectQuerySingleValue(query, "PENDING_INSTALL_COUNT");
+		  
+		  waitCommand(By.xpath(String.format(XPATH_TXT, "Pending Install Count")+"/following-sibling::android.view.View"));
+			waitForSeconds("3");
 
+			WebElement element =  driver.findElement(By.xpath(String.format(XPATH_TXT, "Pending Install Count")+"/following-sibling::android.view.View"));
+			String fieldValue = element.getAttribute("name");
+			
+
+				if (sqlPendingInstallCount.equalsIgnoreCase(fieldValue)) {
+					test.log(LogStatus.PASS, "<b>"+ "Pending Install Count"+ "</b></br>Expected - <b>" + sqlPendingInstallCount + "</b></br>"
+							+ "Actual - <b>" + fieldValue +"</b>", "");
+					takeScreenshot("Pending Install Count is populated as expected");
+				}else {
+					test.log(LogStatus.FAIL, "<b>"+ "Pending Install Count" + "</b></br>Expected - <b>" + sqlPendingInstallCount + "</b></br>"
+							+ "Actual - <font color=red><b>" + fieldValue +"</font></b>", "");				
+					takeScreenshot("Pending Install Count is not populated as expected");				
+				}
+				
+	}
+	
+	public void createTranslationCode(String locationName,String translationcode) {
+
+
+		String query= String.format(TRANSLATION_CODE, locationName);
+		String  getranslationcode = selectQuerySingleValue(query, "TRANSLATIONCODE");
+
+		if(getranslationcode .equalsIgnoreCase("NULL")) {
+
+			int lastRuleSetId = getLastTransactionId("SELECT MAX(LOCATIONTRANSLATIONID) AS LOCATIONTRANSLATIONID FROM CATS_LOCATIONTRANSLATION","LOCATIONTRANSLATIONID" );
+			int currentRuleSetId = lastRuleSetId+1;
+
+			String locationId = selectQuerySingleValue("SELECT  LOCATIONID  FROM CATS_LOCATION WHERE NAME="+"'"+locationName+"'", "LOCATIONID");
+
+			String insertquery="INSERT INTO CATS_LOCATIONTRANSLATION"
+					+ " ("
+					+ " LOCATIONTRANSLATIONID,"
+					+ " LOCATIONID,"
+					+ " TRANSLATIONCODE,"
+					+ " SYSTEM, "
+					+ " ACTIVEFLAG"
+					+ ")"
+					+ "VALUES"
+					+ "("
+					+currentRuleSetId+","
+					+locationId+","
+					+"'"+translationcode+"',"
+					+ "'ORACLE',"
+					+ "'Y'"
+					+ ")";
+
+
+			executeUpdateQuery(insertquery,"Added Translationcode "+translationcode+" for the Location "+locationName );
+
+			try {
+				connection.commit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				test.log(LogStatus.FAIL, "Translationcode "+translationcode+" is not successfully added for the Location "+locationName);
+			}
+		}
+	}
 }

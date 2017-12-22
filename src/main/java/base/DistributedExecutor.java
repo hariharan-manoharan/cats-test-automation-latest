@@ -267,6 +267,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "verifyChildAssetWarranty":
 					case "selectPickListValue":
 					case "isPickListLineValueRepeated":
+					case "createTranslationCode" :
 					
 					
 						try {
@@ -332,6 +333,8 @@ public class DistributedExecutor extends Utility implements Runnable {
 					case "clickOkConfirmPromptContains":
 					case "compareLineValues":
 					case "getNSpartStatus":
+					case "verifyPendingInstallCount" :
+					
 
 					
 						try {
