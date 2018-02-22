@@ -54,6 +54,7 @@ public class Utility implements RoutineObjectRepository{
 
 	@SuppressWarnings("rawtypes")
 	public AndroidDriver driver;
+	public WebDriver webdriver;
 	public ExtentTest test;
 	public DataTable dataTable;
 	public TestParameters testParameters;
@@ -73,6 +74,16 @@ public class Utility implements RoutineObjectRepository{
 	public Utility(ExtentTest test, AndroidDriver driver, DataTable dataTable,TestParameters testParameters, Lock lock, Connection connection) {
 		this.test = test;
 		this.driver = driver;
+		this.dataTable = dataTable;
+		this.testParameters = testParameters;
+		this.lock = lock;
+		this.connection = connection;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Utility(ExtentTest test, WebDriver webdriver, DataTable dataTable,TestParameters testParameters, Lock lock, Connection connection) {
+		this.test = test;
+		this.webdriver = webdriver;
 		this.dataTable = dataTable;
 		this.testParameters = testParameters;
 		this.lock = lock;

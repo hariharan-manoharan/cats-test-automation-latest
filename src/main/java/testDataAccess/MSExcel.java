@@ -276,6 +276,7 @@ public class MSExcel implements DataTable {
 			testParameter.setSetCategory(getData(Suite, i, "SetCategory"));
 			testParameter.setExecuteCurrentTestCase(getData(Suite, i, "Execute"));
 			testParameter.setConnectDB(getData(Suite, i, "Connect_DB"));
+			testParameter.setBROWSER_NAME(getData(Suite,i,"Browser"));
 			
 			
 			runInfoArray.add(testParameter);

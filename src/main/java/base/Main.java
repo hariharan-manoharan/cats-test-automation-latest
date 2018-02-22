@@ -140,7 +140,11 @@ public class Main{
 		setAbsolutePath();
 		collectGlobalProperties();
 		collectTestRailProperties();
+		
+		String executionType = properties.getProperty("ExecutionType");
+		if(executionType.equalsIgnoreCase("MOBILE")) {
 		identifyListofDevicesConnected();
+		}
 		collectDesiredCapabilitiesProperties();
 		
 	}	
@@ -210,17 +214,78 @@ public class Main{
 
 		
 		if(!testInstancesToRun.isEmpty()) {
-		String executionMode = properties.getProperty("ExecutionMode");	
+		String executionMode = properties.getProperty("ExecutionMode");
+		String executionType = properties.getProperty("ExecutionType");
+		
+		
+		if(executionType.equals("MOBILE")) {
 		
 		if(executionMode.equalsIgnoreCase("DISTRIBUTED")) {
 			distributedExecution();
 		}else if(executionMode.equalsIgnoreCase("PARALLEL")){
 			parallelExecution();
 		}
+		}else {
+			//To launch web application
+			distributedExecutionWeb();
+			
+		}
 		}		
 	    
 	}
 	
+	public static void distributedExecutionWeb() {
+		
+		groupedtestInstancesToRun = new ArrayList<ArrayList<TestParameters>>();
+		initializeGlobalRuntimeDataProperties();
+		
+		ExtentReports report = initializeTestReport("TestSummary");
+		
+		Runnable testRunner = null;
+		lock = new ReentrantLock();
+		
+		for (int i = 0; i < setCategoryList.size(); i++) {
+			groupedTestInstances = new ArrayList<TestParameters>();
+			for (int j = 0; j < testInstancesToRun.size(); j++) {
+				if (Integer.parseInt(testInstancesToRun.get(j).getSetCategory()) == setCategoryList.get(i)) {
+					groupedTestInstances.add(testInstancesToRun.get(j));
+				}
+			}
+			groupedtestInstancesToRun.add(groupedTestInstances);					
+		}
+		
+		for (int k = 0; k < groupedtestInstancesToRun.size(); k++) {
+
+			ExecutorService distributedExecutionWeb = Executors.newFixedThreadPool(nThreads);
+
+
+			int groupedTestInstanceSize = groupedtestInstancesToRun.get(k).size();			
+
+			for (int currentTestInstance = 0; currentTestInstance < groupedTestInstanceSize; currentTestInstance++) {
+				if (testRailProperties.getProperty("testRail.enabled").equalsIgnoreCase("True")) {
+					testRunner = new DistributedExecutorWeb(groupedtestInstancesToRun.get(k).get(currentTestInstance), report,
+							executionType, dataTable, testRailListenter, lock);
+				} else {
+					testRunner = new DistributedExecutorWeb(groupedtestInstancesToRun.get(k).get(currentTestInstance), report,
+							executionType, dataTable, lock);
+				}
+				distributedExecutionWeb.execute(testRunner);
+			}
+			
+
+			distributedExecutionWeb.shutdown();
+			while (!distributedExecutionWeb.isTerminated()) {
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+		globalRuntimeDataProperties.writeGlobalRuntimeDataProperties(globalRuntimeDataPropertyFilePath, utility.getRuntimeDataProperties());	
+		report.flush();
+	}
 	
 	/**
 	 * distributedExecution method is used to handle the execution of the test instances in distributed mode across available devices. 
@@ -247,12 +312,13 @@ public class Main{
 
 				appiumServerSetup(t + 1);
 				androidDriverSetUp(t + 1);
-				if(appSetup.equalsIgnoreCase("True")) {
+				if(appSetup.equalsIgnoreCase("True")) { 
 					setupAppForTesting(t);
 				}
 
 			}
-
+			System.out.println(setCategoryList.size());
+			System.out.println(testInstancesToRun.size());
 			for (int i = 0; i < setCategoryList.size(); i++) {
 				if(appsdatavsmobility) {
 					groupedTestInstances = new ArrayList<TestParameters>();
