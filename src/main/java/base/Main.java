@@ -317,8 +317,6 @@ public class Main{
 				}
 
 			}
-			System.out.println(setCategoryList.size());
-			System.out.println(testInstancesToRun.size());
 			for (int i = 0; i < setCategoryList.size(); i++) {
 				if(appsdatavsmobility) {
 					groupedTestInstances = new ArrayList<TestParameters>();
