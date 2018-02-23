@@ -24,8 +24,9 @@ public class LoginPage extends Utility {
 		
 		public void login() {
 			
-		webdriver.get("http://172.16.32.22:8001/cats/login");
-		test.log(LogStatus.PASS, "Application launched");
+			String environmentUrl = environmentVariables.get("EnvironmentURL");	
+			webdriver.get(environmentUrl);
+			test.log(LogStatus.PASS, "Application launched");
 	
 		}
 
