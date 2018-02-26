@@ -542,7 +542,7 @@ public class Main{
 		
 		driver = new AndroidDriver(new URL(	"http://" + properties.getProperty("RemoteAddress") + ":" + desiredCapabilitiesProperties.getProperty("device"+selectDevice+".appium.port") + "/wd/hub"),capabilities);
 		
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		
 		androidDriverList.add(driver);
 		
