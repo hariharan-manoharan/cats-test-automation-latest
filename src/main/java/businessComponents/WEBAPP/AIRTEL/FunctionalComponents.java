@@ -26,8 +26,15 @@ public class FunctionalComponents extends Utility{
 	public void login() {
 		LoginPage log = new LoginPage(test,webdriver,dataTable,testParameters,lock,connection);
 		log.login();
-	
-
 	}	
+	
+	public void openSearch(String dataForm) {
+		
+		
+		
+	}
+	
+	
+	
 
 }
