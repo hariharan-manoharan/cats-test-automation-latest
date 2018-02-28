@@ -1,4 +1,4 @@
-package main.java.utils;
+package main.java.framework.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +9,7 @@ import java.io.OutputStream;
 
 import com.relevantcodes.extentreports.LogStatus;
 
-import main.java.reporting.HtmlReport;
+import main.java.framework.reporting.HtmlReport;
 
 public class CopyLatestResult extends Utility {
 

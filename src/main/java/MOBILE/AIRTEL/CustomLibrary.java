@@ -18,8 +18,8 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
-import main.java.executionSetup.TestParameters;
-import main.java.testDataAccess.DataTable;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.testDataAccess.DataTable;
 
 
 public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepository {

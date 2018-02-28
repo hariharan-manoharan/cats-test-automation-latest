@@ -1,4 +1,4 @@
-package main.java.executionSetup;
+package main.java.framework.executionSetup;
 
 public class TestParameters implements Comparable {
 

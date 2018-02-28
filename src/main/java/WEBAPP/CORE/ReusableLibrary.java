@@ -26,10 +26,10 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
-import main.java.executionSetup.TestParameters;
-import main.java.reporting.HtmlReport;
-import main.java.testDataAccess.DataTable;
-import main.java.utils.Utility;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.reporting.HtmlReport;
+import main.java.framework.testDataAccess.DataTable;
+import main.java.framework.utils.Utility;
 
 public class ReusableLibrary extends Utility{
 

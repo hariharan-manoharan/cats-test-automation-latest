@@ -1,4 +1,4 @@
-package main.java.testDataAccess;
+package main.java.framework.testDataAccess;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import main.java.executionSetup.TestParameters;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
+import main.java.framework.executionSetup.TestParameters;
 
 public class MSExcel implements DataTable {
 

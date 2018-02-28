@@ -1,4 +1,4 @@
-package main.java.base;
+package main.java.framework.base;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,10 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
@@ -27,50 +28,49 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
-import main.java.executionSetup.ExecutionType;
-import main.java.executionSetup.TestParameters;
-import main.java.testDataAccess.DataTable;
-import main.java.utils.AppiumServerHandler;
-import main.java.utils.AppiumServerHandlerCmd;
-import main.java.utils.TestRailListener;
-import main.java.utils.Utility;
+import main.java.framework.executionSetup.ExecutionType;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.testDataAccess.DataTable;
+import main.java.framework.utils.AppiumServerHandler;
+import main.java.framework.utils.AppiumServerHandlerCmd;
+import main.java.framework.utils.TestRailListener;
+import main.java.framework.utils.Utility;
 
-public class ParallelExecutor extends Utility implements Runnable {
+public class DistributedExecutor extends Utility implements Runnable {
 
 	private ExtentReports report; 
 	private ExtentTest test;
 	private TestParameters testParameters;
 	private ExecutionType executionType;
 	private DataTable dataTable;
+	private ArrayList<AndroidDriver> driverList;
 	private AndroidDriver driver;
 	private TestRailListener testRailListenter;
 	String testRailEnabled = testRailProperties.getProperty("testRail.enabled");
 	int projectId = Integer.parseInt(testRailProperties.getProperty("testRail.projectId"));
 	private Lock lock;
 	private Connection connection;
-	private Properties runtimeDataProperties;
 
 
-	public ParallelExecutor(TestParameters testParameters, ExtentReports report, ExecutionType executionType, DataTable dataTable, TestRailListener testRailListenter, Lock lock,  AndroidDriver driver, Properties runtimeDataProperties) {
+	public DistributedExecutor(TestParameters testParameters, ExtentReports report, ExecutionType executionType, DataTable dataTable, TestRailListener testRailListenter, Lock lock,  ArrayList<AndroidDriver> androidDriverList) {
 		this.testParameters = testParameters;
 		this.report = report;
 		this.executionType = executionType;
 		this.dataTable = dataTable;
 		this.testRailListenter = testRailListenter;
 		this.lock = lock;
-		this.driver = driver;
-		this.runtimeDataProperties =runtimeDataProperties;
+		this.driverList = androidDriverList;
 
 	}
 	
-	public ParallelExecutor(TestParameters testParameters, ExtentReports report, ExecutionType executionType, DataTable dataTable,Lock lock,  AndroidDriver driver, Properties runtimeDataProperties) {
+	public DistributedExecutor(TestParameters testParameters, ExtentReports report, ExecutionType executionType, DataTable dataTable,Lock lock,  ArrayList<AndroidDriver> androidDriverList) {
 		this.testParameters = testParameters;
 		this.report = report;
 		this.executionType = executionType;
 		this.dataTable = dataTable;	
 		this.lock = lock;
-		this.driver = driver;
-		this.runtimeDataProperties =runtimeDataProperties;
+		this.driverList = androidDriverList;
+
 	}
 
 	@Override
@@ -79,11 +79,20 @@ public class ParallelExecutor extends Utility implements Runnable {
 		LinkedHashMap<String, String> keywordMap = new LinkedHashMap<String, String>();
 		try {	
 						
-			if (testParameters.getExecuteCurrentTestCase().equalsIgnoreCase("Yes")) {
+			if (testParameters.getExecuteCurrentTestCase().equalsIgnoreCase("Yes")) {				
+				
 				test = report.startTest(testParameters.getCurrentTestCase() + " : " + testParameters.getDescription());
 				dataTable.setCurrentRow(testParameters.getCurrentTestCase());
-				test.log(LogStatus.INFO, testParameters.getCurrentTestCase() + " execution started", "");	
+				test.log(LogStatus.INFO, testParameters.getCurrentTestCase() + " execution started", "");
 				test.log(LogStatus.INFO, "Current Thread - "+Thread.currentThread().getName().toString(), "");
+				
+				
+				String[] threadNumber = Thread.currentThread().getName().toString().split("-");
+				
+				int driverindex = Integer.parseInt(threadNumber[3])-1;				
+				
+				driver = driverList.get(driverindex);
+				
 				test.log(LogStatus.INFO, "AndroidDriver Session ID - "+driver.getSessionId().toString(), "");
 
 				if (testParameters.getConnectDB().equalsIgnoreCase("Yes")) {
@@ -104,7 +113,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 				report.endTest(test);
 				report.flush();		
 				
-				testRailReport();
+				testRailReport();				
+
 			}
 		} catch (SessionNotCreatedException e) {
 			test.log(LogStatus.FAIL, "Android Driver and Appium server setup not done Successfully", "");
@@ -188,9 +198,9 @@ public class ParallelExecutor extends Utility implements Runnable {
 						"<font size=2 face = Bedrock color=blue><b>" + currentKeyword.toUpperCase() + "</font></b>",
 						"");
 				
-
-			File packageDirectory = new File(
-					"./src/main/java/" + executionType + "/" + properties.getProperty("Project"));
+			String requiredDirectory = findDir(new File(System.getProperty("user.dir")), properties.getProperty("Project"));			
+			
+			File packageDirectory = new File(requiredDirectory);
 
 			File[] packageFiles = packageDirectory.listFiles();			
 
@@ -218,8 +228,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 					if(dynamicClass.isInterface()) {
 						continue;
 					}
-					constructor = dynamicClass.getDeclaredConstructors()[1];
-					classInstance = constructor.newInstance(test, driver, dataTable, testParameters, lock, connection, runtimeDataProperties);
+					constructor = dynamicClass.getDeclaredConstructors()[0];
+					classInstance = constructor.newInstance(test, driver, dataTable, testParameters, lock, connection);
 
 
 					switch (currentKeyword) {
@@ -233,6 +243,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "deliveryinfocomplete":
 					case "multipleClickNext":
 					case "validatePicklistValue":
+					case "updateLocatorRuleSet":
 					case "verifyPrompt":
 					case "clickRoutine":
 					case "selectPickListValueByIndex":
@@ -258,7 +269,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "isPickListLineValueRepeated":
 					case "createTranslationCode" :
 					
-						
+					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class, String.class);
 							isMethodFound = true;
@@ -283,7 +294,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 							method.invoke(classInstance, fieldMap.get(currentKey), dataMap.get(currentKey), currentKey);							
 						}
 						break;
-					case "clickRoutineFolder":							
+					case "clickRoutineFolder":						
 					case "validateLoopField":
 					case "clickYesConfirmPromptContains":
 					case "clickNoConfirmPromptContains":
@@ -296,7 +307,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "clickNextWaitTillFieldContains":
 					case "swipingHorizontal":
 					case "clickButtonWithText":
-					case "enterSiteID":	
+					case "enterSiteID":
 					case "clickDatePicker":
 					case "getSystemGenerateValue":
 					case "clickOkPromptmovefinish":
@@ -304,7 +315,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "deliveryConfirmation":
 					case "deliveryConfirmation1":
 					case "createMaterialReceiveReceipt":
-					case "createMRRwithSinglePO":
+					case "createMRRwithSinglePO":	
 					case "createPurchaseOrder":
 					case "getPartID":
 					case "activateBOM":
@@ -324,6 +335,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 					case "getNSpartStatus":
 					case "verifyPendingInstallCount" :
 					
+
+					
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword, String.class);
 							isMethodFound = true;
@@ -335,7 +348,18 @@ public class ParallelExecutor extends Utility implements Runnable {
 							method.invoke(classInstance, dataMap.get(currentKey));
 						}
 						break;
-
+					case "createLocatorRule":
+						try {
+							method = dynamicClass.getDeclaredMethod(currentKeyword, Integer.TYPE);
+							isMethodFound = true;
+						} catch (NoSuchMethodException e) {
+							isMethodFound = false;
+							break;
+						}
+						if (isMethodFound) {
+							method.invoke(classInstance, Integer.parseInt(dataMap.get(currentKey)));
+						}
+						break;
 					default:
 						try {
 							method = dynamicClass.getDeclaredMethod(currentKeyword);
@@ -350,7 +374,9 @@ public class ParallelExecutor extends Utility implements Runnable {
 						break;
 
 					}
+					
 					report.flush();
+
 				}
 			}
 		}
@@ -440,9 +466,9 @@ public class ParallelExecutor extends Utility implements Runnable {
 				if (msg.equals("Would you like to switch to Batch mode?")) {					
 					this.test.log(LogStatus.WARNING,
 							"<font color=red><b>Network not available....Please check network connectivity</b></font>");
-				/*	this.test.log(LogStatus.WARNING,
-							"<font color=red><b>Execution of upcoming this.test cases will be suspended</b></font>");
-					this.test.log(LogStatus.INFO, "<b>Exception handler completed</b>");*/
+/*					this.test.log(LogStatus.WARNING,
+							"<font color=red><b>Execution of upcoming this.test cases will be suspended</b></font>");*/
+					this.test.log(LogStatus.INFO, "<b>Exception handler completed</b>");
 					return;
 				} else if (GetText(this.driver,this.test,ID_ALERT_TITLE, "Alert Title").equals("Mobility")) {
 					Click(this.driver, this.test,ID_MESSAGE_OK, "Clicked 'Ok' for prompt");
@@ -469,7 +495,8 @@ public class ParallelExecutor extends Utility implements Runnable {
 	}
 	}
 	
-private void testRailReport() {
+	
+	private void testRailReport() {
 		
 		
 		

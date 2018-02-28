@@ -9,9 +9,9 @@ import org.openqa.selenium.WebDriver;
 import com.relevantcodes.extentreports.ExtentTest;
 
 import main.java.WEBAPP.CORE.pages.LoginPage;
-import main.java.executionSetup.TestParameters;
-import main.java.testDataAccess.DataTable;
-import main.java.utils.Utility;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.testDataAccess.DataTable;
+import main.java.framework.utils.Utility;
 
 public class FunctionalComponents extends Utility{
 

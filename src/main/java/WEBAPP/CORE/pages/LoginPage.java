@@ -9,8 +9,8 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import main.java.WEBAPP.CORE.ReusableLibrary;
 import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
-import main.java.executionSetup.TestParameters;
-import main.java.testDataAccess.DataTable;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.testDataAccess.DataTable;
 
 public class LoginPage extends ReusableLibrary implements CommonObjectRepository{
 

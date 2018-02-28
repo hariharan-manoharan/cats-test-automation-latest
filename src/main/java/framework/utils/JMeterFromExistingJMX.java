@@ -1,4 +1,4 @@
-package main.java.utils;
+package main.java.framework.utils;
 
 import org.apache.jmeter.engine.StandardJMeterEngine;
 import org.apache.jmeter.save.SaveService;

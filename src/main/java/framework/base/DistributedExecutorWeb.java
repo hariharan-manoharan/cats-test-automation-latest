@@ -1,4 +1,4 @@
-package main.java.base;
+package main.java.framework.base;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -22,12 +22,12 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import io.appium.java_client.android.AndroidDriver;
-import main.java.executionSetup.ExecutionType;
-import main.java.executionSetup.TestParameters;
-import main.java.testDataAccess.DataTable;
-import main.java.utils.TestRailListener;
-import main.java.utils.Utility;
-import main.java.utils.WebDriverFactory;
+import main.java.framework.executionSetup.ExecutionType;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.testDataAccess.DataTable;
+import main.java.framework.utils.TestRailListener;
+import main.java.framework.utils.Utility;
+import main.java.framework.utils.WebDriverFactory;
 
 
 public class DistributedExecutorWeb extends Utility implements Runnable {

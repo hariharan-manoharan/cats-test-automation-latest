@@ -1,8 +1,9 @@
-package main.java.testDataAccess;
+package main.java.framework.testDataAccess;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import main.java.executionSetup.TestParameters;
+
+import main.java.framework.executionSetup.TestParameters;
 
 
 
