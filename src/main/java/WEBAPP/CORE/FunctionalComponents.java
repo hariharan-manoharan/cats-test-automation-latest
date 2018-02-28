@@ -1,4 +1,4 @@
-package main.java.businessComponents.WEBAPP.AIRTEL;
+package main.java.WEBAPP.CORE;
 
 import java.sql.Connection;
 import java.util.Properties;
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 
 import com.relevantcodes.extentreports.ExtentTest;
 
-
+import main.java.WEBAPP.CORE.pages.LoginPage;
 import main.java.executionSetup.TestParameters;
 import main.java.testDataAccess.DataTable;
 import main.java.utils.Utility;

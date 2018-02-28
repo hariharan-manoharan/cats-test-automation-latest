@@ -1,4 +1,4 @@
-package main.java.businessComponents.MOBILE.AIRTEL;
+package main.java.MOBILE.AIRTEL;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

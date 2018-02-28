@@ -1,4 +1,4 @@
-package main.java.businessComponents.WEBAPP.AIRTEL;
+package main.java.WEBAPP.CORE.pages;
 
 import java.sql.Connection;
 import java.util.concurrent.locks.Lock;
@@ -6,10 +6,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
+
+import main.java.WEBAPP.CORE.ReusableLibrary;
+import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
 import main.java.executionSetup.TestParameters;
 import main.java.testDataAccess.DataTable;
 
-public class LoginPage extends ReusableLibrary implements WebObjectRepository{
+public class LoginPage extends ReusableLibrary implements CommonObjectRepository{
 
 	public LoginPage(ExtentTest test, WebDriver webdriver, DataTable dataTable, TestParameters testParameters,
 			Lock lock, Connection connection) {

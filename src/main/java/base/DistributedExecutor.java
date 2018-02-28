@@ -224,7 +224,7 @@ public class DistributedExecutor extends Utility implements Runnable {
 					testParameters.setCurrentKeywordColumnName(map.getKey());
 					
 
-					dynamicClass = Class.forName("main.java.businessComponents." + executionType + "." + properties.getProperty("Project") + "." + className);
+					dynamicClass = Class.forName("main.java." + executionType + "." + properties.getProperty("Project") + "." + className);
 					if(dynamicClass.isInterface()) {
 						continue;
 					}

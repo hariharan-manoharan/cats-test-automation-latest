@@ -1,8 +1,8 @@
-package main.java.businessComponents.WEBAPP.AIRTEL;
+package main.java.WEBAPP.CORE.pageObjectRepositories;
 
 import org.openqa.selenium.By;
 
-public interface WebObjectRepository {
+public interface CommonObjectRepository {
 	
 	
 	//************************************************************** Text fields **********************************************************

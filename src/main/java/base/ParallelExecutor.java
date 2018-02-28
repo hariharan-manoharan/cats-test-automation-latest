@@ -190,7 +190,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 				
 
 			File packageDirectory = new File(
-					"./src/main/java/businessComponents/" + executionType + "/" + properties.getProperty("Project"));
+					"./src/main/java/" + executionType + "/" + properties.getProperty("Project"));
 
 			File[] packageFiles = packageDirectory.listFiles();			
 
@@ -214,7 +214,7 @@ public class ParallelExecutor extends Utility implements Runnable {
 					testParameters.setCurrentKeywordColumnName(map.getKey());
 					
 
-					dynamicClass = Class.forName("main.java.businessComponents." + executionType + "." + properties.getProperty("Project") + "." + className);
+					dynamicClass = Class.forName("main.java." + executionType + "." + properties.getProperty("Project") + "." + className);
 					if(dynamicClass.isInterface()) {
 						continue;
 					}
