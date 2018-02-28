@@ -1,6 +1,6 @@
-package main.java.testDataAccess;
+package main.java.framework.testDataAccess;
 
-import main.java.executionSetup.TestParameters;
+import main.java.framework.executionSetup.TestParameters;
 
 public class DataTableFactory extends DataTableAbstractFactory {
 

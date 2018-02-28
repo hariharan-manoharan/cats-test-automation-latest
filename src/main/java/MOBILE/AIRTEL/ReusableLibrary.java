@@ -44,11 +44,10 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.android.AndroidKeyCode;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import main.java.executionSetup.TestParameters;
-import main.java.reporting.HtmlReport;
-import main.java.reporting.HtmlReport;
-import main.java.testDataAccess.DataTable;
-import main.java.utils.Utility;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.reporting.HtmlReport;
+import main.java.framework.testDataAccess.DataTable;
+import main.java.framework.utils.Utility;
 
 public class ReusableLibrary extends Utility implements RoutineObjectRepository {
 

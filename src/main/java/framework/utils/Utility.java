@@ -1,4 +1,4 @@
-package main.java.utils;
+package main.java.framework.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,9 +46,9 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import main.java.MOBILE.AIRTEL.RoutineObjectRepository;
-import main.java.executionSetup.TestParameters;
-import main.java.reporting.HtmlReport;
-import main.java.testDataAccess.DataTable;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.reporting.HtmlReport;
+import main.java.framework.testDataAccess.DataTable;
 
 public class Utility implements RoutineObjectRepository{
 

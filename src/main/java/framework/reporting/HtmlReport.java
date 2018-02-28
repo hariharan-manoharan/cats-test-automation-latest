@@ -1,4 +1,4 @@
-package main.java.reporting;
+package main.java.framework.reporting;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.NetworkMode;
 
-import main.java.utils.Utility;
+import main.java.framework.utils.Utility;
 
 public class HtmlReport extends Utility{
 	

@@ -1,4 +1,4 @@
-package main.java.testDataAccess;
+package main.java.framework.testDataAccess;
 
 public class DataTableFactoryProducer {
 	

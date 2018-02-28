@@ -1,4 +1,4 @@
-package main.java.utils;
+package main.java.framework.utils;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package main.java.base;
+package main.java.framework.base;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -49,17 +49,17 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
-import main.java.executionSetup.ExecutionType;
-import main.java.executionSetup.TestParameters;
-import main.java.reporting.HtmlReport;
-import main.java.testDataAccess.DataTable;
-import main.java.testDataAccess.DataTableAbstractFactory;
-import main.java.testDataAccess.DataTableFactoryProducer;
-import main.java.utils.AppiumServerHandler;
-import main.java.utils.CopyLatestResult;
-import main.java.utils.FrameworkProperties;
-import main.java.utils.TestRailListener;
-import main.java.utils.Utility;
+import main.java.framework.executionSetup.ExecutionType;
+import main.java.framework.executionSetup.TestParameters;
+import main.java.framework.reporting.HtmlReport;
+import main.java.framework.testDataAccess.DataTable;
+import main.java.framework.testDataAccess.DataTableAbstractFactory;
+import main.java.framework.testDataAccess.DataTableFactoryProducer;
+import main.java.framework.utils.AppiumServerHandler;
+import main.java.framework.utils.CopyLatestResult;
+import main.java.framework.utils.FrameworkProperties;
+import main.java.framework.utils.TestRailListener;
+import main.java.framework.utils.Utility;
 
 
 /**
