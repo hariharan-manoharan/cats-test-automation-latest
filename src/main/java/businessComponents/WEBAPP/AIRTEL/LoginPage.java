@@ -9,11 +9,7 @@ import com.relevantcodes.extentreports.LogStatus;
 import main.java.executionSetup.TestParameters;
 import main.java.testDataAccess.DataTable;
 
-public class LoginPage extends ReusableLibrary {
-
-	By id_txt_user_name = By.id("j_username");
-	By id_txt_password = By.id("j_password");
-	By id_btn_login = By.id("loginBtn");
+public class LoginPage extends ReusableLibrary implements WebObjectRepository{
 
 	public LoginPage(ExtentTest test, WebDriver webdriver, DataTable dataTable, TestParameters testParameters,
 			Lock lock, Connection connection) {
@@ -21,9 +17,19 @@ public class LoginPage extends ReusableLibrary {
 
 	}
 
-	public void login() {
-
-		webdriver.get("https://172.16.32.38:8443/cats/login");
+	public void launchApp() {
+		
+		webdriver.get(environmentVariables.get("EnvironmentURL"));
+		
+		if (webdriver.getTitle().equals("CATS CenterPoint:")) {
+			test.log(LogStatus.PASS, "App with URL - <b>"+ environmentVariables.get("EnvironmentURL")+"</b> is launched successfully.");
+		}else{
+			test.log(LogStatus.FAIL, "App with URL - <b>"+ environmentVariables.get("EnvironmentURL")+"</b> is not launched successfully.");
+		}
+	}
+	
+	
+	public void login() {		
 
 		EnterText(id_txt_user_name, "Enter Username", "catsadm");
 		EnterText(id_txt_password, "Enter Password", "catscats11");
@@ -31,9 +37,24 @@ public class LoginPage extends ReusableLibrary {
 		Click(id_btn_login, "Login button");
 
 		if (webdriver.getTitle().equals("CATS CenterPoint: CenterPoint")) {
-			test.log(LogStatus.PASS, "Logged into Center Point");
+			test.log(LogStatus.PASS, "Login to Center Point is success");
+		}else {
+			test.log(LogStatus.FAIL, "Login to Center Point is not success");
 		}
 
+	}
+	
+	public void selectDataForm(String dataform, String dataforFolder) {
+		
+		Click(xpath_client_folder, "Click Client folder");
+		Click(By.xpath(String.format(xpath_dataform_folder,dataforFolder)), "Click Data form folder - "+dataforFolder);
+		Click(By.xpath(String.format(xpath_data_form,dataform)), "Click Data form - " +dataform);
+		
+		
+	}
+	
+	public void clickSearchButton() {
+		
 	}
 
 }

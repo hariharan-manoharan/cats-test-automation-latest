@@ -49,7 +49,6 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
-import main.java.businessComponents.WEBAPP.AIRTEL.ReusableLibrary;
 import main.java.executionSetup.ExecutionType;
 import main.java.executionSetup.TestParameters;
 import main.java.reporting.HtmlReport;
@@ -108,8 +107,7 @@ public class Main{
 	private static final String testRailPropertyFilePath = "./resources/PropertyFiles/TestRail.properties";
 	private static final String desiredCapabilityPropertyFilePath = "./resources/DesiredCapabilities/DesiredCapabilities.properties";
 	private static final String FILENAME = "\\adbDevices-list.txt";
-	private static ReusableLibrary reusableLibrary;
-	
+
 	
 
 	/**
@@ -664,9 +662,7 @@ public class Main{
 		
 		utility = new Utility();
 		utility.setProperties(properties);
-		
-		reusableLibrary = new ReusableLibrary();
-		reusableLibrary.setProperties(properties);
+
 		
 	}
 	

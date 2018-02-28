@@ -24,14 +24,16 @@ public class FunctionalComponents extends Utility{
 	}
 	
 	public void login() {
-		LoginPage log = new LoginPage(test,webdriver,dataTable,testParameters,lock,connection);
-		log.login();
+		LoginPage loginPage = new LoginPage(test,webdriver,dataTable,testParameters,lock,connection);
+		loginPage.launchApp();
+		loginPage.login();
+		loginPage.selectDataForm("Assets", "Assets");
 	}	
 	
 	public void openSearch(String dataForm) {
 		
 		
-		
+						
 	}
 	
 	

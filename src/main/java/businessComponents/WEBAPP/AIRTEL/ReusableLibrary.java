@@ -29,85 +29,29 @@ import io.appium.java_client.android.AndroidDriver;
 import main.java.executionSetup.TestParameters;
 import main.java.reporting.HtmlReport;
 import main.java.testDataAccess.DataTable;
+import main.java.utils.Utility;
 
-public class ReusableLibrary {
+public class ReusableLibrary extends Utility{
 
-	@SuppressWarnings("rawtypes")	
 	public WebDriver webdriver;
-	public ExtentTest test;
-	public DataTable dataTable;
-	public TestParameters testParameters;
-	public static Properties properties;
-	public static Properties distributedRuntimeDataProperties;
-	public Properties parallelRuntimeDataProperties;
-	public static Properties testRailProperties;
-	public static LinkedHashMap<String, String> environmentVariables;
-	int verifyCounter = 0;
-	public Lock lock;
-	public Connection connection;
+
 
 	@SuppressWarnings("rawtypes")
 	public ReusableLibrary(ExtentTest test, WebDriver webdriver, DataTable dataTable, TestParameters testParameters,
 			Lock lock, Connection connection) {
-		this.test = test;
+		super(test, webdriver, dataTable, testParameters, lock, connection);
 		this.webdriver = webdriver;
-		this.dataTable = dataTable;
-		this.testParameters = testParameters;
-		this.lock = lock;
-		this.connection = connection;
 	}
-
 
 	@SuppressWarnings("rawtypes")
 	public ReusableLibrary(ExtentTest test, WebDriver webdriver, DataTable dataTable, TestParameters testParameters,
 			Lock lock, Connection connection, Properties runtimeDataProperties) {
-		this.test = test;
+		super(test, webdriver, dataTable, testParameters, lock, connection);
 		this.webdriver = webdriver;
-		this.dataTable = dataTable;
-		this.testParameters = testParameters;
-		this.lock = lock;
-		this.connection = connection;
-		this.parallelRuntimeDataProperties = runtimeDataProperties;
 	}
 
 	public ReusableLibrary() {
 
-	}
-
-	@SuppressWarnings("static-access")
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
-	@SuppressWarnings("static-access")
-	public void setRuntimeDataProperties(Properties runtimeDataProperties) {
-		this.distributedRuntimeDataProperties = runtimeDataProperties;
-	}
-
-	@SuppressWarnings("static-access")
-	public void setTestRailProperties(Properties testRailProperties) {
-		this.testRailProperties = testRailProperties;
-	}
-
-	@SuppressWarnings("static-access")
-	public Properties getTestRailProperties() {
-		return this.testRailProperties;
-	}
-
-	@SuppressWarnings("static-access")
-	public Properties getRuntimeDataProperties() {
-		return this.distributedRuntimeDataProperties;
-	}
-
-	@SuppressWarnings("static-access")
-	public void setEnvironmentVariables(LinkedHashMap<String, String> environmentVariables) {
-		this.environmentVariables = environmentVariables;
-	}
-
-	public static String getCurrentFormattedTime(String format) {
-		DateFormat dateFormat = new SimpleDateFormat(format);
-		Calendar calendar = Calendar.getInstance();
-		return dateFormat.format(calendar.getTime());
 	}
 
 	public void EnterText(By by, String reportName, String text) throws TimeoutException, NoSuchElementException {
