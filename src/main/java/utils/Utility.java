@@ -45,7 +45,7 @@ import com.relevantcodes.extentreports.LogStatus;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import main.java.businessComponents.MOBILE.AIRTEL.RoutineObjectRepository;
+import main.java.MOBILE.AIRTEL.RoutineObjectRepository;
 import main.java.executionSetup.TestParameters;
 import main.java.reporting.HtmlReport;
 import main.java.testDataAccess.DataTable;

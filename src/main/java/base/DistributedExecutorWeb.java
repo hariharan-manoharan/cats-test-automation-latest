@@ -154,7 +154,7 @@ public class DistributedExecutorWeb extends Utility implements Runnable {
 	private void executeKeywords(LinkedHashMap<String, String> keywords) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		
 		
-		Class<?> className = Class.forName("main.java.businessComponents." + executionType + "." + properties.getProperty("Project") + ".FunctionalComponents");
+		Class<?> className = Class.forName("main.java." + executionType + "." + properties.getProperty("Project") + ".FunctionalComponents");
 		Constructor<?> constructor = className.getDeclaredConstructors()[0];
 		Object classInstance = constructor.newInstance(test, webdriver, dataTable, testParameters, lock, connection);
 		

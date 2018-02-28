@@ -1,4 +1,4 @@
-package main.java.businessComponents.MOBILE.AIRTEL;
+package main.java.MOBILE.AIRTEL;
 
 import java.io.File;
 import java.io.IOException;
