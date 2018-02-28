@@ -28,7 +28,7 @@ public interface WebObjectRepository {
 	By xpath_btn_popup_close = By.xpath("//form[@class = \'dataform-form form\']//a[contains(text(),\'Close\')]");
 	By xpath_btn_popup_clear = By.xpath("//button[contains(text(),\'Clear\')]");
 	By xpath_btn_popup_delete = By.xpath("//button[contains(text(),\'Delete\')]");
-	String xpath_btn_format = "//div[not(contains(@style,\'display: none;\')) and @class = \'dataform-tab tab-content has-action-bar\']'//div[normalize-space(text())=\'%s\']";
+	String xpath_btn_format = "//div[not(contains(@style,\'display: none;\')) and @class = \'dataform-tab tab-content has-action-bar\']//div[normalize-space(text())=\'%s\']";
 
 	
 	
