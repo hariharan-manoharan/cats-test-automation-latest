@@ -50,6 +50,11 @@ public interface CommonObjectRepository {
 	By xpath_client_folder = By.xpath("//div[@class = \'nav-tree-item-label\' and contains(text(),\'Client\')]");
 	String xpath_dataform_folder = "//div[@class = \'nav-tree-item-label\' and @style = \'padding-left: 20px;\' and contains(text(),\'%s\')]";
 	String xpath_data_form = "//div[@class = \'nav-tree-item unselectable nav-tree-item-dataform\']/div[contains(text(),\'%s\')]";
-
-
+	
+	
+	
+	String xpath_textbox = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]/following-sibling::input";
+	String xpath_combobox = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::div//input";
+	String xpath_select = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::select";
+	String xpath_textarea = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::textarea";
 }
