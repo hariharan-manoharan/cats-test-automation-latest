@@ -809,6 +809,8 @@ public class Main{
 
 		if(Envapp.equalsIgnoreCase(Envdata)) {
 
+            androidDriverList.get(driverIndex).findElement(By.id("username")).sendKeys("catsadm");;
+            androidDriverList.get(driverIndex).findElement(By.id("password")).sendKeys("catscats11");;
 
 			androidDriverList.get(driverIndex).findElement(By.id("btn_connect")).click();	
 			waitCommand(By.id("action_bar_title"), androidDriverList.get(driverIndex));
