@@ -9,26 +9,29 @@ public interface CommonObjectRepository {
 	
 	// Locator Type :: id
 	
-	By id_txt_user_name = By.id("j_username");
-	By id_txt_password = By.id("j_password");
+	By ID_TEXT_USERNAME = By.id("j_username");	
+	By ID_TEXT_PASSWORD = By.id("j_password");
 	
 	
 	//************************************************************** Buttons **************************************************************
 	
 	// Locator Type :: id
 	
-	By id_btn_login = By.id("loginBtn");	
+	By ID_BTN_LOGIN = By.id("loginBtn");	
 	
 	// Locator Type :: xpath
 	
-	By xpath_btn_popup_yes = By.xpath("//button[contains(text(),\'Yes\')]");
-	By xpath_btn_popup_no = By.xpath("//button[contains(text(),\'No\')]");
-	By xpath_btn_popup_save = By.xpath("//button[contains(text(),\'Save\')]");
-	By xpath_btn_popup_back = By.xpath("//button[contains(text(),\'Back\')]");
-	By xpath_btn_popup_close = By.xpath("//form[@class = \'dataform-form form\']//a[contains(text(),\'Close\')]");
-	By xpath_btn_popup_clear = By.xpath("//button[contains(text(),\'Clear\')]");
-	By xpath_btn_popup_delete = By.xpath("//button[contains(text(),\'Delete\')]");
-	String xpath_btn_format = "//div[not(contains(@style,\'display: none;\')) and @class = \'dataform-tab tab-content has-action-bar\']//div[normalize-space(text())=\'%s\']";
+	By XPATH_BTN_POPUP_YES = By.xpath("//button[contains(text(),\'Yes\')]");
+	By XPATH_BTN_POPUP_NO = By.xpath("//button[contains(text(),\'No\')]");
+	By XPATH_BTN_POPUP_SAVE = By.xpath("//button[contains(text(),\'Save\')]");
+	By XPATH_BTN_POPUP_BACK = By.xpath("//button[contains(text(),\'Back\')]");
+	By XPATH_BTN_POPUP_CLOSE = By.xpath("//form[@class = \'dataform-form form\']//a[contains(text(),\'Close\')]");
+	By XPATH_BTN_POPUP_CLEAR = By.xpath("//button[contains(text(),\'Clear\')]");
+	By XPATH_BTN_POPUP_DELETE = By.xpath("//button[contains(text(),\'Delete\')]");
+	String XPATH_BTN_FORMAT = "//div[not(contains(@style,\'display: none;\')) and @class = \'dataform-tab tab-content has-action-bar\']//div[normalize-space(text())=\'%s\']";
+	
+	By XPATH_SEARCH_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Search"));
+	By XPATH_CLEAR_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Clear"));
 
 	
 	
@@ -37,9 +40,9 @@ public interface CommonObjectRepository {
 	
 	// Locator Type :: xpath
 	
-	By xpath_link_search_tab = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Search\')]");
-	By xpath_link_results_tab = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Results\')]");
-	By xpath_link_edit_tab = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Edit\')]");
+	By XPATH_LINK_SEARCH_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Search\')]");
+	By XPATH_LINK_RESULTS_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Results\')]");
+	By XPATH_LINK_EDIT_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Edit\')]");
 
 	
 	
@@ -47,16 +50,16 @@ public interface CommonObjectRepository {
 	
 	// Locator Type :: xpath
 	
-	By xpath_client_folder = By.xpath("//div[@class = \'nav-tree-item-label\' and contains(text(),\'Client\')]");
-	String xpath_dataform_folder = "//div[@class = \'nav-tree-item-label\' and @style = \'padding-left: 20px;\' and contains(text(),\'%s\')]";
-	String xpath_data_form = "//div[@class = \'nav-tree-item unselectable nav-tree-item-dataform\']/div[contains(text(),\'%s\')]";
+	By XPATH_CLIENT_FOLDER = By.xpath("//div[@class = \'nav-tree-item-label\' and contains(text(),\'Client\')]");
+	String XPATH_DATAFORM_FOLDER = "//div[@class = \'nav-tree-item-label\' and @style = \'padding-left: 20px;\' and contains(text(),\'%s\')]";
+	String XPATH_DATAFORM = "//div[@class = \'nav-tree-item unselectable nav-tree-item-dataform\']/div[contains(text(),\'%s\')]";
 	
 	
 	
-	String xpath_textbox = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]/following-sibling::input";
-	String xpath_combobox = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::div//input";
-	String xpath_select = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::select";
-	String xpath_textarea = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::textarea";
-	String xpath_dataform_title = "//div[@class='dataform_title']";
+	String XPATH_TEXTBOX = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]/following-sibling::input";
+	String XPATH_COMBOBOX = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[normalize-space(text())= '%s']//following-sibling::div//input";
+	String XPATH_SELECT = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::select";
+	String XPATH_TEXTAREA = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::textarea";
+	String XPATH_DATAFORM_TITLE = "//div[@class='dataform_title']";
 
 }

@@ -36,6 +36,7 @@ public class FunctionalComponents extends Utility{
 	public void parts_dataform() {
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
 		parts.selectDataForm("Parts", "Parts", "Parts");
+		parts.openSearch();
 	}
 	
 

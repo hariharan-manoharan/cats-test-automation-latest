@@ -35,10 +35,10 @@ public class LoginPage extends ReusableLibrary implements CommonObjectRepository
 	
 	public void login() {		
 
-		EnterText(id_txt_user_name, "Enter Username", "catsadm");
-		EnterText(id_txt_password, "Enter Password", "catscats11");
-		waitCommand(id_btn_login);
-		Click(id_btn_login, "Login button");
+		EnterText(ID_TEXT_USERNAME, "Enter Username", "catsadm");
+		EnterText(ID_TEXT_PASSWORD, "Enter Password", "catscats11");
+		waitCommand(ID_BTN_LOGIN);
+		Click(ID_BTN_LOGIN, "Login button");
 
 		if (webdriver.getTitle().equals("CATS CenterPoint: CenterPoint")) {
 			test.log(LogStatus.PASS, "Login to Center Point is success");

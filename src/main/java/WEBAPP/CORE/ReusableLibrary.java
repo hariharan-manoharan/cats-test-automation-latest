@@ -55,22 +55,6 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 	}
 
-	public void EnterText(By by, String reportName, String text) throws TimeoutException, NoSuchElementException {
-
-		waitCommand(by);
-		WebElement element = webdriver.findElement(by);
-		element.sendKeys(text);
-		takeScreenshot(reportName);
-
-	}
-
-	public void Click(By by, String reportName) throws TimeoutException, NoSuchElementException {
-
-		waitCommand(by);
-		webdriver.findElement(by).click();
-		takeScreenshot(reportName);
-
-	}
 
 	public void takeScreenshot(String reportName) {
 
@@ -127,9 +111,9 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	
 	public void selectDataForm( String dataforFolder, String dataform, String dataFormLabel) {
 		
-		Click(xpath_client_folder, "Click Client folder");
-		Click(By.xpath(String.format(xpath_dataform_folder,dataforFolder)), "Click Data form folder - "+dataforFolder);
-		Click(By.xpath(String.format(xpath_data_form,dataform)), "Click Data form - " +dataform);	
+		Click(XPATH_CLIENT_FOLDER, "Click Client folder");
+		Click(By.xpath(String.format(XPATH_DATAFORM_FOLDER,dataforFolder)), "Click Data form folder - "+dataforFolder);
+		Click(By.xpath(String.format(XPATH_DATAFORM,dataform)), "Click Data form - " +dataform);	
 		
 		
 		if(isDisplayed(By.xpath("//div[contains(text(),\'"+dataFormLabel+"\') and @class='dataform_title']"))) {
@@ -137,6 +121,24 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		}else {
 			test.log(LogStatus.FAIL, dataform + " is not selected successfully");
 		}
+	}
+	
+	
+	public void EnterText(By by, String reportName, String text) throws TimeoutException, NoSuchElementException {
+
+		waitCommand(by);
+		WebElement element = webdriver.findElement(by);
+		element.sendKeys(text);
+		takeScreenshot(reportName);
+
+	}
+
+	public void Click(By by, String reportName) throws TimeoutException, NoSuchElementException {
+
+		waitCommand(by);
+		webdriver.findElement(by).click();
+		takeScreenshot(reportName);
+
 	}
 	
 	public boolean isDisplayed(By by) {
@@ -148,6 +150,13 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		}else {
 			return false;
 		}
+		
+	}
+	
+	public String getText(By by) {		
+		
+		waitCommand(by);			
+		return webdriver.findElement(by).getText();		
 		
 	}
 
