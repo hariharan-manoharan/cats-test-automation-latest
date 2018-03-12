@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import com.relevantcodes.extentreports.ExtentTest;
 
 import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
+import main.java.WEBAPP.CORE.pages.Assets;
 import main.java.WEBAPP.CORE.pages.LoginPage;
 import main.java.WEBAPP.CORE.pages.Parts;
 import main.java.framework.executionSetup.TestParameters;
@@ -40,8 +41,9 @@ public class FunctionalComponents extends Utility{
 	}
 	
 	public void assets_dataform() {
-		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
-		parts.selectDataForm("Assets", "Assets", "Assets");
+		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
+		assets.selectDataForm("Assets", "Assets", "Assets");
+		assets.assetcodesearch();
 	}
 	
 	
