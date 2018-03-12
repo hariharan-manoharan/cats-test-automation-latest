@@ -286,6 +286,7 @@ public class DistributedExecutorWeb extends Utility implements Runnable {
 	private  void intializeWebDriver() {
 
 		webdriver = WebDriverFactory.getDriver(testParameters.getBROWSER_NAME());
+		webdriver.manage().window().maximize();
 
 	}
 }
