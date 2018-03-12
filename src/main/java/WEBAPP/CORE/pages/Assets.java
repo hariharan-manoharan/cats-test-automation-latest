@@ -3,6 +3,7 @@ package main.java.WEBAPP.CORE.pages;
 import java.sql.Connection;
 import java.util.concurrent.locks.Lock;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.relevantcodes.extentreports.ExtentTest;
@@ -22,7 +23,10 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 	
 	public void assetcodesearch() {
 		
-		EnterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
+		//EnterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
+		click(XPATH_SEARCH_BTN, "Click Search button");
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
+		clickEditIcon(2);
 		
 	}
 }
