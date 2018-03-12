@@ -26,12 +26,13 @@ import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 import io.appium.java_client.android.AndroidDriver;
+import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
 import main.java.framework.executionSetup.TestParameters;
 import main.java.framework.reporting.HtmlReport;
 import main.java.framework.testDataAccess.DataTable;
 import main.java.framework.utils.Utility;
 
-public class ReusableLibrary extends Utility{
+public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 	public WebDriver webdriver;
 
@@ -122,4 +123,32 @@ public class ReusableLibrary extends Utility{
 		wait.until(function);
 
 	}
+	
+	
+	public void selectDataForm( String dataforFolder, String dataform, String dataFormLabel) {
+		
+		Click(xpath_client_folder, "Click Client folder");
+		Click(By.xpath(String.format(xpath_dataform_folder,dataforFolder)), "Click Data form folder - "+dataforFolder);
+		Click(By.xpath(String.format(xpath_data_form,dataform)), "Click Data form - " +dataform);	
+		
+		
+		if(isDisplayed(By.xpath("//div[contains(text(),\'"+dataFormLabel+"\') and @class='dataform_title']"))) {
+			test.log(LogStatus.PASS, dataform + " is selected successfully");
+		}else {
+			test.log(LogStatus.FAIL, dataform + " is not selected successfully");
+		}
+	}
+	
+	public boolean isDisplayed(By by) {
+		
+		waitCommand(by);
+		
+		if(webdriver.findElement(by).isDisplayed()) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+
 }

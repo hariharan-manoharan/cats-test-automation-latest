@@ -57,4 +57,6 @@ public interface CommonObjectRepository {
 	String xpath_combobox = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::div//input";
 	String xpath_select = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::select";
 	String xpath_textarea = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::textarea";
+	String xpath_dataform_title = "//div[@class='dataform_title']";
+
 }

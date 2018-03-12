@@ -781,13 +781,13 @@ public class CustomLibrary extends ReusableLibrary implements RoutineObjectRepos
 				while (rs.next()) {
 					rs.getObject(1);
 					trxidActual = rs.getString("TRANSACTION_ID");
-					if (!trxidActual.equals(null)) {
+					if (!trxidActual.isEmpty()) {
 						break;
 					}
 					
 				}
 				
-				if(!trxidActual.equals(null)) {
+				if(!trxidActual.isEmpty()) {
 					if(trxidExpected.equalsIgnoreCase(trxidActual)) {
 						test.log(LogStatus.PASS, "<b>"+arguments[2]+":</b>TRANSACTION_ID in CATSCUST_POQUARANTINE and CATSCUST_MRR  matched for line with Partcode ("+getRuntimeTestdata(arguments[0])+").</br>"
 													+ "<b>Expected </b> - "+trxidExpected+ "</br>"

@@ -9,6 +9,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import main.java.WEBAPP.CORE.ReusableLibrary;
 import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
+import main.java.WEBAPP.CORE.pageObjectRepositories.PartsInterface;
 import main.java.framework.executionSetup.TestParameters;
 import main.java.framework.testDataAccess.DataTable;
 
@@ -47,17 +48,4 @@ public class LoginPage extends ReusableLibrary implements CommonObjectRepository
 
 	}
 	
-	public void selectDataForm(String dataform, String dataforFolder) {
-		
-		Click(xpath_client_folder, "Click Client folder");
-		Click(By.xpath(String.format(xpath_dataform_folder,dataforFolder)), "Click Data form folder - "+dataforFolder);
-		Click(By.xpath(String.format(xpath_data_form,dataform)), "Click Data form - " +dataform);
-		
-		
-	}
-	
-	public void clickSearchButton() {
-		
-	}
-
 }

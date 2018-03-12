@@ -4,14 +4,18 @@ import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.locks.Lock;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.relevantcodes.extentreports.ExtentTest;
 
+import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
 import main.java.WEBAPP.CORE.pages.LoginPage;
+import main.java.WEBAPP.CORE.pages.Parts;
 import main.java.framework.executionSetup.TestParameters;
 import main.java.framework.testDataAccess.DataTable;
 import main.java.framework.utils.Utility;
+import net.sf.ehcache.transaction.xa.commands.Command;
 
 public class FunctionalComponents extends Utility{
 
@@ -27,14 +31,14 @@ public class FunctionalComponents extends Utility{
 		LoginPage loginPage = new LoginPage(test,webdriver,dataTable,testParameters,lock,connection);
 		loginPage.launchApp();
 		loginPage.login();
-		loginPage.selectDataForm("Assets", "Assets");
 	}	
 	
-	public void openSearch(String dataForm) {
-		
-		
-						
+	public void parts_dataform() {
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
+		parts.selectDataForm("Parts", "Parts", "Parts");
 	}
+	
+
 	
 	
 	
