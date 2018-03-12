@@ -39,7 +39,11 @@ public class FunctionalComponents extends Utility{
 		parts.openSearch();
 	}
 	
-
+	public void assets_dataform() {
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
+		parts.selectDataForm("Assets", "Assets", "Assets");
+	}
+	
 	
 	
 	
