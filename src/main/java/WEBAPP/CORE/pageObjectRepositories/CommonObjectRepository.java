@@ -62,4 +62,7 @@ public interface CommonObjectRepository {
 	String XPATH_TEXTAREA = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]//following-sibling::textarea";
 	String XPATH_DATAFORM_TITLE = "//div[@class='dataform_title']";
 
+	
+	By XPATH_RESULTTAB_EDITICON = By.xpath("//a[@class = 'btn btn-xs btn-default']");
+	By XPATH_EDITTAB_PAGINATION = By.xpath("//div[@class='vue-portal-target']//div[@class='fcm-pagination_details']");
 }
