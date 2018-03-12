@@ -38,7 +38,11 @@ public class FunctionalComponents extends Utility{
 		parts.selectDataForm("Parts", "Parts", "Parts");
 	}
 	
-
+	public void assets_dataform() {
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
+		parts.selectDataForm("Assets", "Assets", "Assets");
+	}
+	
 	
 	
 	
