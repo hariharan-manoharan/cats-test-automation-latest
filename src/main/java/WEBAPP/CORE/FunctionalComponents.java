@@ -23,9 +23,6 @@ public class FunctionalComponents extends Utility{
 	public FunctionalComponents(ExtentTest test, WebDriver webdriver, DataTable dataTable,
 			TestParameters testParameters, Lock lock, Connection connection) {
 		super(test,webdriver,dataTable,testParameters,lock,connection);
-		
-		
-
 	}
 	
 	public void login() {
@@ -37,7 +34,7 @@ public class FunctionalComponents extends Utility{
 	public void parts_dataform() {
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
 		parts.selectDataForm("Parts", "Parts", "Parts");
-		parts.openSearch();
+		parts.partcodeSearch();
 	}
 	
 	public void assets_dataform() {

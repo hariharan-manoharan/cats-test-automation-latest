@@ -7,11 +7,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.rules.Timeout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -19,7 +21,10 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -56,16 +61,28 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 
 
-	public void takeScreenshot(String reportName) {
+	public void report(LogStatus status, String reportName) {
 
 		if (properties.getProperty("take.screenshot.on.pass").equalsIgnoreCase("True")) {
-			test.log(LogStatus.PASS, reportName,
-					"<b>Screenshot: <b>" + test.addScreenCapture("./" + screenShot() + ".png"));
-		} else {
-			test.log(LogStatus.PASS, reportName);
-		}
 
+			if (status.equals(LogStatus.PASS)) {
+				test.log(LogStatus.PASS, reportName,
+						"<b>Screenshot: <b>" + test.addScreenCapture("./" + screenShot() + ".png"));
+			} else if (status.equals(LogStatus.FAIL)) {
+				test.log(LogStatus.FAIL, reportName,
+						"<b>Screenshot: <b>" + test.addScreenCapture("./" + screenShot() + ".png"));
+			}
+		} else {
+
+			if (status.equals(LogStatus.PASS)) {
+				test.log(LogStatus.PASS, reportName);
+			} else if (status.equals(LogStatus.FAIL)) {
+				test.log(LogStatus.FAIL, reportName);
+			}
+		}
 	}
+
+
 
 	public String screenShot() {
 
@@ -109,11 +126,19 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	
+	public void waitUntilNotDisplayed(final By by) throws TimeoutException, NoSuchElementException {
+
+		WebDriverWait wait = new WebDriverWait(webdriver,20 ); 
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(by));	
+
+	}
+	
+	
 	public void selectDataForm( String dataforFolder, String dataform, String dataFormLabel) {
 		
-		Click(XPATH_CLIENT_FOLDER, "Click Client folder");
-		Click(By.xpath(String.format(XPATH_DATAFORM_FOLDER,dataforFolder)), "Click Data form folder - "+dataforFolder);
-		Click(By.xpath(String.format(XPATH_DATAFORM,dataform)), "Click Data form - " +dataform);	
+		click(XPATH_CLIENT_FOLDER, "Click Client folder");
+		click(By.xpath(String.format(XPATH_DATAFORM_FOLDER,dataforFolder)), "Click Data form folder - "+dataforFolder);
+		click(By.xpath(String.format(XPATH_DATAFORM,dataform)), "Click Data form - " +dataform);	
 		
 		
 		if(isDisplayed(By.xpath("//div[contains(text(),\'"+dataFormLabel+"\') and @class='dataform_title']"))) {
@@ -124,7 +149,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	
-	public void EnterText(By by, String reportName, String text) throws TimeoutException, NoSuchElementException {
+	public void enterText(By by, String reportName, String text) throws TimeoutException, NoSuchElementException {
 
 		waitCommand(by);
 		WebElement element = webdriver.findElement(by);
@@ -133,7 +158,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 	}
 
-	public void Click(By by, String reportName) throws TimeoutException, NoSuchElementException {
+	public void click(By by, String reportName) throws TimeoutException, NoSuchElementException {
 
 		waitCommand(by);
 		webdriver.findElement(by).click();
@@ -157,6 +182,26 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		
 		waitCommand(by);			
 		return webdriver.findElement(by).getText();		
+		
+	}
+	
+	
+	public void clickEditIcon(int rowNumber) {
+		
+		List<WebElement> rows = webdriver.findElements(XPATH_RESULTTAB_EDITICON);		
+		rows.get(rowNumber - 1).click();
+		
+		waitCommand(XPATH_EDITTAB_PAGINATION);
+				
+		String paginationDetails = webdriver.findElement(XPATH_EDITTAB_PAGINATION).getText();
+		
+		String[] splitpaginationDetails = paginationDetails.split("of");
+		
+		if(rowNumber == Integer.parseInt(splitpaginationDetails[0].trim())) {
+			report(LogStatus.PASS,"Edit icon of row "+ rowNumber+" is clicked successfully");
+		}else {		 
+			report(LogStatus.FAIL,"Edit icon of row "+ rowNumber+" is not clicked successfully");
+		}
 		
 	}
 
