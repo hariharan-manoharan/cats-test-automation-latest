@@ -23,10 +23,19 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 	
 	public void assetcodesearch() {
 		
-		//EnterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
+		enterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
+		click(XPATH_SEARCH_BTN, "Click Search button");
+
+		
+	}
+	
+	public void editassetcode() {
+		
+		enterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
 		click(XPATH_SEARCH_BTN, "Click Search button");
 		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
 		clickEditIcon(2);
+		
 		
 	}
 }
