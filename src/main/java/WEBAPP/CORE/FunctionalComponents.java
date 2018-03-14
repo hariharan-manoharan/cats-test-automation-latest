@@ -41,6 +41,7 @@ public class FunctionalComponents extends Utility{
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
 		assets.selectDataForm("Assets", "Assets", "Assets");
 		assets.assetcodesearch();
+		assets.editassetcode();
 	}
 	
 	
