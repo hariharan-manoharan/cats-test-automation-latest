@@ -35,18 +35,57 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		
 	}
 	
-	public void openSearch() {
+	public void clickSearchBtn() {
 		
 		click(XPATH_SEARCH_BTN, "Click Search button");
 		
 	}
 	
 	
+	public void clickClearBtn() {
+		
+		click(XPATH_CLEAR_BTN, "Click Clear button");
+		
+	}
+	
+	public void clickClearPopupBtn() {
+		
+		click(XPATH_BTN_POPUP_CLEAR, "Click Clear Popup button");
+		
+	}
+	
+	public void clickSearchTab() {
+		
+		click(XPATH_LINK_SEARCH_TAB, "Click Search button");
+		
+	}
+	
+	public void clickResultTab() {
+		
+		click(XPATH_LINK_RESULTS_TAB, "Click Search button");
+		
+	}
+	
+	public void clickEditTab() {
+		
+		click(XPATH_LINK_EDIT_TAB, "Click Search button");
+		
+	}
+	
+	
+	public void clearText(By by) {
+		
+		webdriver.findElement(by).clear();
+		
+	}
+	
+	
+	
+	
 	public void createNewPartSerialized() {
 		
-		String partcode = "ASPARTCODE_"+generateRandomNum(1000);
-		
-		click(XPATH_LINK_EDIT_TAB, "Click Edit tab");
+		String partcode = "ASPARTCODE_"+generateRandomNum(1000);		
+
 		enterText(PARTS_PARTCODE_COMBO_EDIT, "Enter Part code in part code field", partcode);
 		enterText(PARTS_DESCRIPTION_TXT, "Enter Part code in part code field", "DESCRIPTION "+ partcode);
 		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, "ALPHA TECHNOLOGIES", "Select Manufacturer - ALPHA TECHNOLOGIES");
@@ -54,15 +93,49 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		click(XPATH_BTN_POPUP_SAVE, "Click Pop-up Save button");
 		click(XPATH_BTN_POPUP_OK, "Click Pop-up Ok button");
 		click(XPATH_LINK_SEARCH_TAB, "Click Search tab");
+		clearText(PARTS_PARTCODE_COMBO);
 		enterText(PARTS_PARTCODE_COMBO, "Enter Part code in part code field", partcode);
 		click(XPATH_SEARCH_BTN, "Click Search button");
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));	
 		clickEditIcon(1);
-
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));	
+		
+			
+		if(webdriver.findElement(PARTS_PARTCODE_COMBO_EDIT).getAttribute("value").equals(partcode)) {
+			test.log(LogStatus.PASS, "New Part code is created successfully - Partcode: "+partcode);	
+		}else {
+			test.log(LogStatus.FAIL, "New Part code is not created successfully");
+		}
+		
 	}
 	
 
 	public void createNewPartNonSerialized() {
+		
+		
+		String partcode = "ANSPARTCODE_"+generateRandomNum(1000);		
+
+		enterText(PARTS_PARTCODE_COMBO_EDIT, "Enter Part code in part code field", partcode);
+		enterText(PARTS_DESCRIPTION_TXT, "Enter Part code in part code field", "DESCRIPTION "+ partcode);
+		click(PARTS_SERIALIZEDINVENTORY_EDIT_CHECKBOX, "Un check ");	
+		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, "ALPHA TECHNOLOGIES", "Select Manufacturer - ALPHA TECHNOLOGIES");
+		click(XPATH_SAVE_BTN, "Click Save button");	
+		click(XPATH_BTN_POPUP_SAVE, "Click Pop-up Save button");
+		click(XPATH_BTN_POPUP_OK, "Click Pop-up Ok button");
+		click(XPATH_LINK_SEARCH_TAB, "Click Search tab");
+		clearText(PARTS_PARTCODE_COMBO);
+		enterText(PARTS_PARTCODE_COMBO, "Enter Part code in part code field", partcode);
+		click(XPATH_SEARCH_BTN, "Click Search button");
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
+		clickEditIcon(1);
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));	
+		
+		if(webdriver.findElement(PARTS_PARTCODE_COMBO_EDIT).getAttribute("value").equals(partcode)) {
+			test.log(LogStatus.PASS, "New Part code is created successfully - Partcode: "+partcode);	
+		}else {
+			test.log(LogStatus.FAIL, "New Part code is not created successfully");
+		}
+		
 		
 	}
 	

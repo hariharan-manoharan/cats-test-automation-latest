@@ -219,7 +219,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		waitCommand(by);		
 		Select select = new Select(webdriver.findElement(by));		
 		select.selectByVisibleText(text);
-		takeScreenshot(reportName);
+		takeScreenshot(reportName + " is successfull");
 		}catch(Exception e) {
 			test.log(LogStatus.FAIL, reportName + " is not successfull");
 		}
