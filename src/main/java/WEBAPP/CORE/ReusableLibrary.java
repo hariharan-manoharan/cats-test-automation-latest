@@ -188,7 +188,9 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	
 	public void clickEditIcon(int rowNumber) {
 		
-		List<WebElement> rows = webdriver.findElements(XPATH_RESULTTAB_EDITICON);		
+		List<WebElement> rows = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
+		
+		if(rows.size()>0) {
 		rows.get(rowNumber - 1).click();
 		
 		waitCommand(XPATH_EDITTAB_PAGINATION);
@@ -201,6 +203,9 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 			report(LogStatus.PASS,"Edit icon of row "+ rowNumber+" is clicked successfully");
 		}else {		 
 			report(LogStatus.FAIL,"Edit icon of row "+ rowNumber+" is not clicked successfully");
+		}
+		}else {
+			report(LogStatus.WARNING,"Zero records retreived. Cannot perform Click Edit icon");
 		}
 		
 	}
