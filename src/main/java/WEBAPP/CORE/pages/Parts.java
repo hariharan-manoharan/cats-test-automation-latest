@@ -67,19 +67,7 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 	}
 	
 	
-	
-	public void selectValueByVisibleText(By by, String text, String reportName) {
-		
-		try {
-		waitCommand(by);		
-		Select select = new Select(webdriver.findElement(by));		
-		select.selectByVisibleText(text);
-		takeScreenshot(reportName);
-		}catch(Exception e) {
-			test.log(LogStatus.FAIL, reportName + " is not successfull");
-		}
-		
-	}
+
 	
 
 }

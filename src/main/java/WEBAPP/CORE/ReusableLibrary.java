@@ -24,6 +24,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
@@ -206,6 +207,21 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		}
 		}else {
 			report(LogStatus.WARNING,"Zero records retreived. Cannot perform Click Edit icon");
+		}
+		
+	}
+	
+	
+	
+	public void selectValueByVisibleText(By by, String text, String reportName) {
+		
+		try {
+		waitCommand(by);		
+		Select select = new Select(webdriver.findElement(by));		
+		select.selectByVisibleText(text);
+		takeScreenshot(reportName);
+		}catch(Exception e) {
+			test.log(LogStatus.FAIL, reportName + " is not successfull");
 		}
 		
 	}
