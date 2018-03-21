@@ -6,10 +6,11 @@ public interface PartsInterface extends CommonObjectRepository {
 
 
 final By PARTS_PARTCODE_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Part Code")); 
+final By PARTS_PARTCODE_COMBO_EDIT = By.xpath(String.format(XPATH_TEXTBOX, "Part Code")); 
 final By PARTS_TRANSLATIONCODE_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Translation Code"));  
 final By PARTS_BUSINESSUNIT_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Business Unit"));  
 final By PARTS_TRACKEDFORENVIRONMENT_SELECT = By.xpath(String.format(XPATH_SELECT, "Tracked for Environment"));  
-final By PARTS_DSECRIPTION_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Description"));  
+final By PARTS_DESCRIPTION_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Description"));  
 final By PARTS_TRACKEDFORSAFTEY_SELECT = By.xpath(String.format(XPATH_SELECT, "Tracked for Safety"));  
 final By PARTS_OLDPARTCODE_COMBO = By.xpath(String.format(XPATH_TEXTBOX, "Old Part Code"));  
 final By PARTS_TRACKEDBYACCOUNTING_SELECT = By.xpath(String.format(XPATH_SELECT, "Tracked by Accounting"));  

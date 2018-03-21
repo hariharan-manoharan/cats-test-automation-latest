@@ -28,10 +28,12 @@ public interface CommonObjectRepository {
 	By XPATH_BTN_POPUP_CLOSE = By.xpath("//form[@class = \'dataform-form form\']//a[contains(text(),\'Close\')]");
 	By XPATH_BTN_POPUP_CLEAR = By.xpath("//button[contains(text(),\'Clear\')]");
 	By XPATH_BTN_POPUP_DELETE = By.xpath("//button[contains(text(),\'Delete\')]");
+	By XPATH_BTN_POPUP_OK = By.xpath("//button[contains(text(),\'Ok\')]");
 	String XPATH_BTN_FORMAT = "//div[not(contains(@style,\'display: none;\')) and @class = \'dataform-tab tab-content has-action-bar\']//div[normalize-space(text())=\'%s\']";
 	
 	By XPATH_SEARCH_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Search"));
 	By XPATH_CLEAR_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Clear"));
+	By XPATH_SAVE_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Save"));
 
 	
 	
@@ -44,7 +46,7 @@ public interface CommonObjectRepository {
 	By XPATH_LINK_RESULTS_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Results\')]");
 	By XPATH_LINK_EDIT_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Edit\')]");
 
-	
+	By XPATH_POPUP_TRANSACTION_SAVED = By.xpath("//div[contains(text(),'Transaction saved.')]");
 	
 	//************************************************************** Others ****************************************************************
 	
@@ -54,7 +56,7 @@ public interface CommonObjectRepository {
 	String XPATH_DATAFORM_FOLDER = "//div[@class = \'nav-tree-item-label\' and @style = \'padding-left: 20px;\' and contains(text(),\'%s\')]";
 	String XPATH_DATAFORM = "//div[@class = \'nav-tree-item unselectable nav-tree-item-dataform\']/div[contains(text(),\'%s\')]";
 	
-	
+	String XPATH_COMBOBOX_1 = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[normalize-space(text())= '%s']//following-sibling::div//a";
 	
 	String XPATH_TEXTBOX = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[contains(text(),'%s')]/following-sibling::input";
 	String XPATH_COMBOBOX = "//div[not(contains(@style,'display: none;')) and @class = 'dataform-tab tab-content has-action-bar']//label[normalize-space(text())= '%s']//following-sibling::div//input";

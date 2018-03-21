@@ -34,7 +34,7 @@ public class FunctionalComponents extends Utility{
 	public void parts_dataform() {
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
 		parts.selectDataForm("Parts", "Parts", "Parts");
-		parts.partcodeSearch();
+		parts.createNewPartSerialized();
 	}
 	
 	public void assets_dataform() {

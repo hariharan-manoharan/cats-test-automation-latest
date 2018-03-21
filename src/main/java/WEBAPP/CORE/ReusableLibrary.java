@@ -24,6 +24,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.common.base.Function;
@@ -188,7 +189,9 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	
 	public void clickEditIcon(int rowNumber) {
 		
-		List<WebElement> rows = webdriver.findElements(XPATH_RESULTTAB_EDITICON);		
+		List<WebElement> rows = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
+		
+		if(rows.size()>0) {
 		rows.get(rowNumber - 1).click();
 		
 		waitCommand(XPATH_EDITTAB_PAGINATION);
@@ -201,6 +204,24 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 			report(LogStatus.PASS,"Edit icon of row "+ rowNumber+" is clicked successfully");
 		}else {		 
 			report(LogStatus.FAIL,"Edit icon of row "+ rowNumber+" is not clicked successfully");
+		}
+		}else {
+			report(LogStatus.WARNING,"Zero records retreived. Cannot perform Click Edit icon");
+		}
+		
+	}
+	
+	
+	
+	public void selectValueByVisibleText(By by, String text, String reportName) {
+		
+		try {
+		waitCommand(by);		
+		Select select = new Select(webdriver.findElement(by));		
+		select.selectByVisibleText(text);
+		takeScreenshot(reportName);
+		}catch(Exception e) {
+			test.log(LogStatus.FAIL, reportName + " is not successfull");
 		}
 		
 	}
