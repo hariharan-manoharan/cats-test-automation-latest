@@ -62,6 +62,7 @@ public interface AssetInterface extends CommonObjectRepository {
 	final By ASSET_LASTSCANNED_TXT = By.xpath(String.format(XPATH_COMBOBOX, "Last Scanned By"));
 	final By ASSET_FRLSCANNED_TXT = By.xpath(String.format(XPATH_TEXTBOX, "From Last Scanned On Date"));
 	final By ASSET_TLSCANNED_TXT = By.xpath(String.format(XPATH_TEXTBOX, "To Last Scanned On Date"));
+	final By ASSET_NOTES_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Notes"));
 	
 	
 }
