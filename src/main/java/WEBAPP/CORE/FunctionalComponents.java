@@ -40,14 +40,14 @@ public class FunctionalComponents extends ReusableLibrary{
 		selectDataForm(dataformFolder, dataform, dataFormLabel);
 	}
 	
-	public void createSandNSPartcode() {
+/*	public void createSandNSPartcode() {
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);	
 		parts.clickEditTab();
 		parts.createNewPart("N");
 		parts.clickClearBtn();
 		parts.clickClearPopupBtn();
 		parts.createNewPart("Y");
-	}
+	}*/
 	
 	public void createNSPartcode() {
 		

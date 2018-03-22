@@ -161,6 +161,7 @@ public class DistributedExecutorWeb extends Utility implements Runnable {
 		for (Entry<String, String> map : keywords.entrySet()) {
 			
 			if(!map.getKey().equals("TC_ID")) {
+				testParameters.setCurrentKeywordColumnName(map.getKey());
 				String currentKeyword = map.getValue().substring(0,1).toLowerCase() + map.getValue().substring(1);
 				test.log(LogStatus.INFO, "<font size=2 face = Bedrock color=blue><b>"+currentKeyword.toUpperCase()+"</font></b>" );
 				Method method = className.getMethod(currentKeyword);
