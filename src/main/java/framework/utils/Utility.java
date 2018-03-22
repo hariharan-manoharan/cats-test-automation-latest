@@ -46,11 +46,12 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
 import main.java.MOBILE.AIRTEL.RoutineObjectRepository;
+import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
 import main.java.framework.executionSetup.TestParameters;
 import main.java.framework.reporting.HtmlReport;
 import main.java.framework.testDataAccess.DataTable;
 
-public class Utility implements RoutineObjectRepository{
+public class Utility implements RoutineObjectRepository, CommonObjectRepository{
 
 	@SuppressWarnings("rawtypes")
 	public AndroidDriver driver;
@@ -236,7 +237,7 @@ public class Utility implements RoutineObjectRepository{
 		String screenshotName = null;
 
 		screenshotName = getCurrentFormattedTime("dd_MMM_yyyy_hh_mm_ss_SSS");
-
+		
 		File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 		try {
 			

@@ -45,6 +45,8 @@ public interface CommonObjectRepository {
 	By XPATH_LINK_SEARCH_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Search\')]");
 	By XPATH_LINK_RESULTS_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Results\')]");
 	By XPATH_LINK_EDIT_TAB = By.xpath("//li[@class=\'tab\']/a[contains(text(),\'Edit\')]");
+	
+	By XPATH_LINK_ACTIVE_TAB= By.xpath("//li[@class=\'tab active\']/a");
 
 	By XPATH_POPUP_TRANSACTION_SAVED = By.xpath("//div[contains(text(),'Transaction saved.')]");
 	
