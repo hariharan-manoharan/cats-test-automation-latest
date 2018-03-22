@@ -35,10 +35,10 @@ public class FunctionalComponents extends Utility{
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
 		parts.selectDataForm("Parts", "Parts", "Parts");
 		parts.clickEditTab();
-		parts.createNewPartSerialized();
+		parts.createNewPart("N");
 		parts.clickClearBtn();
 		parts.clickClearPopupBtn();
-		parts.createNewPartNonSerialized();
+		parts.createNewPart("Y");
 	}
 	
 	public void assets_dataform() {
