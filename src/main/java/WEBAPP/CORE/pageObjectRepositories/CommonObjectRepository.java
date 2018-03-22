@@ -34,7 +34,7 @@ public interface CommonObjectRepository {
 	By XPATH_SEARCH_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Search"));
 	By XPATH_CLEAR_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Clear"));
 	By XPATH_SAVE_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Save"));
-
+	By XPATH_REFRESH_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Refresh"));
 	
 	
 	//************************************************************** Links ****************************************************************
@@ -67,4 +67,12 @@ public interface CommonObjectRepository {
 	
 	By XPATH_RESULTTAB_EDITICON = By.xpath("//a[@class = 'btn btn-xs btn-default']");
 	By XPATH_EDITTAB_PAGINATION = By.xpath("//div[@class='vue-portal-target']//div[@class='fcm-pagination_details']");
+	
+	String XPATH_BLOCKINGMESSAGE_HEADER="//div[@class='modal-content']//div//h4[contains(text(),'%s')]";
+	
+	By XPATH_ERROR_SAVING = By.xpath(String.format(XPATH_BLOCKINGMESSAGE_HEADER, "Error saving record"));
+	
+	By XPATH_BLOCKINGMESSAGE_CONTENT=By.xpath("//div[@style='text-align: center;']");
+	
+	
 }

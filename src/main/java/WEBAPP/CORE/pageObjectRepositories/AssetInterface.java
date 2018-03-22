@@ -5,12 +5,12 @@ import org.openqa.selenium.By;
 public interface AssetInterface extends CommonObjectRepository {
 	//XPATH_COMBOBOX
 	//XPATH_SELECT
-	//xpath_textarea ,XPATH_TEXTBOX
+	//XPATH_TEXTAREA ,XPATH_TEXTBOX
 	
 	final By ASSET_ASSETCODE_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Asset Code"));
 	final By ASSET_PARTCODE_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Part Code"));
 	final By ASSET_CLEI_TXT = By.xpath(String.format(XPATH_TEXTBOX, "CLEI™"));
-	final By ASSET_BUSINESSUNIT_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Business Unit Name"));
+	final By ASSET_BUSINESSUNIT_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Business Unit"));
 	final By ASSET_LOCATIONNAME_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Location Name"));
 	final By ASSET_LOCATIONSTATUS_COMBO = By.xpath(String.format(XPATH_COMBOBOX, "Location Status"));
 	final By ASSET_LOCATORCODE_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Locator Code"));
@@ -62,7 +62,7 @@ public interface AssetInterface extends CommonObjectRepository {
 	final By ASSET_LASTSCANNED_TXT = By.xpath(String.format(XPATH_COMBOBOX, "Last Scanned By"));
 	final By ASSET_FRLSCANNED_TXT = By.xpath(String.format(XPATH_TEXTBOX, "From Last Scanned On Date"));
 	final By ASSET_TLSCANNED_TXT = By.xpath(String.format(XPATH_TEXTBOX, "To Last Scanned On Date"));
-	final By ASSET_NOTES_TXT = By.xpath(String.format(XPATH_TEXTBOX, "Notes"));
+	final By ASSET_NOTES_TXTAREA = By.xpath(String.format(XPATH_TEXTAREA, "Notes"));
 	
 	
 }
