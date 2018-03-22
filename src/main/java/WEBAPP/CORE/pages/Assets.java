@@ -43,18 +43,36 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 		
 		click(XPATH_LINK_EDIT_TAB, "Click Edit button");
 		enterText(ASSET_ASSETCODE_TXT, "Asset Code", "AASSETCODE_001");
+		
 		enterText(ASSET_PARTCODE_COMBO, "Part Code", "10753");
+		sendTab(ASSET_PARTCODE_COMBO);
+		sendTab(ASSET_CLEI_TXT);
+		
+		
 		enterText(ASSET_BUSINESSUNIT_COMBO, "Business Unit", "ALPHA BUTYPE1");
+		sendTab(ASSET_BUSINESSUNIT_COMBO);
+		
 		enterText(ASSET_LOCATIONNAME_COMBO, "Location Name", "1BL1184");
+		sendTab(ASSET_LOCATIONNAME_COMBO);
+		
 		enterText(ASSET_LOCATIONSTATUS_COMBO, "Location Status", "AVAILABLE");
-		enterText(ASSET_NOTES_TXT, "Notes", "Automation Asset Creation");
+		sendTab(ASSET_LOCATIONSTATUS_COMBO);
 		
-		click(XPATH_LINK_EDIT_TAB, "Click Edit button");
+		moveToElement(ASSET_NOTES_TXTAREA,"Notes");
+		
+		enterText(ASSET_NOTES_TXTAREA, "Notes", "Automation Asset Creation");		
+		click(XPATH_SAVE_BTN, "Clicked Save button");
+		
+		click(XPATH_BTN_POPUP_SAVE, "Confirm Save button");
+		
+		if(isDisplayed( XPATH_ERROR_SAVING)) {
+					
+			getText(XPATH_BLOCKINGMESSAGE_CONTENT);	
+		
+		}
 		
 		
 		
 		
-		
-		
-	}
+}
 }
