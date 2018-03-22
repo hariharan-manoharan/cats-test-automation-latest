@@ -15,12 +15,14 @@ import java.util.concurrent.locks.Lock;
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.Timeout;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -178,7 +180,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		}
 		
 	}
-	
+/*	
 	public String getText(By by) {		
 		
 		waitCommand(by);			
@@ -186,7 +188,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		
 	}
 	
-	
+	*/
 	public void clickEditIcon(int rowNumber) {
 		
 		List<WebElement> rows = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
@@ -221,9 +223,46 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		select.selectByVisibleText(text);
 		takeScreenshot(reportName);
 		}catch(Exception e) {
-			test.log(LogStatus.FAIL, reportName + " is not successfull");
+			test.log(LogStatus.FAIL, reportName + " is not successfull"); 
 		}
 		
+	}
+	
+	public void sendTab(By by) {
+		try {
+			webdriver.findElement(by).sendKeys(Keys.TAB);
+			test.log(LogStatus.PASS, "TAB is successfull");
+		}catch(Exception e){
+			
+			test.log(LogStatus.FAIL,  "TAB is not successfull");
+		}				
+	}
+	
+	public void moveToElement(By by, String field) {		
+		try {
+		Actions builder = new Actions(webdriver);
+		WebElement ele = webdriver.findElement(by);
+        builder.moveToElement(ele).build().perform();
+        test.log(LogStatus.PASS, "Moved to "+field);
+        
+		}catch(Exception e) {
+		test.log(LogStatus.FAIL, "Moved to "+field);
+		}
+	} 
+	
+	
+	public String getText(By by) {
+		String text = null;
+		try {		
+			WebElement element = webdriver.findElement(by);
+			text = element.getText();
+			test.log(LogStatus.INFO, "Returned-Text:<b>" + text+"</b>");
+			return text.trim();
+		} catch (Exception ex) {
+			test.log(LogStatus.FAIL, ex);
+			test.log(LogStatus.INFO, "Not Returned-Text:<b>" + text+"</b>");
+			return "NULL";
+		}
 	}
 
 }
