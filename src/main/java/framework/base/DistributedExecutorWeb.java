@@ -166,7 +166,7 @@ public class DistributedExecutorWeb extends Utility implements Runnable {
 				Method method = className.getMethod(currentKeyword);
 				method.invoke(classInstance);
 			}
-			
+			report.flush();
 		}
 
 		end();

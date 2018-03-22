@@ -18,7 +18,7 @@ import main.java.framework.testDataAccess.DataTable;
 import main.java.framework.utils.Utility;
 
 
-public class FunctionalComponents extends Utility{
+public class FunctionalComponents extends ReusableLibrary{
 
 	public FunctionalComponents(ExtentTest test, WebDriver webdriver, DataTable dataTable,
 			TestParameters testParameters, Lock lock, Connection connection) {
@@ -29,17 +29,44 @@ public class FunctionalComponents extends Utility{
 		LoginPage loginPage = new LoginPage(test,webdriver,dataTable,testParameters,lock,connection);
 		loginPage.launchApp();
 		loginPage.login();
-	}	
+	}		
 	
-	public void parts_dataform() {
-		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
-		parts.selectDataForm("Parts", "Parts", "Parts");
+	public void selectDataForm() {
+		
+		String dataformFolder = dataTable.getData("Data", "DATAFORM_FOLDER");
+		String dataform = dataTable.getData("Data", "DATAFORM");
+		String dataFormLabel = dataTable.getData("Data", "DATAFORMLABEL");
+		
+		selectDataForm(dataformFolder, dataform, dataFormLabel);
+	}
+	
+	public void createSandNSPartcode() {
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);	
 		parts.clickEditTab();
 		parts.createNewPart("N");
 		parts.clickClearBtn();
 		parts.clickClearPopupBtn();
 		parts.createNewPart("Y");
 	}
+	
+	public void createNSPartcode() {
+		
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);		
+		parts.clickEditTab();
+		parts.createNewPart("N");
+		parts.clickClearBtn();
+		parts.clickClearPopupBtn();		
+	}	
+		
+	public void createSPartcode() {
+		
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);		
+		parts.clickEditTab();
+		parts.createNewPart("Y");
+		parts.clickClearBtn();
+		parts.clickClearPopupBtn();	
+	}
+	
 	
 	public void assets_dataform() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
