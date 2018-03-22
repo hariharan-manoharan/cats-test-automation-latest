@@ -70,7 +70,6 @@ public class FunctionalComponents extends ReusableLibrary{
 	
 	public void assets_dataform() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
-		assets.selectDataForm("Assets", "Assets", "Assets");
 		assets.createAssetCode();
 		assets.assetCodeSearch();
 		assets.editAssetCode();
@@ -78,7 +77,6 @@ public class FunctionalComponents extends ReusableLibrary{
 	
 	public void createAssetcode() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
-		assets.selectDataForm("Assets", "Assets", "Assets");
 		assets.createAssetCode();
 
 	}
