@@ -16,7 +16,7 @@ import main.java.WEBAPP.CORE.pages.Parts;
 import main.java.framework.executionSetup.TestParameters;
 import main.java.framework.testDataAccess.DataTable;
 import main.java.framework.utils.Utility;
-import net.sf.ehcache.transaction.xa.commands.Command;
+
 
 public class FunctionalComponents extends Utility{
 
@@ -34,7 +34,11 @@ public class FunctionalComponents extends Utility{
 	public void parts_dataform() {
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);
 		parts.selectDataForm("Parts", "Parts", "Parts");
-		parts.createNewPartSerialized();
+		parts.clickEditTab();
+		parts.createNewPart("N");
+		parts.clickClearBtn();
+		parts.clickClearPopupBtn();
+		parts.createNewPart("Y");
 	}
 	
 	public void assets_dataform() {

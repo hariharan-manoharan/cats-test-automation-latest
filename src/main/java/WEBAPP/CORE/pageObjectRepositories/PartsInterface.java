@@ -17,6 +17,7 @@ final By PARTS_TRACKEDBYACCOUNTING_SELECT = By.xpath(String.format(XPATH_SELECT,
 final By PARTS_CURRENTLYACTIVE_SELECT = By.xpath(String.format(XPATH_SELECT, "Currently Active"));  
 final By PARTS_KIT_SELECT = By.xpath(String.format(XPATH_SELECT, "Kit"));  
 final By PARTS_SERIALIZEDINVENTORY_SELECT = By.xpath(String.format(XPATH_SELECT, "Serialized Inventory"));  
+final By PARTS_SERIALIZEDINVENTORY_EDIT_CHECKBOX= By.xpath(String.format(XPATH_TEXTBOX, "Serialized Inventory"));  
 final By PARTS_ASSEMBLY_SELECT = By.xpath(String.format(XPATH_SELECT, "Assembly"));  
 final By PARTS_LOCKED_SELECT = By.xpath(String.format(XPATH_SELECT, "Locked"));  
 final By PARTS_LOT_SELECT = By.xpath(String.format(XPATH_SELECT, "Lot"));  
