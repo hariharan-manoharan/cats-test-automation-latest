@@ -22,9 +22,10 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 	}
 
 	
-	public void assetCodeSearch() {
+	public void searchAssetCode() {
 		
-		enterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
+		String  assetcode=dataTable.getData("Assets", "ASSETCODE");
+		enterText(ASSET_ASSETCODE_TXT, "Asset Code", assetcode);
 		click(XPATH_SEARCH_BTN, "Click Search button");
 
 		
