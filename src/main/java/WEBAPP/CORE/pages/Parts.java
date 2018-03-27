@@ -43,10 +43,44 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		
 	}
 	
+	public void clickDeleteBtn() {
+		
+		if(webdriver.findElement(XPATH_DELETE_BTN).isEnabled()) {
+		click(XPATH_DELETE_BTN, "Click Delete button");
+		}
+		
+	}
+	
 	public void clickClearPopupBtn() {
 		
 		if(webdriver.findElement(XPATH_BTN_POPUP_CLEAR).isEnabled()) {
 		click(XPATH_BTN_POPUP_CLEAR, "Click Clear Popup button");
+		}
+		
+	}
+	
+	
+	public void clickSavePopupBtn() {
+		
+		if(webdriver.findElement(XPATH_BTN_POPUP_SAVE).isEnabled()) {
+		click(XPATH_BTN_POPUP_SAVE, "Click Save Popup button");
+		}
+		
+	}
+	
+	
+	public void clickDelePopupBtn() {
+		
+		if(webdriver.findElement(XPATH_BTN_POPUP_DELETE).isEnabled()) {
+		click(XPATH_BTN_POPUP_DELETE, "Click Delete Popup button");
+		}
+		
+	}
+	
+	public void clickOkPopupBtn() {
+		
+		if(webdriver.findElement(XPATH_BTN_POPUP_OK).isEnabled()) {
+		click(XPATH_BTN_POPUP_OK, "Click OK Popup button");
 		}
 		
 	}
@@ -122,28 +156,18 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 	
 	public void partcodeSearch(String partCode) {
 		
-		enterText(PARTS_PARTCODE_COMBO, "Enter Part code in part code field", partCode);
-		click(By.xpath(String.format(XPATH_COMBOBOX_1, "Part Code")), "Click Part Code dropdown");
+		enterText(PARTS_PARTCODE_COMBO, "Enter Part code in part code field", partCode);		
 		waitCommand(By.xpath("//div[@class='combo_results_controls']//div[@class='drag-handle']"));
-		click(By.xpath("//td[@style='width: 200px;'][contains(text(),'10124')]"), "Click Part code "+partCode);
+		click(By.xpath("//td[@style='width: 200px;'][contains(text(),'"+partCode+"')]"), "Click Part code "+partCode);
 		click(XPATH_SEARCH_BTN, "Click Search button");
 		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
 		
 	}
 	
-	public void selectRecordResultTab(int i) {
+	public void selectRecordResultTab(int i) {	
 		
-		List<WebElement> records = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
-		
-		if(records.size()>0) {
-			
-			records.get(i-1).click();
-			report(LogStatus.PASS, "selectRecordResultTab - Record - "+i+" is selected.");
-			
-		}else {
-			test.log(LogStatus.WARNING, "selectRecordResultTab - No records found in Resukt tab.");
-		}
-		
+			click(By.xpath(String.format(XPATH_ROW_CHECKBOX, i)), "selectRecordResultTab - Record - "+i+" is selected.");
+					
 	}
 	
 	

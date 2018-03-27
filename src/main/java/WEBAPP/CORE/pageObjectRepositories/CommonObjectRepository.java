@@ -35,6 +35,7 @@ public interface CommonObjectRepository {
 	By XPATH_CLEAR_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Clear"));
 	By XPATH_SAVE_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Save"));
 	By XPATH_REFRESH_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Refresh"));
+	By XPATH_DELETE_BTN = By.xpath(String.format(XPATH_BTN_FORMAT, "Delete"));
 	
 	
 	//************************************************************** Links ****************************************************************
@@ -75,6 +76,11 @@ public interface CommonObjectRepository {
 	By XPATH_ERROR_SAVING = By.xpath(String.format(XPATH_BLOCKINGMESSAGE_HEADER, "Error saving record"));
 	
 	By XPATH_BLOCKINGMESSAGE_CONTENT=By.xpath("//div[@style='text-align: center;']");
+	
+	
+	String XPATH_ROW_CHECKBOX = "(//div[@class='grid-row grid__row'])[%d]/child::*[1]";
+	
+	By XPATH_RESULTTAB_PAGINATION = By.xpath("//div[@class='fcm-pagination_details']");
 	
 	
 }

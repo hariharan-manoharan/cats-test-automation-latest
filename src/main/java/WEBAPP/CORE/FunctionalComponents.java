@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
 import main.java.WEBAPP.CORE.pages.Assets;
@@ -67,6 +68,33 @@ public class FunctionalComponents extends ReusableLibrary{
 		parts.clickClearPopupBtn();	
 	}
 	
+	
+	public void deleteRecord() {
+		
+		int rowNumber = Integer.parseInt(dataTable.getData("Data", testParameters.getCurrentKeywordColumnName()));
+		
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);	
+		parts.selectRecordResultTab(rowNumber);
+		parts.clickDeleteBtn();
+		parts.clickDelePopupBtn();
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));
+		
+		if(getText(XPATH_RESULTTAB_PAGINATION).equals("No results")) {
+			test.log(LogStatus.PASS, "Record deleted successfully.");	
+		}else {
+			test.log(LogStatus.FAIL, "Record not deleted.");
+		}
+				
+	}
+	
+	public void searchPartcode() {
+		
+		String partCode = getRuntimeTestdata(dataTable.getData("Data", testParameters.getCurrentKeywordColumnName()));
+		
+		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);	
+		parts.partcodeSearch(partCode);
+		
+	}
 	
 	public void assets_dataform() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
