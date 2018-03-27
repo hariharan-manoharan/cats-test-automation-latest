@@ -170,16 +170,22 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	public boolean isDisplayed(By by) {
-		
-		waitCommand(by);
-		
-		if(webdriver.findElement(by).isDisplayed()) {
-			return true;
-		}else {
-			return false;
+
+		HardDelay(3000);
+		try {
+			if(webdriver.findElement(by).isDisplayed()) {
+				report(LogStatus.PASS, by+" is displayed");
+				return true;
+			}
 		}
-		
+		catch(Exception e){
+			report(LogStatus.INFO,by+" is not displayed");
+		}
+		return false;
+
+
 	}
+	
 /*	
 	public String getText(By by) {		
 		
