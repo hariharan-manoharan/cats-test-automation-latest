@@ -69,6 +69,7 @@ public class FunctionalComponents extends ReusableLibrary{
 	}
 	
 	
+
 	public void deleteRecord() {
 		
 		int rowNumber = Integer.parseInt(dataTable.getData("Data", testParameters.getCurrentKeywordColumnName()));
@@ -96,12 +97,14 @@ public class FunctionalComponents extends ReusableLibrary{
 		
 	}
 	
-	public void assets_dataform() {
+
+/*	public void assets_dataform() {
+>>>>>>> b11c72dfc8bd16e244f009b99550fff684157297
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
 		assets.createAssetCode();
 		assets.assetCodeSearch();
 		assets.editAssetCode();
-	}
+	}*/
 	
 	public void createAssetcode() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
