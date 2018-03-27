@@ -96,7 +96,7 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		
 		enterText(PARTS_PARTCODE_COMBO_EDIT, "Enter Part code in part code field", partcode);
 		enterText(PARTS_DESCRIPTION_TXT, "Enter Part code in part code field", "DESCRIPTION "+ partcode);
-		if(isSerialized.equalsIgnoreCase("Y")) {
+		if(isSerialized.equalsIgnoreCase("N")) {
 		click(PARTS_SERIALIZEDINVENTORY_EDIT_CHECKBOX, "Un check ");	
 		}
 		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, "ALPHA TECHNOLOGIES", "Select Manufacturer - ALPHA TECHNOLOGIES");
