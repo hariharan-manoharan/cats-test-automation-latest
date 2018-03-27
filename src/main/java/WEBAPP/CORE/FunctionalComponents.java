@@ -106,9 +106,16 @@ public class FunctionalComponents extends ReusableLibrary{
 	public void createAssetcode() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
 		assets.createAssetCode();
+		assets.clickClearBtn();
+		assets.clickClearPopupBtn();
 
 	}
 	
-	
+	public void editAssetcode() {
+		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
+		assets.searchAssetCode();
+		assets.createAssetCode();
+
+	}
 
 }
