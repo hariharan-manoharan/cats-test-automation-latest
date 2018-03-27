@@ -68,12 +68,12 @@ public class FunctionalComponents extends ReusableLibrary{
 	}
 	
 	
-	public void assets_dataform() {
+/*	public void assets_dataform() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
 		assets.createAssetCode();
 		assets.assetCodeSearch();
 		assets.editAssetCode();
-	}
+	}*/
 	
 	public void createAssetcode() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
