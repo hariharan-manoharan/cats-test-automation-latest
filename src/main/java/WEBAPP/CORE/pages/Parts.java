@@ -26,62 +26,6 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 	
 	
 
-	public void clickSearchBtn() {
-		
-		if(webdriver.findElement(XPATH_SEARCH_BTN).isEnabled()) {
-		click(XPATH_SEARCH_BTN, "Click Search button");
-		}
-		
-	}
-	
-	
-	public void clickClearBtn() {
-		
-		if(webdriver.findElement(XPATH_CLEAR_BTN).isEnabled()) {
-		click(XPATH_CLEAR_BTN, "Click Clear button");
-		}
-		
-	}
-	
-	public void clickClearPopupBtn() {
-		
-		if(webdriver.findElement(XPATH_BTN_POPUP_CLEAR).isEnabled()) {
-		click(XPATH_BTN_POPUP_CLEAR, "Click Clear Popup button");
-		}
-		
-	}
-	
-	public void clickSearchTab() {
-		
-		if(!getText(XPATH_LINK_ACTIVE_TAB).equals("Search")) {
-		click(XPATH_LINK_SEARCH_TAB, "Click Search button");
-		}
-		
-	}
-	
-	public void clickResultTab() {
-		
-		if(!getText(XPATH_LINK_ACTIVE_TAB).equals("Result")) {
-		click(XPATH_LINK_RESULTS_TAB, "Click Search button");
-		}
-		
-	}
-	
-	public void clickEditTab() {
-		
-		if(!getText(XPATH_LINK_ACTIVE_TAB).equals("Edit")) {
-		click(XPATH_LINK_EDIT_TAB, "Click Search button");
-		}
-		
-	}
-	
-	
-	public void clearText(By by) {
-		
-		webdriver.findElement(by).clear();
-		
-	}
-	
 	
 	
 	public void createNewPart(String isSerialized) {
@@ -131,20 +75,7 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		
 	}
 	
-	public void selectRecordResultTab(int i) {
-		
-		List<WebElement> records = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
-		
-		if(records.size()>0) {
-			
-			records.get(i-1).click();
-			report(LogStatus.PASS, "selectRecordResultTab - Record - "+i+" is selected.");
-			
-		}else {
-			test.log(LogStatus.WARNING, "selectRecordResultTab - No records found in Resukt tab.");
-		}
-		
-	}
+
 	
 	
 
