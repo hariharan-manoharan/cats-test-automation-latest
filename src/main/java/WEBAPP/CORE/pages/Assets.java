@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 import main.java.WEBAPP.CORE.ReusableLibrary;
 import main.java.WEBAPP.CORE.pageObjectRepositories.AssetInterface;
@@ -41,21 +42,29 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 	
 	public void createAssetCode() {
 		
-		click(XPATH_LINK_EDIT_TAB, "Click Edit button");
-		enterText(ASSET_ASSETCODE_TXT, "Asset Code", "AASSETCODE_001");
 		
-		enterText(ASSET_PARTCODE_COMBO, "Part Code", "10753");
+		String	assetcode = generateTestData(testParameters.getCurrentKeywordColumnName(), "ASSET");
+		String  getpartcode=dataTable.getData("Assets", "PARTCODE");
+		String partcode = getRuntimeTestdata(getpartcode);
+		String  businessUnit=dataTable.getData("Assets", "BUSINESS_UNIT");
+		String  locationName=dataTable.getData("Assets", "LOCATION_NAME");
+		String  locationStatus=dataTable.getData("Assets", "LOCATION_STATUS");
+		
+		click(XPATH_LINK_EDIT_TAB, "Click Edit button");
+		enterText(ASSET_ASSETCODE_TXT, "Asset Code", assetcode);
+		
+		enterText(ASSET_PARTCODE_COMBO, "Part Code", partcode);
 		sendTab(ASSET_PARTCODE_COMBO);
 		sendTab(ASSET_CLEI_TXT);
 		
 		
-		enterText(ASSET_BUSINESSUNIT_COMBO, "Business Unit", "ALPHA BUTYPE1");
+		enterText(ASSET_BUSINESSUNIT_COMBO, "Business Unit", businessUnit);
 		sendTab(ASSET_BUSINESSUNIT_COMBO);
 		
-		enterText(ASSET_LOCATIONNAME_COMBO, "Location Name", "1BL1184");
+		enterText(ASSET_LOCATIONNAME_COMBO, "Location Name", locationName);
 		sendTab(ASSET_LOCATIONNAME_COMBO);
 		
-		enterText(ASSET_LOCATIONSTATUS_COMBO, "Location Status", "AVAILABLE");
+		enterText(ASSET_LOCATIONSTATUS_COMBO, "Location Status", locationStatus);
 		sendTab(ASSET_LOCATIONSTATUS_COMBO);
 		
 		moveToElement(ASSET_NOTES_TXTAREA,"Notes");
@@ -68,11 +77,13 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 		if(isDisplayed( XPATH_ERROR_SAVING)) {
 					
 			getText(XPATH_BLOCKINGMESSAGE_CONTENT);	
+			report(LogStatus.FAIL,"Asset "+assetcode+" is not created successfully");
 		
-		}
-		
-		
-		
+		}else {
+			click(XPATH_BTN_POPUP_OK,"Clicked Ok button");
+			report(LogStatus.PASS,"Asset "+assetcode+" is created successfully");
+			
+		}					
 		
 }
 }
