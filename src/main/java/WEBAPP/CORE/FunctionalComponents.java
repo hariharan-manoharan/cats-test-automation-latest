@@ -78,7 +78,7 @@ public class FunctionalComponents extends ReusableLibrary{
 		parts.selectRecordResultTab(rowNumber);
 		parts.clickDeleteBtn();
 		parts.clickDelePopupBtn();
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		
 		if(getText(XPATH_RESULTTAB_PAGINATION).equals("No results")) {
 			test.log(LogStatus.PASS, "Record deleted successfully.");	
@@ -97,28 +97,30 @@ public class FunctionalComponents extends ReusableLibrary{
 		
 	}
 	
-
-/*	public void assets_dataform() {
->>>>>>> b11c72dfc8bd16e244f009b99550fff684157297
-		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
-		assets.createAssetCode();
-		assets.assetCodeSearch();
-		assets.editAssetCode();
-	}*/
-	
 	public void createAssetcode() {
 		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
-		assets.createAssetCode();
+		assets.createOReditAssetCode();
+	}
+	
+	public void searchAssetCode() {
+		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
+		assets.searchAsset();
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
+		assets.selectRecordResultTab(1);		
+	}
+	
+	public void clearAssetCode() {
+		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
 		assets.clickClearBtn();
-		assets.clickClearPopupBtn();
+		assets.clickClearPopupBtn();		
+	}
+	
+	public void editAssetCode() {
+		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
+		assets.createOReditAssetCode();
 
 	}
 	
-	public void editAssetcode() {
-		Assets assets = new Assets(test,webdriver,dataTable,testParameters,lock,connection);
-		assets.searchAssetCode();
-		assets.createAssetCode();
 
-	}
 
 }
