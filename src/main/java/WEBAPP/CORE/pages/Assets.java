@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+
 import main.java.WEBAPP.CORE.ReusableLibrary;
 import main.java.WEBAPP.CORE.pageObjectRepositories.AssetInterface;
 import main.java.framework.executionSetup.TestParameters;
@@ -22,36 +23,33 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 	}
 
 	
-	public void searchAssetCode() {
+	public void searchAsset() {
 		
-		String  assetcode=dataTable.getData("Assets", "ASSETCODE");
+		String  assetcode=getRuntimeTestdata(dataTable.getData("Assets", "ASSETCODE"));
 		enterText(ASSET_ASSETCODE_TXT, "Asset Code", assetcode);
 		click(XPATH_SEARCH_BTN, "Click Search button");
-
 		
 	}
 	
-	public void editAssetCode() {
-		
-		enterText(ASSET_ASSETCODE_TXT, "Asset Code", "43643616");
-		click(XPATH_SEARCH_BTN, "Click Search button");
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
-		clickEditIcon(2);
-		
-		
-	}
 	
-	public void createAssetCode() {
+	public void createOReditAssetCode() {
+		String	assetcode;
 		
+		String  createoredit=dataTable.getData("Assets", "CREATE_OR_EDIT");
 		
-		String	assetcode = generateTestData(testParameters.getCurrentKeywordColumnName(), "ASSET");
+		if(createoredit.equalsIgnoreCase("Create")) {
+		assetcode = generateTestData(testParameters.getCurrentKeywordColumnName(), "ASSET");
+		click(XPATH_LINK_EDIT_TAB, "Click Edit button");
+		}else {
+		assetcode = getRuntimeTestdata(dataTable.getData("Assets", "ASSETCODE"))	;		
+		}
 		String  getpartcode=dataTable.getData("Assets", "PARTCODE");
 		String partcode = getRuntimeTestdata(getpartcode);
 		String  businessUnit=dataTable.getData("Assets", "BUSINESS_UNIT");
 		String  locationName=dataTable.getData("Assets", "LOCATION_NAME");
 		String  locationStatus=dataTable.getData("Assets", "LOCATION_STATUS");
 		
-		click(XPATH_LINK_EDIT_TAB, "Click Edit button");
+		
 		enterText(ASSET_ASSETCODE_TXT, "Asset Code", assetcode);
 		
 		enterText(ASSET_PARTCODE_COMBO, "Part Code", partcode);
@@ -84,7 +82,8 @@ public class Assets extends ReusableLibrary implements AssetInterface {
 			click(XPATH_BTN_POPUP_OK,"Clicked Ok button");
 			report(LogStatus.PASS,"Asset "+assetcode+" is created successfully");
 			
-		}					
+		}	
+		
 		
 }
 }
