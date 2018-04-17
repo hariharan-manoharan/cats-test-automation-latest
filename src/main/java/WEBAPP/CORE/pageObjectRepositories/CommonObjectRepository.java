@@ -81,6 +81,6 @@ public interface CommonObjectRepository {
 	String XPATH_ROW_CHECKBOX = "(//div[@class='grid-row grid__row'])[%d]/child::*[1]";
 	
 	By XPATH_RESULTTAB_PAGINATION = By.xpath("//div[@class='fcm-pagination_details']");
-	
+	By XPATH_BLOCKINGMESSAGE=By.xpath("//div[@class='blocking-screen']");
 	
 }
