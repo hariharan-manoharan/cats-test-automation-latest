@@ -156,6 +156,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 		waitCommand(by);
 		WebElement element = webdriver.findElement(by);
+		element.clear();
 		element.sendKeys(text);
 		takeScreenshot(reportName);
 
@@ -327,7 +328,35 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		webdriver.findElement(by).clear();
 		
 	}
+
 	
+	public void clickDeleteBtn() {
+		
+		if(webdriver.findElement(XPATH_DELETE_BTN).isEnabled()) {
+		click(XPATH_DELETE_BTN, "Click Delete button");
+		}
+		
+	}
+	
+	
+	public void clickSavePopupBtn() {
+		
+		if(webdriver.findElement(XPATH_BTN_POPUP_SAVE).isEnabled()) {
+		click(XPATH_BTN_POPUP_SAVE, "Click Save Popup button");
+		}
+		
+	}
+	
+	
+	public void clickDelePopupBtn() {
+		
+		if(webdriver.findElement(XPATH_BTN_POPUP_DELETE).isEnabled()) {
+		click(XPATH_BTN_POPUP_DELETE, "Click Delete Popup button");
+		}
+		
+	}
+	
+
 	public void selectRecordResultTab(int i) {
 		
 		List<WebElement> records = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
