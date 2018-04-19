@@ -32,7 +32,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
 				<configuration>
-					<mainClass>target.classes.main.java.framework.base.Main</mainClass>
+					<mainClass>main.java.framework.base.Main</mainClass>
 				</configuration>
 			</plugin>
 			<!-- <plugin> <groupId>com.lazerycode.jmeter</groupId> <artifactId>jmeter-maven-plugin</artifactId> 
