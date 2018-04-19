@@ -32,7 +32,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
 				<configuration>
-					<mainClass>main.java.base.Main</mainClass>
+					<mainClass>target.classes.main.java.framework.base.Main</mainClass>
 				</configuration>
 			</plugin>
 			<!-- <plugin> <groupId>com.lazerycode.jmeter</groupId> <artifactId>jmeter-maven-plugin</artifactId> 
@@ -40,6 +40,13 @@
 				<goals> <goal>jmeter</goal> </goals> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
+	<repositories>
+			<repository>
+   			 <id>in-project</id>
+   			 <name>In Project Repo</name>
+    		<url>file://${project.basedir}/libs</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/io.appium/java-client -->
 		<dependency>
@@ -103,6 +110,7 @@
 			<scope>system</scope>
 			<systemPath>${pom.basedir}/resources/Libs/ojdbc6.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
