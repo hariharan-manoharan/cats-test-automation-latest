@@ -3,6 +3,7 @@ package main.java.framework.utils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -21,7 +22,10 @@ public class WebDriverFactory {
 			break;
 			
 		case "Firefox":
-			driver = new FirefoxDriver();
+			FirefoxProfile fprofile = new FirefoxProfile();
+			fprofile.setAcceptUntrustedCertificates(true);
+			System.setProperty("webdriver.gecko.driver","./resources/Drivers/geckodriver.exe");
+			driver = new FirefoxDriver(fprofile);
 			break;
 			
 		case "Htmlunit":

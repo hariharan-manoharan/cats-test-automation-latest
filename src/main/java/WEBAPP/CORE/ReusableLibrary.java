@@ -170,6 +170,17 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 	}
 	
+	
+	public void clickAction(By by, String reportName) throws TimeoutException, NoSuchElementException {
+
+		waitCommand(by);
+		WebElement element = webdriver.findElement(by);
+		Actions actions = new Actions(webdriver);
+		actions.moveToElement(element).click().perform();
+		takeScreenshot(reportName);
+
+	}
+	
 	public boolean isDisplayed(By by) {
 
 		HardDelay(3000);
@@ -331,7 +342,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 	
 	public void clickDeleteBtn() {
-		
+		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
 		if(webdriver.findElement(XPATH_DELETE_BTN).isEnabled()) {
 		click(XPATH_DELETE_BTN, "Click Delete button");
 		}
@@ -348,7 +359,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	
-	public void clickDelePopupBtn() {
+	public void clickDeletePopupBtn() {
 		
 		if(webdriver.findElement(XPATH_BTN_POPUP_DELETE).isEnabled()) {
 		click(XPATH_BTN_POPUP_DELETE, "Click Delete Popup button");
@@ -356,10 +367,19 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		
 	}
 	
+	
+	public void clickOkPopupBtn() {
+		
+		if(webdriver.findElement(XPATH_BTN_POPUP_OK).isEnabled()) {
+		click(XPATH_BTN_POPUP_OK, "Click Ok Popup button");
+		}
+		
+	}
+	
 
 	public void selectRecordResultTab(int i) {
 		
-		List<WebElement> records = webdriver.findElements(XPATH_RESULTTAB_EDITICON);
+		List<WebElement> records = webdriver.findElements(By.xpath(String.format(XPATH_RESULTTAB_RECORDSELECT_CHECKBOX,i)));
 		
 		if(records.size()>0) {
 			
@@ -367,7 +387,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 			report(LogStatus.PASS, "selectRecordResultTab - Record - "+i+" is selected.");
 			
 		}else {
-			test.log(LogStatus.WARNING, "selectRecordResultTab - No records found in Resukt tab.");
+			test.log(LogStatus.WARNING, "selectRecordResultTab - No records found in Result tab.");
 		}
 		
 	}

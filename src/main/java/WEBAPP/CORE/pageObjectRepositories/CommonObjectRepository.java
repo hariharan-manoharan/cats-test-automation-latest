@@ -69,7 +69,7 @@ public interface CommonObjectRepository {
 
 	
 	By XPATH_RESULTTAB_EDITICON = By.xpath("//a[@class = 'btn btn-xs btn-default']");
-	By XPATH_EDITTAB_PAGINATION = By.xpath("//div[@class='vue-portal-target']//div[@class='fcm-pagination_details']");
+	By XPATH_EDITTAB_PAGINATION = By.xpath("//div[@class='fcm-pagination small']//div[@class='fcm-pagination_details']");
 	
 	String XPATH_BLOCKINGMESSAGE_HEADER="//div[@class='modal-content']//div//h4[contains(text(),'%s')]";
 	
@@ -82,5 +82,6 @@ public interface CommonObjectRepository {
 	
 	By XPATH_RESULTTAB_PAGINATION = By.xpath("//div[@class='fcm-pagination_details']");
 	By XPATH_BLOCKINGMESSAGE=By.xpath("//div[@class='blocking-screen']");
-	
+	String XPATH_RESULTTAB_RECORDSELECT_CHECKBOX = "(//form[@class='grid-row grid__row'])[%d]//div[@class='grid-row__cell grid-row__cell-CHECKBOX'][1]";
+	By XPATH_RESULTTAB_RECORDSLIST = By.xpath("//form[@class='grid-row grid__row']");
 }

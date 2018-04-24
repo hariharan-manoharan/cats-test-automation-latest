@@ -77,10 +77,10 @@ public class FunctionalComponents extends ReusableLibrary{
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);	
 		parts.selectRecordResultTab(rowNumber);
 		parts.clickDeleteBtn();
-		parts.clickDelePopupBtn();
+		parts.clickDeletePopupBtn();	
 		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		
-		if(getText(XPATH_RESULTTAB_PAGINATION).equals("No results")) {
+		if(getText(XPATH_RESULTTAB_PAGINATION).equals("No Results")) {
 			test.log(LogStatus.PASS, "Record deleted successfully.");	
 		}else {
 			test.log(LogStatus.FAIL, "Record not deleted.");

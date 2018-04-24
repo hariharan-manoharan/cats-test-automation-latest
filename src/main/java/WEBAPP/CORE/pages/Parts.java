@@ -44,17 +44,18 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		if(isSerialized.equalsIgnoreCase("N")) {
 		click(PARTS_SERIALIZEDINVENTORY_EDIT_CHECKBOX, "Un check ");	
 		}
-		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, "ALPHA TECHNOLOGIES", "Select Manufacturer - ALPHA TECHNOLOGIES");
+		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, "TEST", "Select Manufacturer - TEST");
 		click(XPATH_SAVE_BTN, "Click Save button");	
 		click(XPATH_BTN_POPUP_SAVE, "Click Pop-up Save button");
-		click(XPATH_BTN_POPUP_OK, "Click Pop-up Ok button");
-		click(XPATH_LINK_SEARCH_TAB, "Click Search tab");
+		//click(XPATH_BTN_POPUP_OK, "Click Pop-up Ok button");
+		waitUntilNotDisplayed(By.xpath("//div[@class='snackbar_item_message']"));	
+		clickAction(XPATH_LINK_SEARCH_TAB, "Click Search tab");
 		clearText(PARTS_PARTCODE_COMBO);
 		enterText(PARTS_PARTCODE_COMBO, "Enter Part code in part code field", partcode);
 		click(XPATH_SEARCH_BTN, "Click Search button");
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);		
 		clickEditIcon(1);
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));	
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);	
 		
 		if(webdriver.findElement(PARTS_PARTCODE_COMBO_EDIT).getAttribute("value").equals(partcode)) {
 			test.log(LogStatus.PASS, "New Part code is created successfully - Partcode: "+partcode);	
@@ -71,7 +72,7 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		waitCommand(By.xpath("//div[@class='combo_results_controls']//div[@class='drag-handle']"));
 		click(By.xpath("//td[@style='width: 200px;'][contains(text(),'"+partCode+"')]"), "Click Part code "+partCode);
 		click(XPATH_SEARCH_BTN, "Click Search button");
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);		
 		
 	}
 	
