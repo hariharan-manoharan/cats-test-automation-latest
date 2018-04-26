@@ -33,6 +33,8 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 
 		String partcode = null;
 		
+		String partMfg = getRuntimeTestdata(dataTable.getData("Data", testParameters.getCurrentKeywordColumnName()));
+		
 		if(isSerialized.equalsIgnoreCase("Y")) {
 		partcode = generateTestData(testParameters.getCurrentKeywordColumnName(), "AS");
 		}else {
@@ -44,11 +46,12 @@ public class Parts extends ReusableLibrary implements PartsInterface{
 		if(isSerialized.equalsIgnoreCase("N")) {
 		click(PARTS_SERIALIZEDINVENTORY_EDIT_CHECKBOX, "Un check ");	
 		}
-		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, "TEST", "Select Manufacturer - TEST");
+		selectValueByVisibleText(PARTS_MANUFACTURER_SELECT, partMfg, "Select Manufacturer - "+partMfg);
 		click(XPATH_SAVE_BTN, "Click Save button");	
 		click(XPATH_BTN_POPUP_SAVE, "Click Pop-up Save button");
 		//click(XPATH_BTN_POPUP_OK, "Click Pop-up Ok button");
-		waitUntilNotDisplayed(By.xpath("//div[@class='snackbar_item_message']"));	
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
+		waitUntilNotDisplayed(XPATH_SNACKBAR_ITEM_MSG);	
 		clickAction(XPATH_LINK_SEARCH_TAB, "Click Search tab");
 		clearText(PARTS_PARTCODE_COMBO);
 		enterText(PARTS_PARTCODE_COMBO, "Enter Part code in part code field", partcode);

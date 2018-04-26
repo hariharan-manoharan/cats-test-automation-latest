@@ -82,6 +82,10 @@ public interface CommonObjectRepository {
 	
 	By XPATH_RESULTTAB_PAGINATION = By.xpath("//div[@class='fcm-pagination_details']");
 	By XPATH_BLOCKINGMESSAGE=By.xpath("//div[@class='blocking-screen']");
+	By XPATH_SNACKBAR_ITEM_MSG=By.xpath("//div[@class='snackbar_item_message']");
 	String XPATH_RESULTTAB_RECORDSELECT_CHECKBOX = "(//form[@class='grid-row grid__row'])[%d]//div[@class='grid-row__cell grid-row__cell-CHECKBOX'][1]";
-	By XPATH_RESULTTAB_RECORDSLIST = By.xpath("//form[@class='grid-row grid__row']");
+	String XPATH_RESULTTAB_RECORD_FIELD = "(//form[@class='grid-row grid__row'])[%d]//div[@data-field-name='%s']/input";
+	By XPATH_RESULTTAB_RECORDSLIST= By.xpath("(//form[@class='grid-row grid__row'])");
+	
+	
 }
