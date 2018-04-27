@@ -143,7 +143,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		click(By.xpath(String.format(XPATH_DATAFORM_FOLDER,dataforFolder)), "Click Data form folder - "+dataforFolder);
 		click(By.xpath(String.format(XPATH_DATAFORM,dataform)), "Click Data form - " +dataform);	
 		
-		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		if(isDisplayed(By.xpath("//div[contains(text(),\'"+dataFormLabel+"\') and @class='dataform_title']"))) {
 			test.log(LogStatus.PASS, dataform + " is selected successfully");
 		}else {
@@ -271,6 +271,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	
 	public String getText(By by) {
 		String text = null;
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		try {		
 			WebElement element = webdriver.findElement(by);
 			text = element.getText();
@@ -285,7 +286,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	
 
 	public void clickSearchBtn() {
-		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		if(webdriver.findElement(XPATH_SEARCH_BTN).isEnabled()) {
 		click(XPATH_SEARCH_BTN, "Click Search button");
 		}
@@ -294,7 +295,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	
 	
 	public void clickClearBtn() {
-		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		if(webdriver.findElement(XPATH_CLEAR_BTN).isEnabled()) {
 		click(XPATH_CLEAR_BTN, "Click Clear button");
 		}
@@ -310,7 +311,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	public void clickSearchTab() {
-		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		if(!getText(XPATH_LINK_ACTIVE_TAB).equals("Search")) {
 		click(XPATH_LINK_SEARCH_TAB, "Click Search button");
 		}
@@ -318,7 +319,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	public void clickResultTab() {
-		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		if(!getText(XPATH_LINK_ACTIVE_TAB).equals("Result")) {
 		click(XPATH_LINK_RESULTS_TAB, "Click Search button");
 		}
@@ -326,7 +327,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 	}
 	
 	public void clickEditTab() {
-		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);
 		if(!getText(XPATH_LINK_ACTIVE_TAB).equals("Edit")) {
 		click(XPATH_LINK_EDIT_TAB, "Click Search button");
 		}
@@ -342,7 +343,7 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 
 	
 	public void clickDeleteBtn() {
-		waitUntilNotDisplayed(By.xpath("//div[@class='blocking-screen']"));		
+		waitUntilNotDisplayed(XPATH_BLOCKINGMESSAGE);		
 		if(webdriver.findElement(XPATH_DELETE_BTN).isEnabled()) {
 		click(XPATH_DELETE_BTN, "Click Delete button");
 		}
@@ -392,4 +393,18 @@ public class ReusableLibrary extends Utility implements CommonObjectRepository{
 		
 	}
 
+	
+	public List<WebElement> getElementList(By by) {
+		
+		List<WebElement> elements = null;
+		try {
+
+		elements = webdriver.findElements(by);		
+		
+		}catch(Exception e) {
+			test.log(LogStatus.FAIL, "Exception occured while getting list of web elements for XPATH - "+by.toString());
+			test.log(LogStatus.INFO, e.getMessage());
+		}
+		return elements;
+	}
 }

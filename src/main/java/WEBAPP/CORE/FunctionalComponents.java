@@ -13,6 +13,7 @@ import com.relevantcodes.extentreports.LogStatus;
 import main.java.WEBAPP.CORE.pageObjectRepositories.CommonObjectRepository;
 import main.java.WEBAPP.CORE.pages.Assets;
 import main.java.WEBAPP.CORE.pages.LoginPage;
+import main.java.WEBAPP.CORE.pages.PartManufacturers;
 import main.java.WEBAPP.CORE.pages.Parts;
 import main.java.framework.executionSetup.TestParameters;
 import main.java.framework.testDataAccess.DataTable;
@@ -59,7 +60,7 @@ public class FunctionalComponents extends ReusableLibrary{
 		parts.clickClearPopupBtn();		
 	}	
 		
-	public void createSPartcode() {
+	public void createSPartcode() {		
 		
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);		
 		parts.clickEditTab();
@@ -95,6 +96,25 @@ public class FunctionalComponents extends ReusableLibrary{
 		Parts parts = new Parts(test,webdriver,dataTable,testParameters,lock,connection);	
 		parts.partcodeSearch(partCode);
 		
+	}
+	
+	
+	public void createPartMFG() {
+		
+		PartManufacturers partManufacturers = new PartManufacturers(test,webdriver,dataTable,testParameters,lock,connection);
+		partManufacturers.clickEditTab();
+		partManufacturers.createNewPartManufacturer();
+				
+	}
+	
+	
+	public void searchPartMFG() {
+		
+		String partMFG = getRuntimeTestdata(dataTable.getData("Data", testParameters.getCurrentKeywordColumnName()));
+		
+		PartManufacturers partManufacturers = new PartManufacturers(test,webdriver,dataTable,testParameters,lock,connection);
+		partManufacturers.searchPartManufacturer(partMFG);
+				
 	}
 	
 	public void createAssetcode() {
