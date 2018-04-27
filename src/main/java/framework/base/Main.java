@@ -128,7 +128,7 @@ public class Main{
 		tearDown();			
 	}
 	
-	/**
+	/***
 	 * prepare method is used to get framework and execution related properties.
 	 * 
 	 * @param nil
