@@ -1931,5 +1931,235 @@ public class SQLLibrary extends Utility {
 
 }	
 	
+public void createIRISO() {
+		
+		
+		LinkedHashMap<String, String> inputValueMap	  = dataTable.getRowData("Data_Staging", testParameters.getCurrentTestCase()+"_RULE");	
+		
+		String nFromInvOrgName ="133";// inputValueMap.get("VALUE1");
+		String nFromOppUnitName = "112";//inputValueMap.get("VALUE1");
+		String nToInvOrgName = "2617";//inputValueMap.get("VALUE1");
+		String nToOppUnitName ="2616";// inputValueMap.get("VALUE1");
+		String sFROMLocationCode ="BAL-MUNDKA-MDEL";// inputValueMap.get("VALUE1");
+		String sTOLocationCode = "204-B023-303476";//inputValueMap.get("VALUE1");
 
+		String NumberofParts = "1";inputValueMap.get("VALUE1");		
+		String sPart1Code = "SER_112205";//inputValueMap.get("VALUE1");
+		String sP1QTY ="1";// inputValueMap.get("VALUE1");
+		String sP1LOTNumber ="MRR_112205";// inputValueMap.get("VALUE1");
+		String sP1InvoiceNumber ="INV11220501";// inputValueMap.get("VALUE1");
+		String sPart2Code ="NONSER_112205";// inputValueMap.get("VALUE1");
+		String sP2QTY = "5";//inputValueMap.get("VALUE1");		
+		String sP2LOTNumber ="MRR_112205";// inputValueMap.get("VALUE1");
+		String sP2InvoiceNumber ="INV11220501";// inputValueMap.get("VALUE1");
+		
+		String destinationlocatorID;
+		String invOrgLocationID;
+		
+		destinationlocatorID =  "select NUMBER1 FROM CATS_LOCATION_UDFDATA WHERE LOCATIONID IN (SELECT LOCATIONID FROM CATS_LOCATION WHERE NAME = "+"'"+sTOLocationCode+"')";
+		destinationlocatorID=selectQuerySingleValue(destinationlocatorID,"NUMBER1");
+		
+		invOrgLocationID =  "select NUMBER1 FROM CATS_LOCATION_UDFDATA WHERE LOCATIONID IN (SELECT LOCATIONID FROM CATS_LOCATION WHERE NAME = "+"'"+sFROMLocationCode+"')";
+		invOrgLocationID =selectQuerySingleValue(sFROMLocationCode,"NUMBER1");
+		
+
+		String insertquery1 = null;	
+		String insertquery2 = null;
+		String insertquery3 = null;
+		
+	/*	try {
+			lock.lock();
+		*/
+			insertquery1 ="INSERT INTO "								
+					+"CATS"
+					+"."
+					+"BTVL_CATS_IRISO_DETAIL_INT_V"
+					+" ("
+					+" SOURCE_INV_ORGANIZATION_ID,"
+					+" SOURCE_OPERATING_UNIT_ID,"
+					+" DESTINATION_INV_ORG_ID,"
+					+" DESTINATION_OPERATING_UNIT_ID,"
+					+" SALES_ORDER_NUMBER,"
+					+" SO_HEADER_ID,"
+					+" SO_CREATION_DATE,"
+					+" SO_STATUS,"
+					+" SO_LINE_NUMBER,"
+					+" SO_LINE_ID,"
+					+" SO_LINE_SCHEDULE_SHIP_DATE,"
+					+" SO_LINE_SUB_INVENTORY,"
+					+" ITEM_CODE,"
+					+" SO_LINE_QUANTITY,"
+					+" DESTINATION_SUB_INVENTORY,"
+					+" DESTINATION_LOCATOR_ID,"
+					+" SO_LINE_CREATED_BY,"
+					+" SO_LINE_CREATION_DATE,"
+					+" SO_LINE_STATUS,"
+					+" SO_LINE_LAST_UPDATED_BY,"
+					+" SO_LINE_LAST_UPDATE_DATE,"
+					+" SOURCE_INV_ORG_LOCATION_ID,"
+					+" RECEIVER_NAME,"
+					+" RECEIVER_CONTACT_NO,"
+					+" UOM"
+					+")"
+					+"VALUES" 
+					+"(" 
+					+ nFromInvOrgName+"," 
+					+ nFromOppUnitName+","
+					+ nToInvOrgName+","
+					+ nToOppUnitName+","
+					+generateRandomNum(10000000)+","
+					+generateRandomNum(10000000)+","
+					+ "SYSDATE"+","
+					+ "'"+"BOOKED"+"',"
+					+ '1'+","
+					+generateRandomNum(10000000)+","
+					+ "SYSDATE"+","
+					+ "'"+"STORES"+"',"
+					+ sPart1Code+"," 
+					+ sP1QTY +"," 
+					+ "'"+"CWIP-CL"+"',"
+					+destinationlocatorID+"," 
+					+ "'"+"37532"+"',"
+					+ "SYSDATE"+","
+					+ "'"+"APPROVED"+"',"
+					+ "'"+"2685618"+"',"		
+					+ "SYSDATE"+","
+					+ invOrgLocationID+"," 
+					+ "'"+"TNS"+"',"	
+					+ "'"+"9810291815"+"',"	
+					+ "'"+"NOS"+"'"	
+					+")";
+			
+			
+			insertquery2 ="INSERT INTO "
+					+"CATS"
+					+"."
+					+"BTVL_CATS_IRISO_SHIP_TXN_INT_V"
+					+" ("
+					+" DELIVERY_NAME,"
+					+" DELIVERY_DETAIL_NUMBER,"
+					+" SHIPPING_FROM_SUB_INVENTORY,"
+					+" LOT_NUMBER,"
+					+" CURRENT_STATUS,"
+					+" TRANSACTION_QUANTITY,"
+					+" DELIVERY_LINE_CREATION_DATE,"
+					+" DELIVERY_LINE_CREATED_BY,"
+					+" DELIVERY_LINE_LAST_UPDATE_DATE,"
+					+" DELIVERY_LINE_LAST_UPDATED_BY,"
+					+" INVOICE_NUMBER,"
+					+" INVOICE_DATE,"
+					+" INVOICE_CREATION_DATE,"
+					+" INVOICE_LAST_UPDATE_DATE,"
+					+" EBN_ENTRY_CREATED_BY,"
+					+" EBN_ENTRY_CREATION_DATE,"
+					+" EBN_ENTRY_LAST_UPDATE_DATE,"
+					+" EBN_NUMBER,"
+					+" VEHICLE_NUMBER,"
+					+" DISABLED_FLAG,"
+					+" EXPIRED_FLAG,"
+					+" FREEZED_FLAG,"
+					+" SO_HEADER_ID,"
+					+" SO_LINE_ID"
+					+")"
+					+"VALUES" 
+					+"(" 
+					+ "'"+"9213"+"',"
+					+ "'"+"9213"+"',"
+					+ "'"+"STORES"+"',"
+					+ sP1LOTNumber+","
+					+ "'"+"Shipped"+"',"
+					+ sP1QTY+","
+					+ "SYSDATE"+","
+					+ "'"+"2732295"+"',"
+					+ "SYSDATE"+","
+					+ "'"+"2732295"+"',"
+					+ sP1InvoiceNumber+","
+					+ "SYSDATE"+","
+					+ "SYSDATE"+","
+					+ "SYSDATE"+","
+					+ "'"+"2732295"+"',"
+					+ "'',"
+					+ "SYSDATE"+","
+					+ "'',"
+					+ "'',"
+					+ "'"+"N"+"',"
+					+ "'"+"N"+"',"
+					+ "'"+"Y"+"',"
+					+generateRandomNum(10000000)+","
+					+generateRandomNum(10000000)
+					+")";
+			
+			insertquery3 ="INSERT INTO "
+					+"CATS"
+					+"."
+					+"BTVL_CATS_IRISO_SHIP_TXN_INT_V"
+					+" ("
+					+" DELIVERY_NAME,"
+					+" DELIVERY_DETAIL_NUMBER,"
+					+" SHIPPING_FROM_SUB_INVENTORY,"
+					+" LOT_NUMBER,"
+					+" CURRENT_STATUS,"
+					+" TRANSACTION_QUANTITY,"
+					+" DELIVERY_LINE_CREATION_DATE,"
+					+" DELIVERY_LINE_CREATED_BY,"
+					+" DELIVERY_LINE_LAST_UPDATE_DATE,"
+					+" DELIVERY_LINE_LAST_UPDATED_BY,"
+					+" INVOICE_NUMBER,"
+					+" INVOICE_DATE,"
+					+" INVOICE_CREATION_DATE,"
+					+" INVOICE_LAST_UPDATE_DATE,"
+					+" EBN_ENTRY_CREATED_BY,"
+					+" EBN_ENTRY_CREATION_DATE,"
+					+" EBN_ENTRY_LAST_UPDATE_DATE,"
+					+" EBN_NUMBER,"
+					+" VEHICLE_NUMBER,"
+					+" DISABLED_FLAG,"
+					+" EXPIRED_FLAG,"
+					+" FREEZED_FLAG,"
+					+" SO_HEADER_ID,"
+					+" SO_LINE_ID"
+					+")"
+					+"VALUES" 
+					+"(" 
+					+ "'"+"9213"+"',"
+					+ "'"+"9213"+"',"
+					+ "'"+"STORES"+"',"
+					+ sP2LOTNumber+","
+					+ "'"+"Shipped"+"',"
+					+ sP2QTY+","
+					+ "SYSDATE"+","
+					+ "'"+"2732295"+"',"
+					+ "SYSDATE"+","
+					+ "'"+"2732295"+"',"
+					+ sP2InvoiceNumber+","
+					+ "SYSDATE"+","
+					+ "SYSDATE"+","
+					+ "SYSDATE"+","
+					+ "'"+"2732295"+"',"
+					+ "''," 
+					+ "SYSDATE"+","
+					+ "'',"
+					+ "'',"
+					+ "'"+"N"+"',"
+					+ "'"+"N"+"',"
+					+ "'"+"Y"+"',"
+					+generateRandomNum(10000000)+","
+					+generateRandomNum(10000000)
+					+")";
+			
+			
+			test.log(LogStatus.INFO, insertquery1);
+			test.log(LogStatus.INFO, insertquery2);
+			test.log(LogStatus.INFO, insertquery3);
+/*			executeUpdateQuery(insertquery1, "");
+			executeUpdateQuery(insertquery2, "");	
+			executeUpdateQuery(insertquery3, "");
+			connection.commit();	
+		} catch (SQLException e) {		
+			e.printStackTrace();
+		}finally{
+			lock.unlock();
+		}*/
+
+	}
 }
