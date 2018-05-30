@@ -1566,6 +1566,8 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 		
 		RECORD_ID = generateRandomNum(10000000);		
 		String itemCode = generateTestData("ITEMCODE", inputValueMap.get("VALUE2"));
+		
+		String installable =((inputValueMap.get("VALUE20") == null) ? "N" : inputValueMap.get("VALUE20") );
 	
 		query = "INSERT "
 				+"INTO CATS.CATSCON_PART_STG"
@@ -1588,7 +1590,8 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 				    +"USER_ITEM_TYPE,"
 				    +"RECORD_ID,"
 				    +"CREATION_DATE,"
-				    +"PROCESS_FLAG"
+				    +"PROCESS_FLAG,"
+				    +"INSTALLABLE_FLAG"
 				  +")"
 				  +"VALUES"
 				  +"("
@@ -1610,9 +1613,11 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 				    +"'"+inputValueMap.get("VALUE16")+"',"
 				    +RECORD_ID+","
 				    +inputValueMap.get("VALUE18")+","
-				    +"'"+inputValueMap.get("VALUE19")+"')";				
+				    +"'"+inputValueMap.get("VALUE19")+"',"
+				    +"'"+installable+"')";				
 			
-		executeUpdateQuery(query, "Part Code <b>"+itemCode+"</b> is inserted into CATSCON_PART_STG table");		
+		executeUpdateQuery(query, "Part Code <b>"+itemCode+"</b> is inserted into CATSCON_PART_STG table");	
+		test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:500px;overflow:scroll;><code>"+query+"</code></div>");
 		connection.commit();
 		stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_PART}");	
 		stproc_stmt.executeUpdate();		
@@ -1644,7 +1649,6 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 			String mfg = (inputValueMap.get("VALUE1").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE1")) : generateTestData("MFG", inputValueMap.get("VALUE1"));
 			String mfgPartNumber = generateTestData("MFGPARTNUMBER", inputValueMap.get("VALUE2"));	
 			String mfgDescription = (inputValueMap.get("VALUE4").contains("#")) ?  getRuntimeTestdata(inputValueMap.get("VALUE4")) : generateTestData("MFGDESCRIPTION", inputValueMap.get("VALUE4"));
-			
 			query = "INSERT "
 					 +"INTO CATS.CATSCON_MFG_STG"
 					   +"("
@@ -1671,6 +1675,8 @@ public int createNewPart(LinkedHashMap<String, String> inputValueMap){
 			//System.out.println(query);
 			
 			executeUpdateQuery(query, "MFG <b>"+mfg+"</b> with MFG Part # <b>"+mfgPartNumber+"</b> is added for Item code <b>"+getRuntimeTestdata(inputValueMap.get("VALUE3"))+"</b> into CATSCON_MFG_STG table");
+			test.log(LogStatus.INFO, "<div style= border:1px solid black;width:200px;height:500px;overflow:scroll;><code>"+query+"</code></div>");
+			
 			connection.commit();	
 			stproc_stmt = connection.prepareCall ("{call CATSCON_P_ERPINBOUND.SP_STG_INT_MFG}");	
 			stproc_stmt.executeUpdate();		
