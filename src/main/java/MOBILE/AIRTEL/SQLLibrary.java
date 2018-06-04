@@ -1517,7 +1517,8 @@ public class SQLLibrary extends Utility {
 
 		String selectquery = "SELECT * FROM CATS_LOCATION_UDFDATA WHERE LOCATIONID IN (SELECT LOCATIONID FROM CATS_LOCATION WHERE NAME = "+"'"+sFROMLocationCode+"')";
 
-		String FROMLOCATIONID= selectQuerySingleValue(selectquery, "NUMBER1");	      
+		String FROMLOCATIONID= selectQuerySingleValue(selectquery, "NUMBER1");
+		String SYSDATE="'"+ getCurrentFormattedTime("dd-MMM-yy")+"'";
 		try {
 			lock.lock();
 			insertquery1 ="INSERT "
@@ -1570,7 +1571,7 @@ public class SQLLibrary extends Utility {
 					+ "'"+sTOLocationCode+"',"
 					+ sP1QTY+","
 					+ "'"+"NOS"+"',"
-					+ "SYSDATE"+","
+					+ SYSDATE+","
 					+ 1+","
 					+ "'"+sTOLocationCode+"',"
 					+ "'"+"SARAN"+"',"
@@ -1578,10 +1579,10 @@ public class SQLLibrary extends Utility {
 					+ "'"+"HARI"+"',"
 					+ "'"+"9789391639"+"',"
 					+ 1+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+
+					+ SYSDATE+","
+					+ SYSDATE+","
+					+ SYSDATE+","
+					+ SYSDATE+
 					")";
 
 
@@ -1631,10 +1632,10 @@ public class SQLLibrary extends Utility {
 					+ "'"+"NOS"+"',"
 					+ "'"+sP1LOTNumber+"',"
 					+ 1+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+","
+					+ SYSDATE+","
+					+ SYSDATE+","
 					+ "'"+sP1DeliveryChallan+"',"
-					+ "SYSDATE"+","
+					+ SYSDATE+","
 					+ "NULL,"
 					+ "'',"
 					+ "NULL,"
@@ -1742,7 +1743,8 @@ public class SQLLibrary extends Utility {
 
 		String selectquery = "SELECT * FROM CATS_LOCATION_UDFDATA WHERE LOCATIONID IN (SELECT LOCATIONID FROM CATS_LOCATION WHERE NAME = "+"'"+sFROMLocationCode+"')";
 
-		String FROMLOCATIONID= selectQuerySingleValue(selectquery, "NUMBER1");	      
+		String FROMLOCATIONID= selectQuerySingleValue(selectquery, "NUMBER1");
+		String SYSDATE="'"+ getCurrentFormattedTime("dd-MMM-yy")+"'";
 		try {
 			lock.lock();
 			insertquery1 ="INSERT "
@@ -1795,7 +1797,7 @@ public class SQLLibrary extends Utility {
 					+ "'"+sTOLocationCode+"',"
 					+ sP1QTY+","
 					+ "'"+"NOS"+"',"
-					+ "SYSDATE"+","
+					+ SYSDATE+","
 					+ 1+","
 					+ "'"+sTOLocationCode+"',"
 					+ "'"+"SARAN"+"',"
@@ -1803,10 +1805,10 @@ public class SQLLibrary extends Utility {
 					+ "'"+"HARI"+"',"
 					+ "'"+"9789391639"+"',"
 					+ 1+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+
+					+ SYSDATE+","
+					+ SYSDATE+","
+					+ SYSDATE+","
+					+ SYSDATE+
 					")";
 
 
@@ -1856,10 +1858,10 @@ public class SQLLibrary extends Utility {
 					+ "'"+"NOS"+"',"
 					+ "'"+sP1LOTNumber+"',"
 					+ 1+","
-					+ "SYSDATE"+","
-					+ "SYSDATE"+","
+					+ SYSDATE+","
+					+ SYSDATE+","
 					+ "'"+sP1DeliveryChallan+"',"
-					+ "SYSDATE"+","
+					+ SYSDATE+","
 					+ "NULL,"
 					+ "'',"
 					+ "NULL,"
